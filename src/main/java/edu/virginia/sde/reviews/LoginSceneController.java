@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginSceneController {
     @FXML
@@ -22,12 +23,22 @@ public class LoginSceneController {
     private Button loginButton;
 
     private Stage stage;
+    private DatabaseDriver driver;
 
     public void setStage(Stage stage){
         this.stage = stage;
     }
     @FXML
-    private void handleButton(){
+    private void initialize(){
+        try{
+            driver = new DatabaseDriver("CruddyCoursework.sqlite");
+            driver.connect();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void handleButton() throws SQLException{
         String user = usernameField.getText();
         String pass = passwordField.getText();
 
@@ -50,10 +61,13 @@ public class LoginSceneController {
             e.printStackTrace();
         }
     }
-    private boolean isValid(String username, String password){
-        if (!username.isEmpty() && password.length()>=8){
+    private boolean isValid(String username, String password) throws SQLException {
+        if(driver.userExists(username)){
             return true;
         }
+        //if (!username.isEmpty() && password.length()>=8){
+        //    return true;
+        //}
         return false;
     }
 }
