@@ -5,14 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class CourseSearchScreen {
-
-        public void start(Stage stage) throws Exception {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("hello-world.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            stage.setTitle("Hello World");
-            stage.setScene(scene);
-            stage.show();
+public class CourseSearchScreen extends Application{
+    public static void main(String[] args) {
+        launch(args);
+    }
+    public void start(Stage stage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Course Search");
+        stage.setScene(scene);
+        stage.show();
         }
     }
-}
+
