@@ -80,6 +80,113 @@ public class DatabaseDriver {
         }
         insertStmt.close();
     }
+
+    public boolean courseExists(Course course) throws SQLException {
+        String findCourses = "SELECT * FROM Courses WHERE (Subject, Number, Title) = (?, ?, ?)";
+        PreparedStatement prepStatement = connection.prepareStatement(findCourses);
+        prepStatement.setString(1, course.getCourseSubject());
+        prepStatement.setInt(2, course.getCourseNumber());
+        prepStatement.setString(3, course.getCourseTitle());
+        ResultSet rs = prepStatement.executeQuery();
+
+        if(rs.next()) {
+            rs.close();
+            prepStatement.close();
+            return true;
+        }
+        rs.close();
+        prepStatement.close();
+        return false;
+    }
+    public void addCourse(Course course) throws SQLException {
+        //TODO: implement
+        String insertQuery = "INSERT INTO Courses (Subject, Number, Title) VALUES (?, ?, ?)";
+        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+        if(!courseExists(course)) {
+            insertStmt.setString(1, course.getCourseSubject());
+            insertStmt.setInt(2, course.getCourseNumber());
+            insertStmt.setString(3, course.getCourseTitle());
+            insertStmt.executeUpdate();
+        }
+        insertStmt.close();
+    }
+
+//    public void addReview(String user, String pass) throws SQLException {
+//        //TODO: implement
+//        String insertQuery = "INSERT INTO Users (id, Password) VALUES (?, ?)";
+//        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+//        if(getPassword(user) == null) {
+//            insertStmt.setString(1, user);
+//            insertStmt.setString(2, pass);
+//            insertStmt.executeUpdate();
+//        }
+//        insertStmt.close();
+//    }
+
+    public List<Course> getCoursesByName(String search) throws SQLException{
+        String findCourses = "SELECT * FROM Courses WHERE Title LIKE ? COLLATE NOCASE";
+        List<Course> c = new ArrayList<>();
+        PreparedStatement prepStatement = connection.prepareStatement(findCourses);
+        prepStatement.setString(1, "%"+search+"%");
+        ResultSet rs = prepStatement.executeQuery();
+
+        while(rs.next()) {
+            String subject = rs.getString("Subject");
+            int number = rs.getInt("Number");
+            String title = rs.getString("Title");
+
+            Course temp = new Course(subject, number, title);
+            c.add(temp);
+        }
+        rs.close();
+        prepStatement.close();
+        return c;
+    }
+    public List<Course> getCoursesBySubject(String search) throws SQLException {
+        String findCourses = "SELECT * FROM Courses WHERE Subject LIKE ? COLLATE NOCASE";
+        List<Course> c = new ArrayList<>();
+        PreparedStatement prepStatement = connection.prepareStatement(findCourses);
+        prepStatement.setString(1, "%"+search+"%");
+        ResultSet rs = prepStatement.executeQuery();
+
+        while(rs.next()) {
+            String subject = rs.getString("Subject");
+            int number = rs.getInt("Number");
+            String title = rs.getString("Title");
+
+            Course temp = new Course(subject, number, title);
+            c.add(temp);
+        }
+        rs.close();
+        prepStatement.close();
+        return c;
+    }
+    public List<Course> getCoursesByNumber(int num) throws SQLException {
+        String findCourses = "SELECT * FROM Courses WHERE Number = ?";
+        List<Course> c = new ArrayList<>();
+        PreparedStatement prepStatement = connection.prepareStatement(findCourses);
+        prepStatement.setInt(1, num);
+        ResultSet rs = prepStatement.executeQuery();
+
+        while(rs.next()) {
+            String subject = rs.getString("Subject");
+            int number = rs.getInt("Number");
+            String title = rs.getString("Title");
+
+            Course temp = new Course(subject, number, title);
+            c.add(temp);
+        }
+        rs.close();
+        prepStatement.close();
+        return c;
+    }
+
+//    public List<Review> getReviewsFromUser(String user) {
+//
+//    }
+    public void deleteReview(Review review) {
+
+    }
     public void clearTables() throws SQLException {
         //TODO: implement
         String delRoute = "DELETE FROM Users";
@@ -97,12 +204,14 @@ public class DatabaseDriver {
     public static void main(String[] args) throws SQLException {
         DatabaseDriver d = new DatabaseDriver("CruddyCoursework.sqlite");
         d.connect();
-        d.clearTables();
         d.createTables();
-        d.addUser("jinwookim", "password1");
-        d.addUser("smatt", "password2");
-        d.addUser("vineelk", "password3");
-        d.addUser("jamtran", "password4");
+//        d.addUser("jinwookim", "password1");
+//        d.addUser("smatt", "password2");
+//        d.addUser("vineelk", "password3");
+//        d.addUser("jamtran", "password4");
+//        System.out.println(d.getPassword("jamtran"));
+        Course temp = new Course("CS", 3100, "Data Structures 2");
+        d.addCourse(temp);
         d.commit();
         d.disconnect();
     }
