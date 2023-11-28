@@ -9,8 +9,11 @@ public class Review {
     private Timestamp timestamp;
     private String comment;
 
-    public Review(Course course) {
+    public Review(Course course, int rating, Timestamp timestamp, String comment) {
         this.course = course;
+        this.rating = rating;
+        this.timestamp = timestamp;
+        this.comment = comment;
     }
     public void setRating(int rating) {
         this.rating = rating;
