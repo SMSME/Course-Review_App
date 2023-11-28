@@ -44,7 +44,4 @@ public class Course {
                 ", title='" + courseTitle + '\'' +
                 '}';
     }
-
-
-
 }
