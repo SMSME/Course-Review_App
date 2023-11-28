@@ -42,9 +42,16 @@ public class LoginSceneController {
         String user = usernameField.getText();
         String pass = passwordField.getText();
 
+        //If a correct username/password entered
         if(isValid(user,pass)){
             messageLabel.setText("Login successful");
         }
+        //If an incorrect username is entered
+        else if(driver.getPassword(user)==null){
+            messageLabel.setText("Username not found");
+        }
+        //password incorrect
+
         else{messageLabel.setText("Login not successful");}
     }
 
@@ -52,7 +59,7 @@ public class LoginSceneController {
     private void handleCreateUser(){
         messageLabel.setText("Create new user button pressed");
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new_user.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -62,8 +69,12 @@ public class LoginSceneController {
         }
     }
     private boolean isValid(String username, String password) throws SQLException {
-        if(driver.userExists(username)){
-            return true;
+        //If the user has a password
+        if(driver.getPassword(username) != null){
+            if(password.equals(driver.getPassword(username))){
+                return true;
+            }
+            return false;
         }
         //if (!username.isEmpty() && password.length()>=8){
         //    return true;
