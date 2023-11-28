@@ -16,13 +16,13 @@
         <!-- Username Input -->
         <HBox alignment="CENTER" spacing="5.0">
             <Label text="Username:" />
-            <TextField fx:id="usernameField" />
+            <TextField fx:id="newuser" />
         </HBox>
 
         <!-- Password Input -->
         <HBox alignment="CENTER" spacing="5.0">
             <Label text="Password:" />
-            <PasswordField fx:id="passwordField" />
+            <PasswordField fx:id="newpassword" />
         </HBox>
 
         <Button mnemonicParsing="false" onAction="#handleCreateUser" text="Create New User" />

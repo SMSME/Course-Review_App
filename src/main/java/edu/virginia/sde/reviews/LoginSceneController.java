@@ -21,27 +21,32 @@ public class LoginSceneController {
     private PasswordField passwordField;
     @FXML
     private Button loginButton;
-
     private Stage stage;
     private DatabaseDriver driver;
-
+//    public LoginSceneController(DatabaseDriver driver){
+//        this.driver = driver;
+//    }
     public void setStage(Stage stage){
         this.stage = stage;
     }
     @FXML
-    private void initialize(){
-        try{
-            driver = new DatabaseDriver("CruddyCoursework.sqlite");
-            driver.connect();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+    public void setDriver(DatabaseDriver driver){
+        this.driver = driver;
     }
+//    @FXML
+//    private void initialize(){
+//        try{
+//            driver = new DatabaseDriver("CruddyCoursework.sqlite");
+//            driver.connect();
+//        } catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//    }
+
     @FXML
     private void handleButton() throws SQLException{
         String user = usernameField.getText();
         String pass = passwordField.getText();
-
         //If a correct username/password entered
         if(isValid(user,pass)){
             messageLabel.setText("Login successful");
@@ -51,19 +56,27 @@ public class LoginSceneController {
             messageLabel.setText("Username not found");
         }
         //password incorrect
-
+        else if(!pass.equals(driver.getPassword(user))){
+            messageLabel.setText("Password is incorrect");
+        }
         else{messageLabel.setText("Login not successful");}
     }
 
     @FXML
     private void handleCreateUser(){
-        messageLabel.setText("Create new user button pressed");
+        //messageLabel.setText("Create new user button pressed");
+
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Create New User");
+            NewUserController newuserController = new NewUserController();
+            newuserController.setInfo(driver, stage, scene);
+
+
+
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -71,14 +84,10 @@ public class LoginSceneController {
     private boolean isValid(String username, String password) throws SQLException {
         //If the user has a password
         if(driver.getPassword(username) != null){
-            if(password.equals(driver.getPassword(username))){
+            if(password.equals(driver.getPassword(username))) {
                 return true;
             }
-            return false;
         }
-        //if (!username.isEmpty() && password.length()>=8){
-        //    return true;
-        //}
         return false;
     }
 }
