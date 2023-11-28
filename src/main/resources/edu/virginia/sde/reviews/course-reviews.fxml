@@ -10,9 +10,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
             prefHeight="720.0" prefWidth="1280.0">
-    <VBox alignment="CENTER" spacing="10.0">
-        <Label>
-            fx:id="courseLabel" text="Initial Text"
-        </Label>
+    <VBox alignment="TOP_CENTER">
+        <Label fx:id="courseLabel" text="Initial Text"/>
     </VBox>
 </StackPane>

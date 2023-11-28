@@ -12,7 +12,9 @@ public class CourseReviewsApplication extends Application{
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello World");
+        CourseReviewsController controller = fxmlLoader.getController();
+        controller.setStage(stage);
+        stage.setTitle("Course Reviews");
         stage.setScene(scene);
         stage.show();
     }
