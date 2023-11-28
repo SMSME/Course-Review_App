@@ -190,18 +190,14 @@ public class DatabaseDriver {
         prepReviewStatement.setString(1, user);
         ResultSet rs = prepReviewStatement.executeQuery();
 
-        while(rs.next()) {
-            prepCourseStatement.setInt(1, );
-        }
-
-
-    CourseID, UserID, Rating, Review, Timestamp
+//    CourseID, UserID, Rating, Review, Timestamp
         while(rs.next()) {
             String subject = rs.getString("CourseID");
             int number = rs.getInt("Number");
             String title = rs.getString("Title");
-
-            Course temp = new Course(subject, number, title);
+            prepCourseStatement.setInt(1, rs.getInt("id"));
+            ResultSet rs2 =
+                    Course temp = new Course(subject, number, title);
             c.add(temp);
         }
         rs.close();
