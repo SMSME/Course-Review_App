@@ -72,9 +72,13 @@ public class LoginSceneController {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Create New User");
-            NewUserController newuserController = new NewUserController();
-            newuserController.setInfo(driver, stage, scene);
 
+            NewUserController newuserController = fxmlLoader.getController();
+            //NewUserController newuserController = new NewUserController();
+            newuserController.setStage(stage);
+            newuserController.setInfo(driver);
+
+            newuserController.createUser();
 
 
         } catch (IOException e){

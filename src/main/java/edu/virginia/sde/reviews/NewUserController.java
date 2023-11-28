@@ -20,28 +20,27 @@ public class NewUserController {
     private Scene scene;
     private DatabaseDriver driver;
 
-    public void setInfo(DatabaseDriver driver, Stage stage, Scene scene){
-        this.driver = driver;
+    public void setStage(Stage stage){
         this.stage = stage;
-        this.scene = scene;
     }
-    private void createUser(){
+    public void setInfo(DatabaseDriver driver){
+        this.driver = driver;
+    }
+    public void createUser(){
         String newUser = newUsername.getText();
         String newPass = newPassword.getText();
         try{
+            if(driver.getPassword(newUser)!=null){
+                message.setText("User already exists");
+            }
+            if(newPass.length()<8){
+                message.setText("Password must be at least 8 characters.");
+            }
             if(isValid(newUser, newPass)){
                 driver.addUser(newUser, newPass);
                 message.setText("User Created Successfully!");
             }
-            else{
-                //If the username already exists
-                if(driver.getPassword(newUser)!=null){
-                    message.setText("User already exists");
-                }
-                if(newPass.length()<8){
-                    message.setText("Password must be at least 8 characters.");
-                }
-            }
+
         } catch (SQLException e){
             e.printStackTrace();
             message.setText("Error Creating user");
