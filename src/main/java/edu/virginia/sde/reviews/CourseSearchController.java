@@ -21,6 +21,7 @@ public class CourseSearchController {
     @FXML
     private void handleSearch(){
         String course = searchField.getText();
-        messageLabel.setText("Getting results for" + course);
+        messageLabel.setText("Getting results for " + course);
     }
+
 }
