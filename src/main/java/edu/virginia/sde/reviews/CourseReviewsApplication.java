@@ -13,10 +13,12 @@ public class CourseReviewsApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("testing.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        stage.setTitle("Course Reviews");
+        LoginSceneController controller = fxmlLoader.getController();
+        controller.setStage(stage);
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }
