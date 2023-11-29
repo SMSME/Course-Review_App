@@ -6,28 +6,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.NewUserController"
             prefHeight="720.0" prefWidth="1280.0">
-    <VBox alignment="CENTER" spacing="10.0">
-
-
-        <!-- Username Input -->
-        <HBox alignment="CENTER" spacing="5.0">
-            <Label text="Username:" />
-            <TextField fx:id="newUsername" />
+    <top>
+        <HBox alignment = "TOP_LEFT">
+            <Button mnemonicParsing = "false" onAction="#exitProgram" text ="Exit"/>
         </HBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="10.0">
+            <!-- Username Input -->
+            <HBox alignment="CENTER" spacing="5.0">
+                <Label text="Username:" />
+                <TextField fx:id="newUsername" />
+            </HBox>
 
-        <!-- Password Input -->
-        <HBox alignment="CENTER" spacing="5.0">
-            <Label text="Password:" />
-            <PasswordField fx:id="newPassword" />
-        </HBox>
+            <!-- Password Input -->
+            <HBox alignment="CENTER" spacing="5.0">
+                <Label text="Password:" />
+                <PasswordField fx:id="newPassword" />
+            </HBox>
 
-        <Button mnemonicParsing="false" onAction="#createUser" text="Create New User" />
+            <Button mnemonicParsing="false" onAction="#createUser" text="Create New User" />
 
-        <Label fx:id="message" />
-    </VBox>
 
-</StackPane>
+            <Label fx:id="message" />
+        </VBox>
+
+    </center>
+
+
+</BorderPane>

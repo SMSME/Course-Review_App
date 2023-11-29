@@ -1,4 +1,5 @@
 package edu.virginia.sde.reviews;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -78,12 +79,17 @@ public class LoginSceneController {
             newuserController.setStage(stage);
             newuserController.setInfo(driver);
 
-            newuserController.createUser();
+            //newuserController.createUser();
 
 
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void exitProgram(){
+        Platform.exit();
     }
     private boolean isValid(String username, String password) throws SQLException {
         //If the user has a password
