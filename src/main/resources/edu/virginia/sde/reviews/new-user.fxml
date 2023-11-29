@@ -29,8 +29,11 @@
                 <PasswordField fx:id="newPassword" />
             </HBox>
 
+            <!-- Create User Button -->
             <Button mnemonicParsing="false" onAction="#createUser" text="Create New User" />
 
+            <!-- Return to login button -->
+            <Button mnemonicParsing="false" onAction="#backToLogin" text="Return to Login"/>
 
             <Label fx:id="message" />
         </VBox>

@@ -23,12 +23,6 @@ public class CourseReviewsApplication extends Application {
 
         DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
         driver.connect();
-        //try{
-        //    DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
-        //    driver.connect();
-        //} catch (SQLException e){
-        //    e.printStackTrace();
-        //}
 
         LoginSceneController controller = fxmlLoader.getController();
         controller.setStage(stage);

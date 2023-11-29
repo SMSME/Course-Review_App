@@ -1,11 +1,15 @@
 package edu.virginia.sde.reviews;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import javafx.scene.Scene;
 public class NewUserController {
@@ -43,13 +47,12 @@ public class NewUserController {
                     message.setText("User Created Successfully! Please return to the login page");
                 }
             }
-            //If they enter an invalid user name password combo
+            //If they enter an invalid username password combo
             else {
                 //The password is not long enough.
                 if(newPass.length()<8){
                     message.setText("Password must be at least 8 characters.");
                 }
-
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -62,5 +65,20 @@ public class NewUserController {
     @FXML
     private void exitProgram(){
         Platform.exit();
+    }
+    @FXML
+    private void backToLogin(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Login");
+            LoginSceneController controller = fxmlLoader.getController();
+            controller.setDriver(driver);
+            controller.setStage(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

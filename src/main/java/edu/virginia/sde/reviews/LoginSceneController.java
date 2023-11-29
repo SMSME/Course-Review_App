@@ -24,13 +24,11 @@ public class LoginSceneController {
     private Button loginButton;
     private Stage stage;
     private DatabaseDriver driver;
-//    public LoginSceneController(DatabaseDriver driver){
-//        this.driver = driver;
-//    }
+    private String currentUser;
     public void setStage(Stage stage){
         this.stage = stage;
     }
-    @FXML
+    //@FXML
     public void setDriver(DatabaseDriver driver){
         this.driver = driver;
     }
@@ -50,6 +48,8 @@ public class LoginSceneController {
         String pass = passwordField.getText();
         //If a correct username/password entered
         if(isValid(user,pass)){
+            currentUser = user;
+            //Will need to change when Course Search Screen is Done.
             messageLabel.setText("Login successful");
         }
         //If an incorrect username is entered
@@ -75,13 +75,8 @@ public class LoginSceneController {
             stage.setTitle("Create New User");
 
             NewUserController newuserController = fxmlLoader.getController();
-            //NewUserController newuserController = new NewUserController();
             newuserController.setStage(stage);
             newuserController.setInfo(driver);
-
-            //newuserController.createUser();
-
-
         } catch (IOException e){
             e.printStackTrace();
         }
