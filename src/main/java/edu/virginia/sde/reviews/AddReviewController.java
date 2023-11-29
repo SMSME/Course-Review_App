@@ -32,8 +32,9 @@ public class AddReviewController {
         this.driver = driver;
     }
     @FXML
-    public void addRating() {
+    public void addRating() throws SQLException {
         int rating = 0;
+        String comment = commentField.getText();
         try {
             rating = parseInt(ratingField.getText());
         }
@@ -45,7 +46,20 @@ public class AddReviewController {
         }
         else {
             message.setText("Review successfully added!");
+            //driver.addReview(int rating, Timestamp timestamp, String comment);
+            driver.commit();
         }
-        String comment = commentField.getText();
+    }
+    @FXML
+    public void backButton() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Course Reviews");
+
+        CourseReviewsController courseReviewsController = fxmlLoader.getController();
+        courseReviewsController.setStage(stage);
+        courseReviewsController.setDatabaseDriver(driver);
     }
 }
