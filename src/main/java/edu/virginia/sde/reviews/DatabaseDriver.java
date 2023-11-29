@@ -180,7 +180,7 @@ public class DatabaseDriver {
         prepStatement.close();
         return c;
     }
-    /*
+
     public List<Review> getReviewsFromUser(String user) throws SQLException{
         String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
         String findCourse = "SELECT * FROM Courses WHERE id = ?";
@@ -191,27 +191,23 @@ public class DatabaseDriver {
         ResultSet rs = prepReviewStatement.executeQuery();
 
 //    CourseID, UserID, Rating, Review, Timestamp
-
-        while(rs.next()) {
-            String subject = rs.getString("CourseID");
-            int number = rs.getInt("Number");
-            String title = rs.getString("Title");
-            prepCourseStatement.setInt(1, rs.getInt("id"));
-            ResultSet rs2 =
-                    Course temp = new Course(subject, number, title);
-            c.add(temp);
-        }
-        rs.close();
-        prepStatement.close();
-        return c;
+//        while(rs.next()) {
+//            String subject = rs.getString("CourseID");
+//            int number = rs.getInt("Number");
+//            String title = rs.getString("Title");
+//            prepCourseStatement.setInt(1, rs.getInt("id"));
+//            ResultSet rs2 =
+//            Course temp = new Course(subject, number, title);
+//            c.add(temp);
+//        }
+//        rs.close();
+//        prepStatement.close();
+//        return c;
+        return null;
     }
-
-     */
-    /*
     public void deleteReview(Review review) {
 
     }
-     */
     public void clearTables() throws SQLException {
         //TODO: implement
         String delRoute = "DELETE FROM Users";
@@ -226,18 +222,18 @@ public class DatabaseDriver {
         statement.close();
 
     }
-    public static void main(String[] args) throws SQLException {
-        DatabaseDriver d = new DatabaseDriver("CruddyCoursework.sqlite");
-        d.connect();
-        d.createTables();
-//        d.addUser("jinwookim", "password1");
-//        d.addUser("smatt", "password2");
-//        d.addUser("vineelk", "password3");
-//        d.addUser("jamtran", "password4");
-//        System.out.println(d.getPassword("jamtran"));
-        Course temp = new Course("CS", 3100, "Data Structures 2");
-        d.addCourse(temp);
-        d.commit();
-        d.disconnect();
-    }
+//    public static void main(String[] args) throws SQLException {
+//        DatabaseDriver d = new DatabaseDriver("CruddyCoursework.sqlite");
+//        d.connect();
+//        d.createTables();
+////        d.addUser("jinwookim", "password1");
+////        d.addUser("smatt", "password2");
+////        d.addUser("vineelk", "password3");
+//        d.addUser("jamtran12", "password4");
+////        System.out.println(d.getPassword("jamtran"));
+//        Course temp = new Course("CS", 3200, "Data Structures 3");
+//        d.addCourse(temp);
+//        d.commit();
+//        d.disconnect();
+//    }
 }

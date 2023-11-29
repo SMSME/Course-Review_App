@@ -30,7 +30,7 @@ public class CourseReviewsController implements Initializable{
     }
     @FXML
     public void setCourseLabel() {
-        courseLabel.setText("Hello");
+        courseLabel.setText("COURSE NAMaslfjoasoifjasdoifjsaisdjfaoisdE");
     }
     @FXML
     public void addReview() throws IOException {
@@ -43,5 +43,16 @@ public class CourseReviewsController implements Initializable{
         AddReviewController addReviewController = fxmlLoader.getController();
         addReviewController.setStage(stage);
         addReviewController.setDatabaseDriver(driver);
+    }
+    @FXML
+    public void logOut() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Course Reviews");
+        LoginSceneController loginSceneController = fxmlLoader.getController();
+        loginSceneController.setStage(stage);
+        loginSceneController.setDriver(driver);
     }
 }

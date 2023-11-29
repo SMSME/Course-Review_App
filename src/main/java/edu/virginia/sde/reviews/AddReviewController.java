@@ -62,4 +62,16 @@ public class AddReviewController {
         courseReviewsController.setStage(stage);
         courseReviewsController.setDatabaseDriver(driver);
     }
+
+    @FXML
+    public void logOut() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Course Reviews");
+        LoginSceneController loginSceneController = fxmlLoader.getController();
+        loginSceneController.setStage(stage);
+        loginSceneController.setDriver(driver);
+    }
 }
