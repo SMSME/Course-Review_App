@@ -180,7 +180,7 @@ public class DatabaseDriver {
         prepStatement.close();
         return c;
     }
-
+    /*
     public List<Review> getReviewsFromUser(String user) throws SQLException{
         String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
         String findCourse = "SELECT * FROM Courses WHERE id = ?";
@@ -191,6 +191,7 @@ public class DatabaseDriver {
         ResultSet rs = prepReviewStatement.executeQuery();
 
 //    CourseID, UserID, Rating, Review, Timestamp
+
         while(rs.next()) {
             String subject = rs.getString("CourseID");
             int number = rs.getInt("Number");
@@ -204,9 +205,13 @@ public class DatabaseDriver {
         prepStatement.close();
         return c;
     }
+
+     */
+    /*
     public void deleteReview(Review review) {
 
     }
+     */
     public void clearTables() throws SQLException {
         //TODO: implement
         String delRoute = "DELETE FROM Users";
