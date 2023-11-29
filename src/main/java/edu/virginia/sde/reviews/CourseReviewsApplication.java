@@ -21,7 +21,8 @@ public class CourseReviewsApplication extends Application {
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
 
-        DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
+        //DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
+        DatabaseDriver driver = DatabaseSingleton.getInstance();
         driver.connect();
 
         LoginSceneController controller = fxmlLoader.getController();

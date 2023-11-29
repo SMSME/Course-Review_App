@@ -23,12 +23,17 @@ public class UserSingleton {
                 User newUser = new User(username);
                 singleton = new UserSingleton(newUser);
                 return newUser;
-            } else {
-                throw new IllegalArgumentException("A user singleton");
+            }
+            else if (driver.getPassword(username)==null){
+                throw new IllegalArgumentException("User not found");
+            }
+            else if(!password.equals(driver.getPassword(username))){
+                throw new IllegalStateException("Password is incorrect");
             }
         } catch (SQLException e) {
             throw new IllegalArgumentException("An error something something");
         }
+        return null;
     }
 
     public static User createUser(String username, String password) {
@@ -45,12 +50,12 @@ public class UserSingleton {
             }
             else{
                 if(password.length()<8){
-                    throw new IllegalArgumentException("Password must be at least 8 characters");
+                    throw new IllegalStateException("Password must be at least 8 characters");
                 }
             }
             return null;
         } catch (SQLException e){
-            return null;
+            throw new IllegalArgumentException("Error occurred creating user.");
         }
     }
 
@@ -68,7 +73,7 @@ public class UserSingleton {
     }
     private static boolean isValid(String username, String password) throws SQLException {
         DatabaseDriver driver = DatabaseSingleton.getInstance();
-        driver.connect();
+//      driver.connect();
         //If the user has a password
         if(driver.getPassword(username)!=null){
             return password.equals(driver.getPassword(username));
