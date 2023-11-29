@@ -40,6 +40,7 @@ public class NewUserController {
             // If the username already exists or the password is too short
             if (driver.getPassword(newUser) != null) {
                 message.setText("User already exists");
+
             }
             else{
                 // If the username and password are valid, create the user
@@ -54,6 +55,7 @@ public class NewUserController {
             if(newPass.length()<8){
                 message.setText("Password must be at least 8 characters.");
             }
+
         }
     }
     private boolean isValid(String username, String password){
