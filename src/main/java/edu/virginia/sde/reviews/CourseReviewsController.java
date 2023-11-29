@@ -30,7 +30,6 @@ public class CourseReviewsController implements Initializable{
     }
     @FXML
     public void setCourseLabel() {
-        System.out.println("lmao");
         courseLabel.setText("Hello");
     }
     @FXML

@@ -13,10 +13,10 @@ public class ApplicationTest extends Application{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
+        driver.connect();
 
         CourseReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-
 
         controller.setDatabaseDriver(driver);
         stage.setTitle("Course Reviews");

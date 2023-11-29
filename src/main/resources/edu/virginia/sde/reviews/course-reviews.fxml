@@ -11,7 +11,7 @@
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
             prefHeight="720.0" prefWidth="1280.0">
     <VBox alignment="TOP_CENTER">
-        <Label fx:id="courseLabel" text="Initial Text" style="-fx-font-size: 32px;"/>
+        <Label fx:id="courseLabel" text="Text" style="-fx-font-size: 32px;"/>
     </VBox>
 
     <VBox>
@@ -19,6 +19,7 @@
     </VBox>
 
     <VBox style="-fx-padding: 108 0 0 225;">
-        <Button mnemonicParsing="false" onAction="#handleCreateUser" text="Add Review"/>
+        <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
     </VBox>
+
 </StackPane>
