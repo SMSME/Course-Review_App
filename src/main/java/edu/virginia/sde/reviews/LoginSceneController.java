@@ -48,21 +48,7 @@ public class LoginSceneController {
         String pass = passwordField.getText();
         //If a correct username/password entered
 
-//        if(UserSingleton.login(user, pass)!=null){
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
-//            Parent root = fxmlLoader.load();
-//            Scene scene = new Scene(root);
-//            stage.setScene(scene);
-//            stage.setTitle("Course Search");
-//
-//            CourseSearchController controller = fxmlLoader.getController();
-//            controller.setStage(stage);
-//            messageLabel.setText("Login successful");
-//        }
-
-        if(isValid(user,pass)){
-            currentUser = user;
-            //Will need to change when Course Search Screen is Done.
+        if(UserSingleton.login(user, pass)!=null){
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
@@ -73,6 +59,20 @@ public class LoginSceneController {
             controller.setStage(stage);
             messageLabel.setText("Login successful");
         }
+
+//        if(isValid(user,pass)){
+//            currentUser = user;
+//            //Will need to change when Course Search Screen is Done.
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
+//            Parent root = fxmlLoader.load();
+//            Scene scene = new Scene(root);
+//            stage.setScene(scene);
+//            stage.setTitle("Course Search");
+//
+//            CourseSearchController controller = fxmlLoader.getController();
+//            controller.setStage(stage);
+//            messageLabel.setText("Login successful");
+//        }
         //If an incorrect username is entered
         else if(driver.getPassword(user)==null){
             messageLabel.setText("Username not found");

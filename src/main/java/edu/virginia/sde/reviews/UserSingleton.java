@@ -68,7 +68,7 @@ public class UserSingleton {
     }
     private static boolean isValid(String username, String password) throws SQLException {
         DatabaseDriver driver = DatabaseSingleton.getInstance();
-
+        driver.connect();
         //If the user has a password
         if(driver.getPassword(username)!=null){
             return password.equals(driver.getPassword(username));
