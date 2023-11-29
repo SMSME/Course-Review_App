@@ -1,0 +1,78 @@
+package edu.virginia.sde.reviews;
+
+import java.sql.SQLException;
+
+public class UserSingleton {
+    private final User user;
+    private static UserSingleton singleton;
+
+    private UserSingleton(User user) {
+        this.user = user;
+    }
+
+    public boolean isLoggedIn() {
+        // If a singleton exists, it means a user is logged in
+        return singleton != null;
+    }
+
+    public static User login(String username, String password) {
+        DatabaseDriver driver = DatabaseSingleton.getInstance();
+        // Create the singleton if the login exists
+        try {
+            if (isValid(username, password)) {
+                User newUser = new User(username);
+                singleton = new UserSingleton(newUser);
+                return newUser;
+            } else {
+                throw new IllegalArgumentException("A user singleton");
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("An error something something");
+        }
+    }
+
+    public static User createUser(String username, String password) {
+        DatabaseDriver driver = DatabaseSingleton.getInstance();
+        try{
+            if(!username.isEmpty() && password.length()>=8){
+                if(driver.getPassword(username)!=null){
+                    throw new IllegalArgumentException("User already exists");
+                }
+                else{
+                    driver.addUser(username, password);
+                    driver.commit();
+                }
+            }
+            else{
+                if(password.length()<8){
+                    throw new IllegalArgumentException("Password must be at least 8 characters");
+                }
+            }
+            return null;
+        } catch (SQLException e){
+            return null;
+        }
+    }
+
+    public static void logout() {
+        // Logout
+        singleton = null;
+    }
+
+
+    public static User getCurrentUser() {
+        if (singleton != null)
+            return singleton.user;
+        // Return null, or throw an error otherwise
+        return null;
+    }
+    private static boolean isValid(String username, String password) throws SQLException {
+        DatabaseDriver driver = DatabaseSingleton.getInstance();
+
+        //If the user has a password
+        if(driver.getPassword(username)!=null){
+            return password.equals(driver.getPassword(username));
+        }
+        return false;
+    }
+}
