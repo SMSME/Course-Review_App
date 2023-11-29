@@ -31,32 +31,28 @@ public class NewUserController {
     public void setInfo(DatabaseDriver driver){
         this.driver = driver;
     }
-    public void createUser(){
+    public void createUser() throws SQLException{
         String newUser = newUsername.getText();
         String newPass = newPassword.getText();
-        try{
-            //If they entered a valid username and password
-            if (isValid(newUser, newPass)) {
-                // If the username already exists or the password is too short
-                if (driver.getPassword(newUser) != null) {
-                    message.setText("User already exists");
-                }
-                else{
-                    // If the username and password are valid, create the user
-                    driver.addUser(newUser, newPass);
-                    message.setText("User Created Successfully! Please return to the login page");
-                }
+
+        //If they entered a valid username and password
+        if (isValid(newUser, newPass)) {
+            // If the username already exists or the password is too short
+            if (driver.getPassword(newUser) != null) {
+                message.setText("User already exists");
             }
-            //If they enter an invalid username password combo
-            else {
-                //The password is not long enough.
-                if(newPass.length()<8){
-                    message.setText("Password must be at least 8 characters.");
-                }
+            else{
+                // If the username and password are valid, create the user
+                driver.addUser(newUser, newPass);
+                message.setText("User Created Successfully! Please return to the login page");
             }
-        } catch (SQLException e){
-            e.printStackTrace();
-            message.setText("Error Creating user");
+        }
+        //If they enter an invalid username password combo
+        else {
+            //The password is not long enough.
+            if(newPass.length()<8){
+                message.setText("Password must be at least 8 characters.");
+            }
         }
     }
     private boolean isValid(String username, String password){
@@ -67,8 +63,8 @@ public class NewUserController {
         Platform.exit();
     }
     @FXML
-    private void backToLogin(){
-        try {
+    private void backToLogin() throws IOException{
+        //try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
@@ -77,8 +73,8 @@ public class NewUserController {
             LoginSceneController controller = fxmlLoader.getController();
             controller.setDriver(driver);
             controller.setStage(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
     }
 }

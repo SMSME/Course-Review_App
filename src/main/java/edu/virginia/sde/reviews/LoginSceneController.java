@@ -64,10 +64,10 @@ public class LoginSceneController {
     }
 
     @FXML
-    private void handleCreateUser(){
+    private void handleCreateUser() throws IOException{
         //messageLabel.setText("Create new user button pressed");
 
-        try{
+        //try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
@@ -77,9 +77,9 @@ public class LoginSceneController {
             NewUserController newuserController = fxmlLoader.getController();
             newuserController.setStage(stage);
             newuserController.setInfo(driver);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        //} catch (IOException e){
+        //    e.printStackTrace();
+        //}
     }
 
     @FXML
@@ -89,9 +89,7 @@ public class LoginSceneController {
     private boolean isValid(String username, String password) throws SQLException {
         //If the user has a password
         if(driver.getPassword(username) != null){
-            if(password.equals(driver.getPassword(username))) {
-                return true;
-            }
+            return password.equals(driver.getPassword(username));
         }
         return false;
     }
