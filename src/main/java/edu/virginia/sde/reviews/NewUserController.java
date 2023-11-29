@@ -44,6 +44,7 @@ public class NewUserController {
             else{
                 // If the username and password are valid, create the user
                 driver.addUser(newUser, newPass);
+                driver.commit();
                 message.setText("User Created Successfully! Please return to the login page");
             }
         }
