@@ -53,19 +53,27 @@ public class DatabaseDriver {
         statement.close();
     }
 
-    public boolean userExists(String user) throws SQLException {
+    public String getPassword(String user) throws SQLException {
         String find = "SELECT * FROM Users WHERE id = ?";
 
         PreparedStatement prepStatement = connection.prepareStatement(find);
         prepStatement.setString(1, user);
         ResultSet rs = prepStatement.executeQuery();
-        return rs.next();
+        if(rs.next()) {
+            String password = rs.getString("Password");
+            prepStatement.close();
+            rs.close();
+            return password;
+        }
+        prepStatement.close();
+        rs.close();
+        return null;
     }
     public void addUser(String user, String pass) throws SQLException {
         //TODO: implement
         String insertQuery = "INSERT INTO Users (id, Password) VALUES (?, ?)";
         PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
-        if(!userExists(user)) {
+        if(getPassword(user) == null) {
             insertStmt.setString(1, user);
             insertStmt.setString(2, pass);
             insertStmt.executeUpdate();

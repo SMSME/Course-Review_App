@@ -22,6 +22,7 @@ public class CourseReviewsController implements Initializable{
     public void setStage(Stage stage){
         this.stage = stage;
     }
+
     public void setDatabaseDriver(DatabaseDriver driver) {
         this.driver = driver;
     }
