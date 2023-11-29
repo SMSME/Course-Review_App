@@ -76,7 +76,7 @@ public class LoginSceneController {
 
             NewUserController newuserController = fxmlLoader.getController();
             newuserController.setStage(stage);
-            newuserController.setInfo(driver);
+            newuserController.setDriver(driver);
         //} catch (IOException e){
         //    e.printStackTrace();
         //}
@@ -88,7 +88,7 @@ public class LoginSceneController {
     }
     private boolean isValid(String username, String password) throws SQLException {
         //If the user has a password
-        if(driver.getPassword(username) != null){
+        if(driver.getPassword(username)!=null){
             return password.equals(driver.getPassword(username));
         }
         return false;

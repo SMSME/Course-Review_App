@@ -28,7 +28,7 @@ public class NewUserController {
     public void setStage(Stage stage){
         this.stage = stage;
     }
-    public void setInfo(DatabaseDriver driver){
+    public void setDriver(DatabaseDriver driver){
         this.driver = driver;
     }
     public void createUser() throws SQLException{
