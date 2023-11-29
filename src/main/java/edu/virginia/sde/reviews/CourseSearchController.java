@@ -22,13 +22,19 @@ import java.util.List;
 
 public class CourseSearchController {
     @FXML
-    private TextField CourseSubject;
+    private TextField courseSubject;
     @FXML
-    private TextField CourseNumber;
+    private TextField courseNumber;
     @FXML
-    private TextField CourseTitle;
+    private TextField courseTitle;
+
     @FXML
-    private Label messageLabel;
+    private TextField newCourseSubject;
+    @FXML
+    private TextField newCourseNumber;
+    @FXML
+    private TextField newCourseTitle;
+
 
     @FXML
     private ListView<Course> courseListView;
@@ -55,6 +61,15 @@ public class CourseSearchController {
 
     @FXML
     private void createNewCourse() throws IOException, SQLException{
+        String subject = newCourseSubject.getText();
+        String number = newCourseNumber.getText();
+        String title = newCourseTitle.getText();
+
+        Course newCourse = new Course(subject, Integer.parseInt(number), title);
+    }
+
+    @FXML
+    private void addCourse() throws IOException, SQLException{
 
     }
 
@@ -62,9 +77,9 @@ public class CourseSearchController {
     private void handleSearch() throws IOException, SQLException {
         DatabaseDriver driver = DatabaseSingleton.getInstance();
 
-        String subject = CourseSubject.getText();
-        String number = CourseNumber.getText();
-        String title = CourseTitle.getText();
+        String subject = courseSubject.getText();
+        String number = courseNumber.getText();
+        String title = courseTitle.getText();
 
         List<Course> foundCourses = search(subject,number,title);
         courseListView.getItems().setAll(foundCourses);

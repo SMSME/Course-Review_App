@@ -20,11 +20,11 @@ public class Course {
         this.courseSubject = courseSubject;
     }
 
-    public String getcourseTitle() {
+    public String getCourseTitle() {
         return courseTitle;
     }
 
-    public void setcourseTitle(String courseTitle) {
+    public void setCourseTitle(String courseTitle) {
         this.courseTitle = courseTitle;
     }
 

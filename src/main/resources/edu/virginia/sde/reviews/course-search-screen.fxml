@@ -12,18 +12,34 @@
 
     <HBox spacing="10.0" alignment="CENTER">
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="searchSubject" promptText="CourseSubject" />
+            <TextField fx:id="courseSubject" promptText="Subject" />
         </VBox>
 
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="searchNumber" promptText="CourseNumber"/>
+            <TextField fx:id="courseNumber" promptText="Course Number"/>
         </VBox>
 
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="searchTitle" promptText="CourseTitle"/>
+            <TextField fx:id="courseTitle" promptText="Course Title"/>
         </VBox>
 
         <Button text="Search" onAction="#handleSearch" />
         <Button text="Add New Course" onAction="#createNewCourse"/>
     </HBox>
+
+    <VBox xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          prefHeight="400.0" prefWidth="600.0"
+          alignment="TOP_CENTER" style="-fx-padding: 20 0 0 0;">
+
+        <TextField fx:id="newCourseSubject" promptText="Subject"/>
+        <TextField fx:id="newCourseNumber" promptText="Number"/>
+        <TextField fx:id="newCourseTitle" promptText="Title"/>
+
+        <Button text="Submit" onAction="#addCourse"/>
+    </VBox>
 </VBox>
+
+
+
+
