@@ -12,17 +12,18 @@
 
     <HBox spacing="10.0" alignment="CENTER">
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="searchSubject" promptText="Subject" />
+            <TextField fx:id="searchSubject" promptText="CourseSubject" />
         </VBox>
 
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="searchNumber" promptText="Course Number"/>
+            <TextField fx:id="searchNumber" promptText="CourseNumber"/>
         </VBox>
 
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="searchTitle" promptText="Course Title"/>
+            <TextField fx:id="searchTitle" promptText="CourseTitle"/>
         </VBox>
 
-        <Button text="Search" onAction="#handleButtonClick" />
+        <Button text="Search" onAction="#handleSearch" />
+        <Button text="Add New Course" onAction="#createNewCourse"/>
     </HBox>
 </VBox>
