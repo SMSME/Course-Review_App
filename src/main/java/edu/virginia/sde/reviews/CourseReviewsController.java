@@ -14,13 +14,16 @@ import javafx.scene.Scene;
 public class CourseReviewsController implements Initializable{
     @FXML
     private Label courseLabel;
+    private DatabaseDriver driver;
     private Stage stage;
     public void initialize(URL location, ResourceBundle resources) {
         setCourseLabel();
     }
-
     public void setStage(Stage stage){
         this.stage = stage;
+    }
+    public void setDatabaseDriver(DatabaseDriver driver) {
+        this.driver = driver;
     }
     @FXML
     public void setCourseLabel() {
