@@ -13,4 +13,12 @@
     <VBox alignment="TOP_CENTER">
         <Label fx:id="courseLabel" text="Initial Text" style="-fx-font-size: 32px;"/>
     </VBox>
+
+    <VBox>
+        <Label text="Course Reviews" style="-fx-padding: 100 0 0 0; -fx-font-size: 32px;"/>
+    </VBox>
+
+    <VBox style="-fx-padding: 108 0 0 225;">
+        <Button mnemonicParsing="false" onAction="#handleCreateUser" text="Add Review"/>
+    </VBox>
 </StackPane>

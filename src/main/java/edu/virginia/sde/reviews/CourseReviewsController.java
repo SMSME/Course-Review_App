@@ -3,6 +3,8 @@ package edu.virginia.sde.reviews;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,5 +32,17 @@ public class CourseReviewsController implements Initializable{
     public void setCourseLabel() {
         System.out.println("lmao");
         courseLabel.setText("Hello");
+    }
+    @FXML
+    public void addReview() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("add-review.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Add Review");
+
+        AddReviewController addReviewController = fxmlLoader.getController();
+        addReviewController.setStage(stage);
+        addReviewController.setDatabaseDriver(driver);
     }
 }
