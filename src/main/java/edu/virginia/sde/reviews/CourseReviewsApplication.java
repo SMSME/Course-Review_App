@@ -13,12 +13,12 @@ public class CourseReviewsApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        LoginSceneController controller = fxmlLoader.getController();
+        CourseSearchController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        stage.setTitle("Login");
+        stage.setTitle("Course Search");
         stage.setScene(scene);
         stage.show();
     }
