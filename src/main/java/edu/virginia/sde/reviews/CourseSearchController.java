@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import javax.swing.text.LabelView;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseSearchController {
@@ -17,6 +18,10 @@ public class CourseSearchController {
     private Stage stage;
     private DatabaseDriver driver;
     private String curUser;
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("your_fxml_file.fxml"));
+    Parent root = fxmlLoader.load();
+    CourseSearchController controller = fxmlLoader.getController();
+
 
 
     public void setUser(String curUser){
@@ -34,15 +39,19 @@ public class CourseSearchController {
 
     public void setDriver(DatabaseDriver driver) {this.driver = driver;}
 
+
+
     @FXML
-    private void handleSearch(){
-        String course = searchField.getText();
-        messageLabel.setText("Getting results for " + course);
+    private void handleButtonClick(){
+
     }
 
-    private List<Course> findCourseByTitle(String title) throws SQLException {
-        DatabaseDriver db = new DatabaseDriver();
-        List<Course> foundCourse = db.getCoursesByName(title);
+
+
+//    private List<Course> findCourseByTitle(String title) throws SQLException {
+//        DatabaseDriver db = new DatabaseDriver("CruddyCoursework.sqlite");
+//        List<Course> foundCourses = db.getCoursesByName(title);
+//        return foundCourses;
+//        }
     }
 
-}

@@ -181,29 +181,29 @@ public class DatabaseDriver {
         return c;
     }
 
-    public List<Review> getReviewsFromUser(String user) throws SQLException{
-        String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
-        String findCourse = "SELECT * FROM Courses WHERE id = ?";
-        List<Review> r = new ArrayList<>();
-        PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
-        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourse);
-        prepReviewStatement.setString(1, user);
-        ResultSet rs = prepReviewStatement.executeQuery();
-
-//    CourseID, UserID, Rating, Review, Timestamp
-        while(rs.next()) {
-            String subject = rs.getString("CourseID");
-            int number = rs.getInt("Number");
-            String title = rs.getString("Title");
-            prepCourseStatement.setInt(1, rs.getInt("id"));
-            ResultSet rs2 =
-                    Course temp = new Course(subject, number, title);
-            c.add(temp);
-        }
-        rs.close();
-        prepStatement.close();
-        return c;
-    }
+//    public List<Review> getReviewsFromUser(String user) throws SQLException{
+//        String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
+//        String findCourse = "SELECT * FROM Courses WHERE id = ?";
+//        List<Review> r = new ArrayList<>();
+//        PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
+//        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourse);
+//        prepReviewStatement.setString(1, user);
+//        ResultSet rs = prepReviewStatement.executeQuery();
+//
+////    CourseID, UserID, Rating, Review, Timestamp
+//        while(rs.next()) {
+//            String subject = rs.getString("CourseID");
+//            int number = rs.getInt("Number");
+//            String title = rs.getString("Title");
+//            prepCourseStatement.setInt(1, rs.getInt("id"));
+//            ResultSet rs2 =
+//                    Course temp = new Course(subject, number, title);
+//            c.add(temp);
+//        }
+//        rs.close();
+//        prepStatement.close();
+//        return c;
+//    }
     public void deleteReview(Review review) {
 
     }
