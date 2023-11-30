@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+
 import javafx.scene.Scene;
 import javafx.fxml.Initializable;
 import static java.lang.Integer.parseInt;
@@ -24,6 +26,8 @@ public class AddReviewController {
     private TextField commentField;
     @FXML
     private Label message;
+    @FXML
+    private Course currentCourse;
 
     public void setStage(Stage stage){
         this.stage = stage;
@@ -46,7 +50,10 @@ public class AddReviewController {
         }
         else {
             message.setText("Review successfully added!");
-            //driver.addReview(int rating, Timestamp timestamp, String comment);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            User currentUser = UserSingleton.getCurrentUser();
+            Review newReview = new Review(currentCourse, rating, timestamp, comment, currentUser.getUsername());
+            driver.addReview(newReview);
             driver.commit();
         }
     }

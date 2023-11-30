@@ -35,8 +35,6 @@ public class Review {
     public String getComment() {
         return comment;
     }
-    public void setCourse(Course course) { this.course = course; }
-    public Course getCourse() { return course; }
     public void setUser(String user) { this.user = user; }
     public String getUser() { return user; }
 
@@ -45,7 +43,7 @@ public class Review {
     public Course getCourse() { return course; }
 
     public Boolean hasComment() {
-        if (comment.equals("")) {
+        if (comment.isEmpty()) {
             return false;
         }
         return true;

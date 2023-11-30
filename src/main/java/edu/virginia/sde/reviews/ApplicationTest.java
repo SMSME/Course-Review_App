@@ -12,13 +12,13 @@ public class ApplicationTest extends Application{
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
+        DatabaseDriver driver = DatabaseSingleton.getInstance();
         driver.connect();
 
         CourseReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-
         controller.setDatabaseDriver(driver);
+
         stage.setTitle("Course Reviews");
         stage.setScene(scene);
         stage.show();
