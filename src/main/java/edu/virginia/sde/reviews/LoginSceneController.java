@@ -24,13 +24,11 @@ public class LoginSceneController {
     private Button loginButton;
     private Stage stage;
     private DatabaseDriver driver;
-//    public LoginSceneController(DatabaseDriver driver){
-//        this.driver = driver;
-//    }
+    private String currentUser;
     public void setStage(Stage stage){
         this.stage = stage;
     }
-    @FXML
+    //@FXML
     public void setDriver(DatabaseDriver driver){
         this.driver = driver;
     }
@@ -45,46 +43,67 @@ public class LoginSceneController {
 //    }
 
     @FXML
-    private void handleButton() throws SQLException{
+    private void handleButton() throws SQLException, IOException{
         String user = usernameField.getText();
         String pass = passwordField.getText();
         //If a correct username/password entered
-        if(isValid(user,pass)){
-            messageLabel.setText("Login successful");
+        try{
+            if(UserSingleton.login(user, pass)!=null){
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.setTitle("Course Search");
+
+                CourseSearchController controller = fxmlLoader.getController();
+                controller.setStage(stage);
+                messageLabel.setText("Login successful");
+            }
+        } catch (IllegalArgumentException e){
+            messageLabel.setText("User not found");
         }
-        //If an incorrect username is entered
-        else if(driver.getPassword(user)==null){
-            messageLabel.setText("Username not found");
-        }
-        //password incorrect
-        else if(!pass.equals(driver.getPassword(user))){
+        catch(IllegalStateException e){
             messageLabel.setText("Password is incorrect");
         }
-        else{messageLabel.setText("Login not successful");}
+        catch(IOException e){
+            messageLabel.setText("Login not successful, an error occurred.");
+        }
+//        if(isValid(user,pass)){
+//            currentUser = user;
+//            //Will need to change when Course Search Screen is Done.
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
+//            Parent root = fxmlLoader.load();
+//            Scene scene = new Scene(root);
+//            stage.setScene(scene);
+//            stage.setTitle("Course Search");
+//
+//            CourseSearchController controller = fxmlLoader.getController();
+//            controller.setStage(stage);
+//            messageLabel.setText("Login successful");
+//        }
+        //If an incorrect username is entered
+//        else if(driver.getPassword(user)==null){
+//            messageLabel.setText("Username not found");
+//        }
+//        //password incorrect
+//        else if(!pass.equals(driver.getPassword(user))){
+//            messageLabel.setText("Password is incorrect");
+//        }
+//        else{messageLabel.setText("Login not successful");}
     }
 
     @FXML
-    private void handleCreateUser(){
+    private void handleCreateUser() throws IOException{
         //messageLabel.setText("Create new user button pressed");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Create New User");
 
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Create New User");
-
-            NewUserController newuserController = fxmlLoader.getController();
-            //NewUserController newuserController = new NewUserController();
-            newuserController.setStage(stage);
-            newuserController.setInfo(driver);
-
-            //newuserController.createUser();
-
-
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        NewUserController newuserController = fxmlLoader.getController();
+        newuserController.setStage(stage);
+        //newuserController.setDriver(driver);
     }
 
     @FXML
@@ -93,10 +112,8 @@ public class LoginSceneController {
     }
     private boolean isValid(String username, String password) throws SQLException {
         //If the user has a password
-        if(driver.getPassword(username) != null){
-            if(password.equals(driver.getPassword(username))) {
-                return true;
-            }
+        if(driver.getPassword(username)!=null){
+            return password.equals(driver.getPassword(username));
         }
         return false;
     }
