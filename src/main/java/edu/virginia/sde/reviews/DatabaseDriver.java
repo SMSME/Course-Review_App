@@ -43,7 +43,7 @@ public class DatabaseDriver {
         //TODO: implement
         String createUsers = "CREATE TABLE IF NOT EXISTS Users (id TEXT PRIMARY KEY, Password TEXT NOT NULL)";
         String createCourses = "CREATE TABLE IF NOT EXISTS Courses (id INTEGER PRIMARY KEY, Subject TEXT NOT NULL, Number INTEGER NOT NULL, Title TEXT NOT NULL)";
-        String createReviews = "CREATE TABLE IF NOT EXISTS Reviews (INTEGER CourseID REFERENCES Courses(id) ON DELETE CASCADE, UserID TEXT REFERENCES Users(id) ON DELETE CASCADE, Rating INTEGER NOT NULL, Review TEXT, Timestamp TEXT NOT NULL)";
+        String createReviews = "CREATE TABLE IF NOT EXISTS Reviews (CourseID INTEGER REFERENCES Courses(id) ON DELETE CASCADE, UserID TEXT REFERENCES Users(id) ON DELETE CASCADE, Rating INTEGER NOT NULL, Review TEXT, Timestamp TEXT NOT NULL)";
         Statement statement = connection.createStatement();
 
         statement.execute(createUsers);
@@ -111,7 +111,7 @@ public class DatabaseDriver {
         insertStmt.close();
     }
 
-//    public void addReview(String user, String pass) throws SQLException {
+//    public void addReview(Review review) throws SQLException {
 //        //TODO: implement
 //        String insertQuery = "INSERT INTO Users (id, Password) VALUES (?, ?)";
 //        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
@@ -181,31 +181,64 @@ public class DatabaseDriver {
         return c;
     }
 
+    public Course getCourseByID(int num) throws SQLException{
+        String findCourse = "SELECT * FROM Courses WHERE id = ?";
+        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourse);
+        prepCourseStatement.setInt(1, num);
+        ResultSet rs = prepCourseStatement.executeQuery();
+        Course c = null;
+        if(rs.next()) {
+            String subject = rs.getString("Subject");
+            int number = rs.getInt("Number");
+            String title = rs.getString("Title");
+            c = new Course(subject, number, title);
+        }
+        prepCourseStatement.close();
+        rs.close();
+        return c;
+    }
+
+    public int getCourseIDByCourse(Course course) throws SQLException {
+        int courseid = -1;
+        String findCourseID = "SELECT * FROM Courses WHERE (Subject, Number, Title) = (?, ?, ?)";
+        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourseID);
+        prepCourseStatement.setString(1, course.getCourseSubject());
+        prepCourseStatement.setInt(2, course.getCourseNumber());
+        prepCourseStatement.setString(3, course.getCourseTitle());
+        ResultSet rs = prepCourseStatement.executeQuery();
+
+        if(rs.next()) {
+            courseid = rs.getInt("id");
+        }
+        prepCourseStatement.close();
+        rs.close();
+        return courseid;
+    }
     public List<Review> getReviewsFromUser(String user) throws SQLException{
         String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
-        String findCourse = "SELECT * FROM Courses WHERE id = ?";
         List<Review> r = new ArrayList<>();
         PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
-        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourse);
         prepReviewStatement.setString(1, user);
         ResultSet rs = prepReviewStatement.executeQuery();
+        while(rs.next()) {
+            int cid = rs.getInt("CourseID");
+            Course temp = getCourseByID(cid);
+            int rating  = rs.getInt("Rating");
+            String ts = rs.getString("Timestamp");
+            String comment = rs.getString("Review");
 
-//    CourseID, UserID, Rating, Review, Timestamp
-//        while(rs.next()) {
-//            String subject = rs.getString("CourseID");
-//            int number = rs.getInt("Number");
-//            String title = rs.getString("Title");
-//            prepCourseStatement.setInt(1, rs.getInt("id"));
-//            ResultSet rs2 =
-//            Course temp = new Course(subject, number, title);
-//            c.add(temp);
-//        }
-//        rs.close();
-//        prepStatement.close();
-//        return c;
-        return null;
+            Timestamp timestamp = Timestamp.valueOf(ts);
+            Review review = new Review(temp, rating, timestamp, comment);
+            r.add(review);
+        }
+        rs.close();
+        prepReviewStatement.close();
+        return r;
     }
-    public void deleteReview(Review review) {
+    public void deleteReview(Review review)throws SQLException {
+        String delReview = "DELETE FROM Reviews WHERE CourseID = ? and UserID = ?";
+        PreparedStatement prepReviewStatement = connection.prepareStatement(delReview);
+        prepReviewStatement.setInt(1, getCourseIDByCourse(review.getCourse()));
 
     }
     public void clearTables() throws SQLException {
@@ -222,18 +255,18 @@ public class DatabaseDriver {
         statement.close();
 
     }
-//    public static void main(String[] args) throws SQLException {
-//        DatabaseDriver d = new DatabaseDriver("CruddyCoursework.sqlite");
-//        d.connect();
-//        d.createTables();
-////        d.addUser("jinwookim", "password1");
-////        d.addUser("smatt", "password2");
-////        d.addUser("vineelk", "password3");
-//        d.addUser("jamtran12", "password4");
-////        System.out.println(d.getPassword("jamtran"));
-//        Course temp = new Course("CS", 3200, "Data Structures 3");
-//        d.addCourse(temp);
-//        d.commit();
-//        d.disconnect();
-//    }
+    public static void main(String[] args) throws SQLException {
+        DatabaseDriver d = new DatabaseDriver("CruddyCoursework.sqlite");
+        d.connect();
+        d.createTables();
+//        d.addUser("jinwookim", "password1");
+//        d.addUser("smatt", "password2");
+//        d.addUser("vineelk", "password3");
+        d.addUser("jamtran12", "password4");
+//        System.out.println(d.getPassword("jamtran"));
+        Course temp = new Course("CS", 3200, "Data Structures 3");
+        d.addCourse(temp);
+        d.commit();
+        d.disconnect();
+    }
 }
