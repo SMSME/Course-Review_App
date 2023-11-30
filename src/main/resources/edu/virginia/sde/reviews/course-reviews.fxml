@@ -19,6 +19,6 @@
         <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
     </VBox>
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
-    <Button mnemonicParsing="false" onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
+    <Hyperlink onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
 </AnchorPane>
 
