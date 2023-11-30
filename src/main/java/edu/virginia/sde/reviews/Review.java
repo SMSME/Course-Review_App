@@ -1,6 +1,5 @@
 package edu.virginia.sde.reviews;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Review {

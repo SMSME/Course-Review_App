@@ -17,6 +17,8 @@
             <Label text=" Course Reviews" style="-fx-font-size: 32px;"/>
         </HBox>
         <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
+        <VBox fx:id="reviews">
+        </VBox>
     </VBox>
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
     <Hyperlink onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
