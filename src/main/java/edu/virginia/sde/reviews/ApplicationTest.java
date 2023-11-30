@@ -15,9 +15,12 @@ public class ApplicationTest extends Application{
         DatabaseDriver driver = DatabaseSingleton.getInstance();
         driver.connect();
 
+        Course tempCourse = new Course("CS",3200,"Data Structures 3");
+
         CourseReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
         controller.setDatabaseDriver(driver);
+        controller.setCurrentCourse(tempCourse);
 
         stage.setTitle("Course Reviews");
         stage.setScene(scene);

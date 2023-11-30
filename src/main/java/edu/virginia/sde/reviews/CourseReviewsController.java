@@ -13,24 +13,22 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-public class CourseReviewsController implements Initializable{
+public class CourseReviewsController {
     @FXML
     private Label courseLabel;
     private DatabaseDriver driver;
     private Stage stage;
-    public void initialize(URL location, ResourceBundle resources) {
-        setCourseLabel();
-    }
+    private Course currentCourse;
     public void setStage(Stage stage){
         this.stage = stage;
     }
-
     public void setDatabaseDriver(DatabaseDriver driver) {
         this.driver = driver;
     }
-    @FXML
-    public void setCourseLabel() {
-        courseLabel.setText("COURSE NAMaslfjoasoifjasdoifjsaisdjfaoisdE");
+
+    public void setCurrentCourse(Course currentCourse) {
+        this.currentCourse = currentCourse;
+        courseLabel.setText(currentCourse.getCourseTitle());
     }
     @FXML
     public void addReview() throws IOException {
