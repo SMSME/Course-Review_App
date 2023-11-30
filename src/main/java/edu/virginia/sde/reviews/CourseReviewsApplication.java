@@ -1,5 +1,4 @@
 package edu.virginia.sde.reviews;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +8,7 @@ import javafx.stage.Stage;
 import javax.xml.crypto.Data;
 import java.sql.SQLException;
 
-
-public class CourseReviewsApplication extends Application {
+public class CourseReviewsApplication extends Application{
     public static void main(String[] args) {
         launch(args);
     }
