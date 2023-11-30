@@ -2,11 +2,8 @@ package edu.virginia.sde.reviews;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,24 +19,28 @@ import java.util.List;
 
 public class CourseSearchController {
     @FXML
-    private TextField courseSubject;
+    public TextField courseSubject;
     @FXML
-    private TextField courseNumber;
+    public TextField courseNumber;
     @FXML
-    private TextField courseTitle;
-
-    @FXML
-    private TextField newCourseSubject;
-    @FXML
-    private TextField newCourseNumber;
-    @FXML
-    private TextField newCourseTitle;
+    public TextField courseTitle;
 
 
     @FXML
-    private ListView<Course> courseListView;
-    private Stage stage;
-    private DatabaseDriver driver;
+    public VBox newCourseFields;
+    @FXML
+    public TextField newCourseSubject;
+    @FXML
+    public TextField newCourseNumber;
+    @FXML
+    public TextField newCourseTitle;
+
+
+    @FXML
+    public ListView<Course> courseListView;
+    public List<Course> courses = new ArrayList<>();
+    public Stage stage;
+    public DatabaseDriver driver = DatabaseSingleton.getInstance();
 
 
     public void setStage(Stage stage) {
@@ -50,17 +51,75 @@ public class CourseSearchController {
         this.driver = driver;
     }
 
-
-    @FXML
-    private void initialize() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
-        Parent root = fxmlLoader.load();
-        CourseSearchController controller = fxmlLoader.getController();
-        courseListView = new ListView<>();
+    public void clearNewCourses(){
+        courseSubject.clear();
+        courseNumber.clear();
+        courseTitle.clear();
     }
 
     @FXML
-    private void createNewCourse() throws IOException, SQLException{
+    public void addCourse(){
+        String subject = courseSubject.getText().toLowerCase();
+        String number = courseNumber.getText();
+        String title = courseTitle.getText();
+
+        if (validateCourse(subject,number,title)){
+            Course newCourse = new Course(subject,Integer.parseInt(number),title);
+            courses.add(newCourse);
+            courseListView.getItems().setAll(courses);
+            clearNewCourses();
+            toggleNewCourseFields();
+        }else{
+            //idk make a message appear
+            System.out.println("Invalid data...");
+        }
+    }
+
+    @FXML
+    public boolean validateCourse(String subject, String number, String title){
+        //all letters 2-4 in length
+        if (!subject.matches("[A-Za-z]{2,4}")){
+            return false;
+        }
+        //number that is exactly 4 in length
+        if (!number.matches("\\d{4}")){
+            return false;
+        }
+        //ensure at least one long and < 50 char
+        if (title.isEmpty() || title.length()>50){
+            return false;
+        }
+        return true;
+    }
+
+
+    @FXML
+    public void createNewCourse() throws IOException, SQLException{
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Add New Course");
+
+        dialog.getDialogPane().setMinSize(400,400);
+
+        VBox dialogContent = new VBox(10);
+        dialogContent.getChildren().addAll(
+                new Label("New Course Subject"),
+                newCourseSubject,
+                new Label("New Course Number"),
+                newCourseNumber,
+                new Label("New Course Title"),
+                newCourseTitle
+        );
+
+        dialog.getDialogPane().setContent(dialogContent);
+        Platform.runLater(() -> newCourseSubject.requestFocus());
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == ButtonType.OK){
+                //something to handle it idk yet
+            }
+            return null;
+        });
+        dialog.showAndWait();
+
         String subject = newCourseSubject.getText();
         String number = newCourseNumber.getText();
         String title = newCourseTitle.getText();
@@ -69,14 +128,21 @@ public class CourseSearchController {
     }
 
     @FXML
-    private void addCourse() throws IOException, SQLException{
+    public void toggleNewCourseFields(){
+        newCourseFields.setVisible(!newCourseFields.isVisible());
 
+        // Clear the fields when hiding
+        if (!newCourseFields.isVisible()) {
+            newCourseSubject.clear();
+            newCourseNumber.clear();
+            newCourseTitle.clear();
+        }
     }
 
-    @FXML
-    private void handleSearch() throws IOException, SQLException {
-        DatabaseDriver driver = DatabaseSingleton.getInstance();
 
+
+    @FXML
+    public void handleSearch() throws IOException, SQLException {
         String subject = courseSubject.getText();
         String number = courseNumber.getText();
         String title = courseTitle.getText();
@@ -85,8 +151,7 @@ public class CourseSearchController {
         courseListView.getItems().setAll(foundCourses);
     }
 
-    private List<Course> search(String subject, String number, String title) throws SQLException {
-        DatabaseDriver db = new DatabaseDriver("CruddyCoursework.sqlite");
+    public List<Course> search(String subject, String number, String title) throws SQLException {
         //refers to whether each search bar is filled in the order of subject, number, Title
         int searchbars = 0;
 
