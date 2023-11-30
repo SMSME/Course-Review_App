@@ -111,18 +111,6 @@ public class DatabaseDriver {
         insertStmt.close();
     }
 
-//    public void addReview(Review review) throws SQLException {
-//        //TODO: implement
-//        String insertQuery = "INSERT INTO Users (id, Password) VALUES (?, ?)";
-//        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
-//        if(getPassword(user) == null) {
-//            insertStmt.setString(1, user);
-//            insertStmt.setString(2, pass);
-//            insertStmt.executeUpdate();
-//        }
-//        insertStmt.close();
-//    }
-
     public List<Course> getCoursesByName(String search) throws SQLException{
         String findCourses = "SELECT * FROM Courses WHERE Title LIKE ? COLLATE NOCASE";
         List<Course> c = new ArrayList<>();
@@ -214,6 +202,29 @@ public class DatabaseDriver {
         rs.close();
         return courseid;
     }
+    public void addReview(Review review) throws SQLException {
+        String insertQuery = "INSERT INTO Reviews (CourseID, UserID, Rating, Review, Timestamp) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+        Course c = review.getCourse();
+        insertStmt.setInt(1, getCourseIDByCourse(c));
+        insertStmt.setString(2, review.getUser());
+        insertStmt.setInt(3, review.getRating());
+        insertStmt.setString(4, review.getComment());
+        insertStmt.setString(5, review.getTimestamp().toString());
+        insertStmt.executeUpdate();
+
+        insertStmt.close();
+    }
+
+    public void deleteReview(Review review) throws SQLException {
+        String delReview = "DELETE FROM Reviews WHERE CourseID = ? and UserID = ?";
+        PreparedStatement prepReviewStatement = connection.prepareStatement(delReview);
+        prepReviewStatement.setInt(1, getCourseIDByCourse(review.getCourse()));
+        prepReviewStatement.setString(2, review.getUser());
+        prepReviewStatement.executeUpdate();
+
+        prepReviewStatement.close();
+    }
     public List<Review> getReviewsFromUser(String user) throws SQLException{
         String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
         List<Review> r = new ArrayList<>();
@@ -228,19 +239,48 @@ public class DatabaseDriver {
             String comment = rs.getString("Review");
 
             Timestamp timestamp = Timestamp.valueOf(ts);
-            Review review = new Review(temp, rating, timestamp, comment);
+            Review review = new Review(temp, rating, timestamp, comment, user);
             r.add(review);
         }
         rs.close();
         prepReviewStatement.close();
         return r;
     }
-    public void deleteReview(Review review)throws SQLException {
-        String delReview = "DELETE FROM Reviews WHERE CourseID = ? and UserID = ?";
-        PreparedStatement prepReviewStatement = connection.prepareStatement(delReview);
-        prepReviewStatement.setInt(1, getCourseIDByCourse(review.getCourse()));
+    public List<Review> getReviewsFromCourse(Course course) throws SQLException{
+        String findReviews = "SELECT * FROM Reviews WHERE CourseID = ?";
+        List<Review> r = new ArrayList<>();
+        PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
+        prepReviewStatement.setInt(1, getCourseIDByCourse(course));
+        ResultSet rs = prepReviewStatement.executeQuery();
+        while(rs.next()) {
+            int cid = rs.getInt("CourseID");
+            Course temp = getCourseByID(cid);
+            int rating  = rs.getInt("Rating");
+            String ts = rs.getString("Timestamp");
+            String comment = rs.getString("Review");
+            String user = rs.getString("UserID");
 
+            Timestamp timestamp = Timestamp.valueOf(ts);
+            Review review = new Review(temp, rating, timestamp, comment, user);
+            r.add(review);
+        }
+        rs.close();
+        prepReviewStatement.close();
+        return r;
     }
+    public void editReview(Review review) throws SQLException{
+        String changeReview = "UPDATE Reviews SET Rating = ?, Timestamp = ?, Review = ? WHERE (CourseID, UserID) = (?,?)";
+        PreparedStatement prepReviewStatement = connection.prepareStatement(changeReview);
+        prepReviewStatement.setInt(1, review.getRating());
+        prepReviewStatement.setString(2, review.getTimestamp().toString());
+        prepReviewStatement.setString(3, review.getComment());
+        prepReviewStatement.setInt(4, getCourseIDByCourse(review.getCourse()));
+        prepReviewStatement.setString(5, review.getUser());
+        prepReviewStatement.executeUpdate();
+
+        prepReviewStatement.close();
+    }
+
     public void clearTables() throws SQLException {
         //TODO: implement
         String delRoute = "DELETE FROM Users";
