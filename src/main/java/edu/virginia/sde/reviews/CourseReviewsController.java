@@ -55,4 +55,17 @@ public class CourseReviewsController implements Initializable{
         loginSceneController.setStage(stage);
         loginSceneController.setDriver(driver);
     }
+
+    @FXML
+    public void editReview() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("edit-review.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Edit Review");
+
+        EditReviewController editReviewController = fxmlLoader.getController();
+        editReviewController.setStage(stage);
+        editReviewController.setDatabaseDriver(driver);
+    }
 }
