@@ -111,6 +111,24 @@ public class DatabaseDriver {
         insertStmt.close();
     }
 
+    public List<Course> getCourses() throws SQLException {
+        String findCourses = "SELECT * FROM Courses";
+        List<Course> c = new ArrayList<>();
+        PreparedStatement prepStatement = connection.prepareStatement(findCourses);
+        ResultSet rs = prepStatement.executeQuery();
+
+        while(rs.next()) {
+            String subject = rs.getString("Subject");
+            int number = rs.getInt("Number");
+            String title = rs.getString("Title");
+
+            Course temp = new Course(subject, number, title);
+            c.add(temp);
+        }
+        rs.close();
+        prepStatement.close();
+        return c;
+    }
     public List<Course> getCoursesByName(String search) throws SQLException{
         String findCourses = "SELECT * FROM Courses WHERE Title LIKE ? COLLATE NOCASE";
         List<Course> c = new ArrayList<>();
