@@ -9,7 +9,7 @@ public class DatabaseSingleton {
     }
 
     public static DatabaseDriver getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
             instance = new DatabaseSingleton(driver);
         }
