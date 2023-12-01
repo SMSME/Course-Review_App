@@ -77,9 +77,9 @@ public class CourseSearchController {
     //add course into database and update the display
     @FXML
     public void addCourse(){
-        String subject = courseSubject.getText().toLowerCase();
-        String number = courseNumber.getText();
-        String title = courseTitle.getText();
+        String subject = newCourseSubject.getText().toLowerCase();
+        String number = newCourseNumber.getText();
+        String title = newCourseTitle.getText();
 
         if (validateCourse(subject,number,title)){
             Course newCourse = new Course(subject,Integer.parseInt(number),title);
