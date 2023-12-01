@@ -10,6 +10,7 @@
       prefHeight="720.0" prefWidth="1280.0"
       alignment="TOP_CENTER" style="-fx-padding: 20 0 0 0;">
 
+    //search fields
     <HBox spacing="10.0" alignment="CENTER">
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
             <TextField fx:id="courseSubject" promptText="Subject" />
@@ -27,6 +28,13 @@
         <Button text="Add New Course" onAction="#createNewCourse"/>
     </HBox>
 
+    <ScrollPane VBox.vgrow="ALWAYS">
+        <content>
+            <ListView fx:id="courseListView"/>
+        </content>
+    </ScrollPane>
+
+    //fields for adding a new course
     <VBox fx:id="newCourseFields" visible="false">
         <TextField fx:id="newCourseSubject" promptText="Subject"/>
         <TextField fx:id="newCourseNumber" promptText="Number"/>
