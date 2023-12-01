@@ -5,16 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 
-import javax.xml.crypto.Data;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class CourseSearchController {
@@ -40,41 +35,22 @@ public class CourseSearchController {
     public ListView<Course> courseListView;
     public List<Course> courses = new ArrayList<>();
     public Stage stage;
-    public DatabaseDriver driver = DatabaseSingleton.getInstance();
+    public DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
 
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    public void setDriver(DatabaseDriver driver) {
-        this.driver = driver;
-    }
 
+    //dealing with basic course searching
     public void clearNewCourses(){
         courseSubject.clear();
         courseNumber.clear();
         courseTitle.clear();
     }
 
-    @FXML
-    public void addCourse() throws SQLException {
-        String subject = newCourseSubject.getText();
-        String number = newCourseNumber.getText();
-        String title = newCourseTitle.getText();
-        if (validateCourse(subject,number,title)){
-            Course newCourse = new Course(subject,Integer.parseInt(number),title);
-            courses.add(newCourse);
-            courseListView.getItems().setAll(courses);
-            clearNewCourses();
-            driver.addCourse(newCourse);
-            toggleNewCourseFields();
-        }else{
-            //idk make a message appear
-            System.out.println("Invalid data...");
-        }
-    }
-
+    //adding a new course - check if valid
     @FXML
     public boolean validateCourse(String subject, String number, String title){
         //all letters 2-4 in length
@@ -92,9 +68,39 @@ public class CourseSearchController {
         return true;
     }
 
-
+    //ensure all fields are filled when adding new course to review
     @FXML
-    public void createNewCourseButton() throws IOException, SQLException{
+    public boolean fieldsFilled(){
+        return !newCourseSubject.getText().isEmpty() && !newCourseNumber.getText().isEmpty()
+                && !newCourseTitle.getText().isEmpty();
+    }
+
+    //add course into database and update the display
+    @FXML
+    public void addCourse(){
+        String subject = courseSubject.getText().toLowerCase();
+        String number = courseNumber.getText();
+        String title = courseTitle.getText();
+
+        if (validateCourse(subject,number,title)){
+            Course newCourse = new Course(subject,Integer.parseInt(number),title);
+            try{
+                driver.addCourse(newCourse);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            updateCourseListView();
+            clearNewCourses();
+            toggleNewCourseFields();
+        }else{
+            //idk make a message appear
+            System.out.println("Invalid data...");
+        }
+    }
+
+    //create new course - opens a dialog box to fill
+    @FXML
+    public void createNewCourse() throws IOException, SQLException{
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Add New Course");
 
@@ -113,24 +119,35 @@ public class CourseSearchController {
         dialog.getDialogPane().setContent(dialogContent);
         Platform.runLater(() -> newCourseSubject.requestFocus());
 
-        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(submitButton, ButtonType.CANCEL);
+        ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
 
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == submitButton){
-                try {
+            if (dialogButton == addButton){
+                if (fieldsFilled()){
                     addCourse();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    dialog.close();}
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Incomplete Form");
+                    alert.setContentText("Please fill in all fields");
+
+                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                    alert.showAndWait();
+
+                    return null;
                 }
                 //something to handle it idk yet
             }
             return null;
         });
-        dialog.showAndWait();
 
+        dialog.showAndWait();
     }
 
+    //changes visibility with new course fields
     @FXML
     public void toggleNewCourseFields(){
         newCourseFields.setVisible(!newCourseFields.isVisible());
@@ -143,8 +160,18 @@ public class CourseSearchController {
         }
     }
 
+    //updates list for courses to appear
+    @FXML
+    public void updateCourseListView(){
+        try{
+            List<Course> allCourses = driver.getAllCourses();
+            courseListView.getItems().setAll(allCourses);
+        } catch (SQLException e){
+            System.out.println("Error in getting courses idk bro");
+        }
+    }
 
-
+    //searching database
     @FXML
     public void handleSearch() throws IOException, SQLException {
         String subject = courseSubject.getText();
@@ -152,7 +179,12 @@ public class CourseSearchController {
         String title = courseTitle.getText();
 
         List<Course> foundCourses = search(subject,number,title);
-        courseListView.getItems().setAll(foundCourses);
+
+        if (subject.isEmpty() && number.isEmpty() && title.isEmpty()){
+            updateCourseListView();
+        }else{
+            courseListView.getItems().setAll(foundCourses);
+        }
     }
 
     public List<Course> search(String subject, String number, String title) throws SQLException {
@@ -183,41 +215,39 @@ public class CourseSearchController {
         // case 5 = search by subject and Title
         // case 6 = search by number and Title
         // case 7 = search by subject, number, and Title
-       switch (searchbars){
-           case 1:
-               matchCourses.addAll(coursesbySub);
-               break;
-           case 2:
-               matchCourses.addAll(coursesbyNum);
-               break;
-           case 3:
-               for (Course course : coursesbySub){
-                   if (coursesbyNum.contains(course)){
-                       matchCourses.add(course);}}
-               break;
-           case 4:
-               matchCourses.addAll(coursesbyTitle);
-               break;
-           case 5:
-               for (Course course : coursesbySub){
-                   if (coursesbyTitle.contains(course)){
-                       matchCourses.add(course);}}
-               break;
-           case 6:
-               for (Course course : coursesbyTitle){
-                   if (coursesbyNum.contains(course)){
-                       matchCourses.add(course);}}
-               break;
-           case 7:
-               for (Course course : coursesbyTitle){
-                   if (coursesbyNum.contains(course) && coursesbySub.contains(course)){
-                       matchCourses.add(course);}}
-               break;
-       }
+        switch (searchbars){
+            case 1:
+                matchCourses.addAll(coursesbySub);
+                break;
+            case 2:
+                matchCourses.addAll(coursesbyNum);
+                break;
+            case 3:
+                for (Course course : coursesbySub){
+                    if (coursesbyNum.contains(course)){
+                        matchCourses.add(course);}}
+                break;
+            case 4:
+                matchCourses.addAll(coursesbyTitle);
+                break;
+            case 5:
+                for (Course course : coursesbySub){
+                    if (coursesbyTitle.contains(course)){
+                        matchCourses.add(course);}}
+                break;
+            case 6:
+                for (Course course : coursesbyTitle){
+                    if (coursesbyNum.contains(course)){
+                        matchCourses.add(course);}}
+                break;
+            case 7:
+                for (Course course : coursesbyTitle){
+                    if (coursesbyNum.contains(course) && coursesbySub.contains(course)){
+                        matchCourses.add(course);}}
+                break;
+        }
         return matchCourses;
     }
 
 
 }
-
-
