@@ -24,7 +24,7 @@
         </VBox>
 
         <Button text="Search" onAction="#handleSearch" />
-        <Button text="Add New Course" onAction="#createNewCourse"/>
+        <Button text="Add New Course" onAction="#createNewCourseButton"/>
     </HBox>
 
     <VBox fx:id="newCourseFields" visible="false">

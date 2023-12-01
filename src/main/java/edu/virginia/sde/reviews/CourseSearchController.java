@@ -58,16 +58,16 @@ public class CourseSearchController {
     }
 
     @FXML
-    public void addCourse(){
-        String subject = courseSubject.getText().toLowerCase();
-        String number = courseNumber.getText();
-        String title = courseTitle.getText();
-
+    public void addCourse() throws SQLException {
+        String subject = newCourseSubject.getText();
+        String number = newCourseNumber.getText();
+        String title = newCourseTitle.getText();
         if (validateCourse(subject,number,title)){
             Course newCourse = new Course(subject,Integer.parseInt(number),title);
             courses.add(newCourse);
             courseListView.getItems().setAll(courses);
             clearNewCourses();
+            driver.addCourse(newCourse);
             toggleNewCourseFields();
         }else{
             //idk make a message appear
@@ -94,7 +94,7 @@ public class CourseSearchController {
 
 
     @FXML
-    public void createNewCourse() throws IOException, SQLException{
+    public void createNewCourseButton() throws IOException, SQLException{
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Add New Course");
 
@@ -112,19 +112,23 @@ public class CourseSearchController {
 
         dialog.getDialogPane().setContent(dialogContent);
         Platform.runLater(() -> newCourseSubject.requestFocus());
+
+        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(submitButton, ButtonType.CANCEL);
+
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == ButtonType.OK){
+            if (dialogButton == submitButton){
+                try {
+                    addCourse();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 //something to handle it idk yet
             }
             return null;
         });
         dialog.showAndWait();
 
-        String subject = newCourseSubject.getText();
-        String number = newCourseNumber.getText();
-        String title = newCourseTitle.getText();
-
-        Course newCourse = new Course(subject, Integer.parseInt(number), title);
     }
 
     @FXML
