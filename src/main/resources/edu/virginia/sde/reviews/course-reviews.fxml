@@ -6,13 +6,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx"
+<AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
             prefHeight="720.0" prefWidth="1280.0">
-    <VBox alignment="CENTER" spacing="10.0">
 
+    <VBox>
+        <HBox>
+            <Label fx:id="courseLabel" text="Text" style="-fx-font-size: 32px;"/>
+            <Label text=" Course Reviews" style="-fx-font-size: 32px;"/>
+        </HBox>
+        <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
+        <VBox fx:id="reviews">
+        </VBox>
     </VBox>
+    <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
+    <Hyperlink onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
+</AnchorPane>
 
-
-</StackPane>
