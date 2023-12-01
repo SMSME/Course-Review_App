@@ -43,7 +43,7 @@ public class DatabaseDriver {
         //TODO: implement
         String createUsers = "CREATE TABLE IF NOT EXISTS Users (id TEXT PRIMARY KEY, Password TEXT NOT NULL)";
         String createCourses = "CREATE TABLE IF NOT EXISTS Courses (id INTEGER PRIMARY KEY, Subject TEXT NOT NULL, Number INTEGER NOT NULL, Title TEXT NOT NULL)";
-        String createReviews = "CREATE TABLE IF NOT EXISTS Reviews (INTEGER CourseID REFERENCES Courses(id) ON DELETE CASCADE, UserID TEXT REFERENCES Users(id) ON DELETE CASCADE, Rating INTEGER NOT NULL, Review TEXT, Timestamp TEXT NOT NULL)";
+        String createReviews = "CREATE TABLE IF NOT EXISTS Reviews (CourseID INTEGER REFERENCES Courses(id) ON DELETE CASCADE, UserID TEXT REFERENCES Users(id) ON DELETE CASCADE, Rating INTEGER NOT NULL, Review TEXT, Timestamp TEXT NOT NULL)";
         Statement statement = connection.createStatement();
 
         statement.execute(createUsers);
@@ -111,18 +111,6 @@ public class DatabaseDriver {
         insertStmt.close();
     }
 
-//    public void addReview(String user, String pass) throws SQLException {
-//        //TODO: implement
-//        String insertQuery = "INSERT INTO Users (id, Password) VALUES (?, ?)";
-//        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
-//        if(getPassword(user) == null) {
-//            insertStmt.setString(1, user);
-//            insertStmt.setString(2, pass);
-//            insertStmt.executeUpdate();
-//        }
-//        insertStmt.close();
-//    }
-
     public List<Course> getCoursesByName(String search) throws SQLException{
         String findCourses = "SELECT * FROM Courses WHERE Title LIKE ? COLLATE NOCASE";
         List<Course> c = new ArrayList<>();
@@ -181,32 +169,118 @@ public class DatabaseDriver {
         return c;
     }
 
-//    public List<Review> getReviewsFromUser(String user) throws SQLException{
-//        String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
-//        String findCourse = "SELECT * FROM Courses WHERE id = ?";
-//        List<Review> r = new ArrayList<>();
-//        PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
-//        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourse);
-//        prepReviewStatement.setString(1, user);
-//        ResultSet rs = prepReviewStatement.executeQuery();
-//
-////    CourseID, UserID, Rating, Review, Timestamp
-//        while(rs.next()) {
-//            String subject = rs.getString("CourseID");
-//            int number = rs.getInt("Number");
-//            String title = rs.getString("Title");
-//            prepCourseStatement.setInt(1, rs.getInt("id"));
-//            ResultSet rs2 =
-//                    Course temp = new Course(subject, number, title);
-//            c.add(temp);
-//        }
-//        rs.close();
-//        prepStatement.close();
-//        return c;
-//    }
-//    public void deleteReview(Review review) {
-//
-//    }
+    public Course getCourseByID(int num) throws SQLException{
+        String findCourse = "SELECT * FROM Courses WHERE id = ?";
+        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourse);
+        prepCourseStatement.setInt(1, num);
+        ResultSet rs = prepCourseStatement.executeQuery();
+        Course c = null;
+        if(rs.next()) {
+            String subject = rs.getString("Subject");
+            int number = rs.getInt("Number");
+            String title = rs.getString("Title");
+            c = new Course(subject, number, title);
+        }
+        prepCourseStatement.close();
+        rs.close();
+        return c;
+    }
+
+    public int getCourseIDByCourse(Course course) throws SQLException {
+        int courseid = -1;
+        String findCourseID = "SELECT * FROM Courses WHERE (Subject, Number, Title) = (?, ?, ?)";
+        PreparedStatement prepCourseStatement = connection.prepareStatement(findCourseID);
+        prepCourseStatement.setString(1, course.getCourseSubject());
+        prepCourseStatement.setInt(2, course.getCourseNumber());
+        prepCourseStatement.setString(3, course.getCourseTitle());
+        ResultSet rs = prepCourseStatement.executeQuery();
+
+        if(rs.next()) {
+            courseid = rs.getInt("id");
+        }
+        prepCourseStatement.close();
+        rs.close();
+        return courseid;
+    }
+    public void addReview(Review review) throws SQLException {
+        String insertQuery = "INSERT INTO Reviews (CourseID, UserID, Rating, Review, Timestamp) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+        Course c = review.getCourse();
+        insertStmt.setInt(1, getCourseIDByCourse(c));
+        insertStmt.setString(2, review.getUser());
+        insertStmt.setInt(3, review.getRating());
+        insertStmt.setString(4, review.getComment());
+        insertStmt.setString(5, review.getTimestamp().toString());
+        insertStmt.executeUpdate();
+
+        insertStmt.close();
+    }
+
+    public void deleteReview(Review review) throws SQLException {
+        String delReview = "DELETE FROM Reviews WHERE CourseID = ? and UserID = ?";
+        PreparedStatement prepReviewStatement = connection.prepareStatement(delReview);
+        prepReviewStatement.setInt(1, getCourseIDByCourse(review.getCourse()));
+        prepReviewStatement.setString(2, review.getUser());
+        prepReviewStatement.executeUpdate();
+
+        prepReviewStatement.close();
+    }
+    public List<Review> getReviewsFromUser(String user) throws SQLException{
+        String findReviews = "SELECT * FROM Reviews WHERE UserID = ?";
+        List<Review> r = new ArrayList<>();
+        PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
+        prepReviewStatement.setString(1, user);
+        ResultSet rs = prepReviewStatement.executeQuery();
+        while(rs.next()) {
+            int cid = rs.getInt("CourseID");
+            Course temp = getCourseByID(cid);
+            int rating  = rs.getInt("Rating");
+            String ts = rs.getString("Timestamp");
+            String comment = rs.getString("Review");
+
+            Timestamp timestamp = Timestamp.valueOf(ts);
+            Review review = new Review(temp, rating, timestamp, comment, user);
+            r.add(review);
+        }
+        rs.close();
+        prepReviewStatement.close();
+        return r;
+    }
+    public List<Review> getReviewsFromCourse(Course course) throws SQLException{
+        String findReviews = "SELECT * FROM Reviews WHERE CourseID = ?";
+        List<Review> r = new ArrayList<>();
+        PreparedStatement prepReviewStatement = connection.prepareStatement(findReviews);
+        prepReviewStatement.setInt(1, getCourseIDByCourse(course));
+        ResultSet rs = prepReviewStatement.executeQuery();
+        while(rs.next()) {
+            int cid = rs.getInt("CourseID");
+            Course temp = getCourseByID(cid);
+            int rating  = rs.getInt("Rating");
+            String ts = rs.getString("Timestamp");
+            String comment = rs.getString("Review");
+            String user = rs.getString("UserID");
+
+            Timestamp timestamp = Timestamp.valueOf(ts);
+            Review review = new Review(temp, rating, timestamp, comment, user);
+            r.add(review);
+        }
+        rs.close();
+        prepReviewStatement.close();
+        return r;
+    }
+    public void editReview(Review review) throws SQLException{
+        String changeReview = "UPDATE Reviews SET Rating = ?, Timestamp = ?, Review = ? WHERE (CourseID, UserID) = (?,?)";
+        PreparedStatement prepReviewStatement = connection.prepareStatement(changeReview);
+        prepReviewStatement.setInt(1, review.getRating());
+        prepReviewStatement.setString(2, review.getTimestamp().toString());
+        prepReviewStatement.setString(3, review.getComment());
+        prepReviewStatement.setInt(4, getCourseIDByCourse(review.getCourse()));
+        prepReviewStatement.setString(5, review.getUser());
+        prepReviewStatement.executeUpdate();
+
+        prepReviewStatement.close();
+    }
+
     public void clearTables() throws SQLException {
         //TODO: implement
         String delRoute = "DELETE FROM Users";
@@ -228,9 +302,9 @@ public class DatabaseDriver {
 //        d.addUser("jinwookim", "password1");
 //        d.addUser("smatt", "password2");
 //        d.addUser("vineelk", "password3");
-//        d.addUser("jamtran", "password4");
+        d.addUser("jamtran12", "password4");
 //        System.out.println(d.getPassword("jamtran"));
-        Course temp = new Course("CS", 3100, "Data Structures 2");
+        Course temp = new Course("CS", 3200, "Data Structures 3");
         d.addCourse(temp);
         d.commit();
         d.disconnect();
