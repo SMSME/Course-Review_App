@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseSearchController {
+    //for searching the database
     @FXML
     public TextField courseSubject;
     @FXML
@@ -21,16 +22,9 @@ public class CourseSearchController {
     public TextField courseTitle;
 
 
-    @FXML
-    public VBox newCourseFields;
-    @FXML
-    public TextField newCourseSubject;
-    @FXML
-    public TextField newCourseNumber;
-    @FXML
-    public TextField newCourseTitle;
 
 
+    //display courses
     @FXML
     public ListView<Course> courseListView;
     public Stage stage;
@@ -69,17 +63,14 @@ public class CourseSearchController {
 
     //ensure all fields are filled when adding new course to review
     @FXML
-    public boolean fieldsFilled(){
+    public boolean fieldsFilled(TextField newCourseSubject, TextField newCourseNumber, TextField newCourseTitle){
         return !newCourseSubject.getText().isEmpty() && !newCourseNumber.getText().isEmpty()
                 && !newCourseTitle.getText().isEmpty();
     }
 
     //add course into database and update the display
     @FXML
-    public void addCourse(){
-        String subject = newCourseSubject.getText().toLowerCase();
-        String number = newCourseNumber.getText();
-        String title = newCourseTitle.getText();
+    public void addCourse(String subject, String number, String title){
 
         if (validateCourse(subject,number,title)){
             Course newCourse = new Course(subject,Integer.parseInt(number),title);
@@ -90,7 +81,6 @@ public class CourseSearchController {
             }
             updateCourseListView();
             clearNewCourses();
-            toggleNewCourseFields();
         }else{
             //idk make a message appear
             System.out.println("Invalid data...");
@@ -99,35 +89,45 @@ public class CourseSearchController {
 
     //create new course - opens a dialog box to fill
     @FXML
-    public void createNewCourse() throws IOException, SQLException{
+    public void createNewCourse() throws IOException, SQLException {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Add New Course");
 
-        dialog.getDialogPane().setMinSize(400,400);
+        dialog.getDialogPane().setMinSize(400, 400);
+
+        // Create the UI elements for the new course fields
+        TextField newCourseSubjectField = new TextField();
+        TextField newCourseNumberField = new TextField();
+        TextField newCourseTitleField = new TextField();
 
         VBox dialogContent = new VBox(10);
         dialogContent.getChildren().addAll(
                 new Label("New Course Subject"),
-                newCourseSubject,
+                newCourseSubjectField,
                 new Label("New Course Number"),
-                newCourseNumber,
+                newCourseNumberField,
                 new Label("New Course Title"),
-                newCourseTitle
+                newCourseTitleField
         );
 
         dialog.getDialogPane().setContent(dialogContent);
-        Platform.runLater(() -> newCourseSubject.requestFocus());
+        Platform.runLater(() -> newCourseSubjectField.requestFocus());
 
         ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
 
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButton){
-                if (fieldsFilled()){
-                    addCourse();
-                    dialog.close();}
-                else{
+            if (dialogButton == addButton) {
+                // Access the values from the dynamically created fields
+                String subject = newCourseSubjectField.getText().toLowerCase();
+                String number = newCourseNumberField.getText();
+                String title = newCourseTitleField.getText();
+
+                if (fieldsFilled(newCourseSubjectField,newCourseNumberField,newCourseTitleField)) {
+                    // Add the course to the database and update the list view
+                    addCourse(subject,number,title);
+                } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText("Incomplete Form");
@@ -138,7 +138,6 @@ public class CourseSearchController {
 
                     return null;
                 }
-                //something to handle it idk yet
             }
             return null;
         });
@@ -146,18 +145,7 @@ public class CourseSearchController {
         dialog.showAndWait();
     }
 
-    //changes visibility with new course fields
-    @FXML
-    public void toggleNewCourseFields(){
-        newCourseFields.setVisible(!newCourseFields.isVisible());
 
-        // Clear the fields when hiding
-        if (!newCourseFields.isVisible()) {
-            newCourseSubject.clear();
-            newCourseNumber.clear();
-            newCourseTitle.clear();
-        }
-    }
 
     //updates list for courses to appear
     @FXML

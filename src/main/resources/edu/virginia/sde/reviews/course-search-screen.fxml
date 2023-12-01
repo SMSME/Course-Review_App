@@ -34,14 +34,6 @@
         </content>
     </ScrollPane>
 
-    //fields for adding a new course
-    <VBox fx:id="newCourseFields" visible="false">
-        <TextField fx:id="newCourseSubject" promptText="Subject"/>
-        <TextField fx:id="newCourseNumber" promptText="Number"/>
-        <TextField fx:id="newCourseTitle" promptText="Title"/>
-
-        <Button text="Submit" onAction="#addCourse"/>
-    </VBox>
 </VBox>
 
 
