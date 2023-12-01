@@ -33,7 +33,6 @@ public class CourseSearchController {
 
     @FXML
     public ListView<Course> courseListView;
-    public List<Course> courses = new ArrayList<>();
     public Stage stage;
     public DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
 
