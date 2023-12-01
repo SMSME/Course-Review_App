@@ -204,9 +204,9 @@ public class DatabaseDriver {
 //        prepStatement.close();
 //        return c;
 //    }
-    public void deleteReview(Review review) {
-
-    }
+//    public void deleteReview(Review review) {
+//
+//    }
     public void clearTables() throws SQLException {
         //TODO: implement
         String delRoute = "DELETE FROM Users";

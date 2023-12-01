@@ -28,35 +28,44 @@ public class NewUserController {
     public void setStage(Stage stage){
         this.stage = stage;
     }
-    public void setDriver(DatabaseDriver driver){
-        this.driver = driver;
-    }
+//    public void setDriver(DatabaseDriver driver){
+//        this.driver = driver;
+//    }
     public void createUser() throws SQLException{
         String newUser = newUsername.getText();
         String newPass = newPassword.getText();
 
-        //If they entered a valid username and password
-        if (isValid(newUser, newPass)) {
-            // If the username already exists or the password is too short
-            if (driver.getPassword(newUser) != null) {
-                message.setText("User already exists");
-
-            }
-            else{
-                // If the username and password are valid, create the user
-                driver.addUser(newUser, newPass);
-                driver.commit();
-                message.setText("User Created Successfully! Please return to the login page");
-            }
+        try{
+            UserSingleton.createUser(newUser,newPass);
+            message.setText("User Created Successfully! Please return to the login page");
+        }catch(IllegalArgumentException e){
+            message.setText("User already exists");
         }
-        //If they enter an invalid username password combo
-        else {
-            //The password is not long enough.
-            if(newPass.length()<8){
-                message.setText("Password must be at least 8 characters.");
-            }
-
+        catch(IllegalStateException e){
+            message.setText("Password needs to be at least 8 characters");
         }
+//        //If they entered a valid username and password
+//        if (isValid(newUser, newPass)) {
+//            // If the username already exists or the password is too short
+//            if (driver.getPassword(newUser) != null) {
+//                message.setText("User already exists");
+//
+//            }
+//            else{
+//                // If the username and password are valid, create the user
+//                driver.addUser(newUser, newPass);
+//                driver.commit();
+//                message.setText("User Created Successfully! Please return to the login page");
+//            }
+//        }
+//        //If they enter an invalid username password combo
+//        else {
+//            //The password is not long enough.
+//            if(newPass.length()<8){
+//                message.setText("Password must be at least 8 characters.");
+//            }
+//
+//        }
     }
     private boolean isValid(String username, String password){
         return !username.isEmpty() && password.length()>=8;
