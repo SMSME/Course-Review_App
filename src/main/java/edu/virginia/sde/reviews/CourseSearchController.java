@@ -12,6 +12,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//make it so that if it has the same department/subject the number isnt the same/ titles arent the same
+
+//an empty search should display all courses that are in the database
+
+//add some formatting to make it look better too
+
+//make searching connect to the db properly, open connnections and stuff
+
 public class CourseSearchController {
     //for searching the database
     @FXML
@@ -22,13 +30,12 @@ public class CourseSearchController {
     public TextField courseTitle;
 
 
-
-
     //display courses
     @FXML
     public ListView<Course> courseListView;
     public Stage stage;
-    public DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
+    public DatabaseDriver driver = DatabaseSingleton.getInstance();
+
 
 
     public void setStage(Stage stage) {
@@ -46,6 +53,7 @@ public class CourseSearchController {
     //adding a new course - check if valid
     @FXML
     public boolean validateCourse(String subject, String number, String title){
+        //display an error if the course is invalid DO
         //all letters 2-4 in length
         if (!subject.matches("[A-Za-z]{2,4}")){
             return false;
@@ -70,22 +78,37 @@ public class CourseSearchController {
 
     //add course into database and update the display
     @FXML
-    public void addCourse(String subject, String number, String title){
+    public void addCourse(String subject, String number, String title) throws SQLException {
+        DatabaseDriver db = DatabaseSingleton.getInstance();
 
-        if (validateCourse(subject,number,title)){
-            Course newCourse = new Course(subject,Integer.parseInt(number),title);
-            try{
-                driver.addCourse(newCourse);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+
+        try {
+            db.connect();
+            if (validateCourse(subject, number, title)) {
+                Course newCourse = new Course(subject, Integer.parseInt(number), title);
+                if (!db.courseExists(newCourse)) {
+                    db.addCourse(newCourse);
+
+                    // Commit the transaction
+                    db.commit();
+                    updateCourseListView();
+                    clearNewCourses();
+                } else {
+                    // idk make a message appear
+                    System.out.println("Invalid data...");
+                }
             }
-            updateCourseListView();
-            clearNewCourses();
-        }else{
-            //idk make a message appear
-            System.out.println("Invalid data...");
+            } catch(SQLException e){
+                e.printStackTrace();
+            }finally{
+                if (db != null) {
+                    db.disconnect();
+                }
+            }
         }
-    }
+
+
+
 
     //create new course - opens a dialog box to fill
     @FXML
@@ -126,7 +149,11 @@ public class CourseSearchController {
 
                 if (fieldsFilled(newCourseSubjectField,newCourseNumberField,newCourseTitleField)) {
                     // Add the course to the database and update the list view
-                    addCourse(subject,number,title);
+                    try {
+                        addCourse(subject,number,title);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
@@ -151,7 +178,7 @@ public class CourseSearchController {
     @FXML
     public void updateCourseListView(){
         try{
-            List<Course> allCourses = driver.getAllCourses();
+            List<Course> allCourses = driver.getCourses();
             courseListView.getItems().setAll(allCourses);
         } catch (SQLException e){
             System.out.println("Error in getting courses idk bro");

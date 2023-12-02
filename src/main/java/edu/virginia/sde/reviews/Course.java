@@ -62,10 +62,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
-                "subject='" + courseSubject + '\'' +
-                ", number=" + courseNumber +
-                ", title='" + courseTitle + '\'' +
-                ", reviews=" + reviews +
-                '}';
+        return courseSubject.toUpperCase() +  ' ' +
+                courseNumber + ' ' +  courseTitle + ' ' +
+                getAvgRating();
     }}
