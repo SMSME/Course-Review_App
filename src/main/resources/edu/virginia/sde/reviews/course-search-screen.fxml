@@ -41,6 +41,10 @@
         </content>
     </ScrollPane>
 
+    <Label fx:id="errormessage" />
+
+
+
 </VBox>
 
 

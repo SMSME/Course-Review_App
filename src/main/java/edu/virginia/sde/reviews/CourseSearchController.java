@@ -29,6 +29,9 @@ public class CourseSearchController {
     @FXML
     public TextField courseTitle;
 
+    @FXML
+    private Label errormessage;
+
 
     //display courses
     @FXML
@@ -56,6 +59,7 @@ public class CourseSearchController {
     public boolean validateCourse(String subject, String number, String title) {
         //display an error if the course is invalid DO
         //all letters 2-4 in length
+        //if there is a class with the same subject and number dont allow
         if (!subject.matches("[A-Za-z]{2,4}")) {
             return false;
         }
@@ -91,6 +95,26 @@ public class CourseSearchController {
                 && !newCourseTitle.getText().isEmpty();
     }
 
+    public boolean sameCourseNumandSub(Course newCourse) throws SQLException {
+        DatabaseDriver db = DatabaseSingleton.getInstance();
+        try {
+            db.connect();
+            List<Course> courses = db.getCourses();
+            for (Course course : courses) {
+                if (course.getCourseSubject().equalsIgnoreCase(newCourse.getCourseSubject()) && course.getCourseNumber() == newCourse.getCourseNumber()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.disconnect();
+            }
+            return false;
+        }
+    }
+
     //add course into database and update the display
     @FXML
     public void addCourse(String subject, String number, String title) throws SQLException {
@@ -100,7 +124,7 @@ public class CourseSearchController {
             db.connect();
             if (validateCourse(subject, number, title)) {
                 Course newCourse = new Course(subject, Integer.parseInt(number), title);
-                if (!db.courseExists(newCourse)) {
+                if (!db.courseExists(newCourse) & !sameCourseNumandSub(newCourse)) {
                     db.addCourse(newCourse);
 
                     // Commit the transaction
@@ -109,7 +133,7 @@ public class CourseSearchController {
                     clearNewCourses();
                 } else {
                     // idk make a message appear
-                    System.out.println("Invalid data...");
+                    errormessage.setText("Course with same number and subject already exist");
                 }
             }
         } catch (SQLException e) {
@@ -140,6 +164,7 @@ public class CourseSearchController {
         newCourseTitleField.setTextFormatter(createTextFormat(".{0,50}"));
 
 
+
         VBox dialogContent = new VBox(10);
         dialogContent.getChildren().addAll(
                 new Label("New Course Subject"),
@@ -147,7 +172,8 @@ public class CourseSearchController {
                 new Label("New Course Number"),
                 newCourseNumberField,
                 new Label("New Course Title"),
-                newCourseTitleField
+                newCourseTitleField,
+                errormessage
         );
 
         dialog.getDialogPane().setContent(dialogContent);
@@ -172,6 +198,7 @@ public class CourseSearchController {
                         throw new RuntimeException(e);
                     }
                 } else {
+                    errormessage.setText("Already Exists");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText("Incomplete Form");
