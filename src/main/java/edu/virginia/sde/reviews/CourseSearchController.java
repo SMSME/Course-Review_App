@@ -2,11 +2,18 @@ package edu.virginia.sde.reviews;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,11 +52,47 @@ public class CourseSearchController {
     }
 
 
+    public void initialize(){
+        courseListView.setOnMouseClicked(this::handleCourseClick);
+    }
+
     //dealing with basic course searching
     public void clearNewCourses() {
         courseSubject.clear();
         courseNumber.clear();
         courseTitle.clear();
+    }
+
+    public void handleCourseClick(MouseEvent event){
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2){
+            Course course = courseListView.getSelectionModel().getSelectedItem();
+            if (course != null){
+                try{
+                    openCourseRev(course);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public void openCourseRev(Course course) throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        Stage courseReviewStage = new Stage();
+        courseReviewStage.setScene(scene);
+        courseReviewStage.setTitle("Course Review");
+
+        CourseReviewsController crc = fxmlLoader.getController();
+        crc.setStage(courseReviewStage);
+        crc.setDatabaseDriver(driver);
+        crc.setCurrentCourse(course);
+
+        courseReviewStage.show();
+
+
     }
 
 
