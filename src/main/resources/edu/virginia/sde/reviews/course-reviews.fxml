@@ -6,19 +6,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
             prefHeight="720.0" prefWidth="1280.0">
-
     <VBox>
         <HBox>
             <Label fx:id="courseLabel" text="Text" style="-fx-font-size: 32px;"/>
             <Label text=" Course Reviews" style="-fx-font-size: 32px;"/>
         </HBox>
         <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
-        <VBox fx:id="reviews">
-        </VBox>
+
+        <ListView fx:id="reviewListView" prefHeight="200.0" prefWidth="300.0">
+
+        </ListView>
+
+    </VBox>
+    <VBox fx:id="newReviewFields" visible="false">
+        <TextField fx:id="newReviewRating" promptText="Subject"/>
+        <TextField fx:id="newReviewComment" promptText="Number"/>
+        <Button text="Submit" onAction="#submitReview"/>
     </VBox>
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
     <Hyperlink onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
