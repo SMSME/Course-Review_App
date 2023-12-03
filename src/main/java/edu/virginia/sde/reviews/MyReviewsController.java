@@ -1,10 +1,7 @@
 package edu.virginia.sde.reviews;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +15,8 @@ import java.util.List;
 public class MyReviewsController {
     @FXML
     private Label messageLabel;
+    @FXML
+    private ListView<ReviewDisplay> reviewListView;
     @FXML
     private Stage stage;
     @FXML
@@ -38,8 +37,9 @@ public class MyReviewsController {
     public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
         driver = DatabaseSingleton.getInstance();
+        List<Review> reviews;
         try{
-            List<Review> reviews = driver.getReviewsFromUser(currentUser);
+            reviews = driver.getReviewsFromUser(currentUser);
             for(Review review: reviews){
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("review-item.fxml"));
                 Parent root = loader.load();
@@ -49,9 +49,12 @@ public class MyReviewsController {
                 myReviews.getChildren().add(root);
 
             }
-        }catch(SQLException | IOException e){
+        }catch(SQLException e){
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
 
     }
 

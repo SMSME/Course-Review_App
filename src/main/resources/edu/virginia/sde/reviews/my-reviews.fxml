@@ -23,8 +23,15 @@
             </AnchorPane>
         </top>
         <center>
-            <VBox fx:id="myReviews">
+            <VBox>
+                <HBox alignment="CENTER" spacing = "5.0">
+                    <Label fx:id="courseMnemonic" text="Course Mnemonic"/>
+                    <Label fx:id="courseNumber" text = "Course Number"/>
+                    <Label fx:id="courseRating" text = "Course Rating"/>
+                </HBox>
+                <ListView fx:id="reviewListView" prefHeight="200.0" prefWidth="300.0">
 
+                </ListView>
             </VBox>
         </center>
 
