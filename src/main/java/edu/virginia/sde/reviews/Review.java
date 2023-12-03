@@ -1,5 +1,10 @@
 package edu.virginia.sde.reviews;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.sql.Timestamp;
 
 public class Review {
@@ -36,7 +41,12 @@ public class Review {
     }
     public void setUser(String user) { this.user = user; }
     public String getUser() { return user; }
-
+    public IntegerProperty getDisplayRating() {
+        return new SimpleIntegerProperty(rating);
+    }
+    public StringProperty getDisplayComment() {
+        return new SimpleStringProperty(comment);
+    }
     public void setCourse(Course course) {this.course = course; }
 
     public Course getCourse() { return course; }

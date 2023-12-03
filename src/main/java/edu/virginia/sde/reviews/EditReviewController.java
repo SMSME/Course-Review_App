@@ -53,7 +53,6 @@ public class EditReviewController {
 
         CourseReviewsController courseReviewsController = fxmlLoader.getController();
         courseReviewsController.setStage(stage);
-        courseReviewsController.setDatabaseDriver(driver);
     }
 
     @FXML

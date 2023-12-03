@@ -26,10 +26,19 @@ import static java.lang.Integer.parseInt;
 
 public class CourseReviewsController {
     @FXML
-    private Label courseLabel;
+    private Label courseTitleLabel;
     @FXML
-    private ListView<ReviewDisplay> reviewListView;
-
+    private Label courseSubjectLabel;
+    @FXML
+    private Label courseNumberLabel;
+    @FXML
+    private TableView<Review> reviewTableView;
+    @FXML
+    private TableColumn<Review,Integer> ratingColumn;
+    @FXML
+    private TableColumn<Review,String> commentColumn;
+    private User currentUser;
+    private List<Review> courseReviews;
     private DatabaseDriver driver;
     private Stage stage;
     private Course currentCourse;
@@ -44,8 +53,9 @@ public class CourseReviewsController {
     @FXML
     public void submitReview() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        User currentUser = new User("matthews");
         Review newReview = new Review(currentCourse, newRating, timestamp, newComment, currentUser.getUsername());
+        ratingColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getRating()).asObject());
+        commentColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getComment()));
         try {
             driver.addReview(newReview);
             driver.commit();
@@ -53,36 +63,47 @@ public class CourseReviewsController {
             throw new RuntimeException(e);
         }
     }
-    @FXML
+    public void initialize() {
+        driver = DatabaseSingleton.getInstance();
+        try {
+            driver.connect();
+        }
+        catch (SQLException e) {
+            System.out.println("bruh");
+        }
+    }
     public void initializer() throws RuntimeException {
-        List<Review> courseReviews;
-        reviewListView = new ListView<>();
+        currentUser = UserSingleton.getCurrentUser();
+        System.out.println(currentCourse.getCourseTitle());
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+
+        courseTitleLabel.setText(currentCourse.getCourseTitle());
+        courseSubjectLabel.setText(currentCourse.getCourseSubject());
+        courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
+
         try {
             courseReviews = driver.getReviewsFromCourse(currentCourse);
+            ObservableList<Review> reviewList = FXCollections.observableArrayList(courseReviews);
+            reviewTableView.setItems(reviewList);
+
         } catch (SQLException e) {
             throw new RuntimeException("Runtime Exception");
         }
-
-        ObservableList<ReviewDisplay> data = FXCollections.observableArrayList();
-
-        for (Review review : courseReviews) {
-            data.add(new ReviewDisplay(review.getRating(),review.getComment()));
-        }
-        reviewListView.setItems(data);
     }
     public void setStage(Stage stage){
         this.stage = stage;
     }
-    public void setDatabaseDriver(DatabaseDriver driver) {
-        this.driver = driver;
-    }
-
     public void setCurrentCourse(Course currentCourse) {
         this.currentCourse = currentCourse;
-        courseLabel.setText(currentCourse.getCourseTitle());
     }
     @FXML
     public void addReview() throws SQLException {
+        List<Review> userReviews = driver.getReviewsFromUser(currentUser.getUsername());
+        boolean reviewExists = false;
+        for (Review review : courseReviews) {
+            if
+        }
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Add New Review");
 
@@ -135,7 +156,7 @@ public class CourseReviewsController {
                 }
                 else {
                     submitReview();
-                    reviewListView.getItems().clear();
+                    reviewTableView.getItems().clear();
                     initializer();
                     dialog.close();
                 }
