@@ -22,7 +22,7 @@ import java.util.function.UnaryOperator;
 
 //make it so that if it has the same department/subject the number isnt the same/ titles arent the same -idk how to throw an error for this lol
 //add reviews for the user ?? - how do i know kek xD
-
+//why everyony
 
 //add some formatting to make it look better too
 
@@ -69,7 +69,7 @@ public class CourseSearchController {
         loginSceneController.setDriver(driver);
     }
 
-    //dealing with basic course searching
+    //dealing with basic course searching - shouldnt u make a button??
     public void clearNewCourses() {
         courseSubject.clear();
         courseNumber.clear();
@@ -130,7 +130,7 @@ public class CourseSearchController {
         return true;
     }
 
-    //create text for
+    //forces you to only type lettesr / numbers for certain parts lol
     @FXML
     public TextFormatter<String> createTextFormat (String pattern){
         UnaryOperator<TextFormatter.Change> filter = change -> {
@@ -151,25 +151,25 @@ public class CourseSearchController {
                 && !newCourseTitle.getText().isEmpty();
     }
 
-    public boolean sameCourseNumandSub(Course newCourse) throws SQLException {
-        DatabaseDriver db = DatabaseSingleton.getInstance();
-        try {
-            db.connect();
-            List<Course> courses = db.getCourses();
-            for (Course course : courses) {
-                if (course.getCourseSubject().equalsIgnoreCase(newCourse.getCourseSubject()) && course.getCourseNumber() == newCourse.getCourseNumber()) {
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (db != null) {
-                db.disconnect();
-            }
-            return false;
-        }
-    }
+//    public boolean sameCourseNumandSub(Course newCourse) throws SQLException {
+//        DatabaseDriver db = DatabaseSingleton.getInstance();
+//        try {
+//            db.connect();
+//            List<Course> courses = db.getCourses();
+//            for (Course course : courses) {
+//                if (course.getCourseSubject().equalsIgnoreCase(newCourse.getCourseSubject()) && course.getCourseNumber() == newCourse.getCourseNumber()) {
+//                    return true;
+//                }
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (db != null) {
+//                db.disconnect();
+//            }
+//            return false;
+//        }
+//    }
 
     //add course into database and update the display
     @FXML
@@ -180,7 +180,8 @@ public class CourseSearchController {
             db.connect();
             if (validateCourse(subject, number, title)) {
                 Course newCourse = new Course(subject, Integer.parseInt(number), title);
-                if (!db.courseExists(newCourse) & !sameCourseNumandSub(newCourse)) {
+                //same course search bruh idk
+                if (!db.courseExists(newCourse)) {
                     db.addCourse(newCourse);
 
                     // Commit the transaction

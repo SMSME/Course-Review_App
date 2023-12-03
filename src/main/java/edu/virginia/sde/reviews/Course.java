@@ -11,6 +11,7 @@ public class Course {
     private List<Review> reviews;
 
     public String formatTitle(String title){
+        title = title.toLowerCase();
         StringBuffer buffer = new StringBuffer();
         buffer.append(Character.toUpperCase(title.charAt(0)));
         for (int i = 1; i < title.length(); i++){
