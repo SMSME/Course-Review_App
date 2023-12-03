@@ -17,14 +17,17 @@ import javafx.scene.input.MouseButton;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
 //make it so that if it has the same department/subject the number isnt the same/ titles arent the same -idk how to throw an error for this lol
+//like how do i fix it brug
 //add reviews for the user ?? - how do i know kek xD
 //why everyony
 
-//add some formatting to make it look better too
+//add some formatting to make it look better too - LITERALLY ITS SO UGLy
 //thers an error if u format it to capitalize the letters because if theres a space at the end it panics
 
 
@@ -306,11 +309,12 @@ public class CourseSearchController {
     public List<Course> search(String subject, String number, String title) throws SQLException {
         //refers to whether each search bar is filled in the order of subject, number, Title
         int searchbars = 0;
-
+        List<Course> matchCourses = new ArrayList<>();
         List<Course> coursesbySub = new ArrayList<>();
         List<Course> coursesbyNum = new ArrayList<>();
         List<Course> coursesbyTitle = new ArrayList<>();
-        List<Course> matchCourses = new ArrayList<>();
+
+
         DatabaseDriver db = DatabaseSingleton.getInstance();
         try {
             db.connect();
@@ -356,35 +360,24 @@ public class CourseSearchController {
                     matchCourses.addAll(coursesbyNum);
                     break;
                 case 3:
-                    for (Course course : coursesbySub) {
-                        if (coursesbyNum.contains(course)) {
-                            matchCourses.add(course);
-                        }
-                    }
+                    matchCourses.addAll(coursesbySub);
+                    matchCourses.retainAll(coursesbyNum);
                     break;
                 case 4:
                     matchCourses.addAll(coursesbyTitle);
                     break;
                 case 5:
-                    for (Course course : coursesbySub) {
-                        if (coursesbyTitle.contains(course)) {
-                            matchCourses.add(course);
-                        }
-                    }
+                    matchCourses.addAll(coursesbySub);
+                    matchCourses.retainAll(coursesbyTitle);
                     break;
                 case 6:
-                    for (Course course : coursesbyTitle) {
-                        if (coursesbyNum.contains(course)) {
-                            matchCourses.add(course);
-                        }
-                    }
+                    matchCourses.addAll(coursesbyTitle);
+                    matchCourses.retainAll(coursesbyNum);
                     break;
                 case 7:
-                    for (Course course : coursesbyTitle) {
-                        if (coursesbyNum.contains(course) && coursesbySub.contains(course)) {
-                            matchCourses.add(course);
-                        }
-                    }
+                    matchCourses.addAll(coursesbySub);
+                    matchCourses.retainAll(coursesbyNum);
+                    matchCourses.retainAll(coursesbyTitle);
                     break;
             }
             return matchCourses;

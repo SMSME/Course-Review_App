@@ -3,6 +3,7 @@ package edu.virginia.sde.reviews;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Course {
     private String courseSubject;
@@ -79,6 +80,18 @@ public class Course {
         }
         return sum/reviews.size();
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Course course = (Course) obj;
+        // Compare relevant fields (courseSubject, courseNumber, courseTitle)
+        return Objects.equals(courseSubject, course.courseSubject) &&
+                courseNumber == course.courseNumber &&
+                Objects.equals(courseTitle, course.courseTitle);
+    }
+
+
 
     @Override
     public String toString() {
