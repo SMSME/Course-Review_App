@@ -10,11 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -26,10 +24,19 @@ import static java.lang.Integer.parseInt;
 
 public class CourseReviewsController {
     @FXML
-    private Label courseLabel;
+    private Label courseTitleLabel;
     @FXML
-    private ListView<ReviewDisplay> reviewListView;
-
+    private Label courseSubjectLabel;
+    @FXML
+    private Label courseNumberLabel;
+    @FXML
+    private TableView<Review> reviewTableView;
+    @FXML
+    private TableColumn<Review,Integer> ratingColumn;
+    @FXML
+    private TableColumn<Review,String> commentColumn;
+    private User currentUser;
+    private List<Review> courseReviews;
     private DatabaseDriver driver;
     private Stage stage;
     private Course currentCourse;
@@ -44,8 +51,9 @@ public class CourseReviewsController {
     @FXML
     public void submitReview() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        User currentUser = new User("matthews");
         Review newReview = new Review(currentCourse, newRating, timestamp, newComment, currentUser.getUsername());
+        ratingColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getRating()).asObject());
+        commentColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getComment()));
         try {
             driver.addReview(newReview);
             driver.commit();
@@ -53,96 +61,118 @@ public class CourseReviewsController {
             throw new RuntimeException(e);
         }
     }
-    @FXML
+    public void initialize() {
+        driver = DatabaseSingleton.getInstance();
+        try {
+            driver.connect();
+        }
+        catch (SQLException e) {
+            System.out.println("bruh");
+        }
+    }
     public void initializer() throws RuntimeException {
-        List<Review> courseReviews;
-        reviewListView = new ListView<>();
+        currentUser = UserSingleton.getCurrentUser();
+        System.out.println(currentCourse.getCourseTitle());
+
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+
+        courseTitleLabel.setText(currentCourse.getCourseTitle());
+        courseSubjectLabel.setText(currentCourse.getCourseSubject());
+        courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
+
         try {
             courseReviews = driver.getReviewsFromCourse(currentCourse);
+            ObservableList<Review> reviewList = FXCollections.observableArrayList(courseReviews);
+            reviewTableView.setItems(reviewList);
+
         } catch (SQLException e) {
             throw new RuntimeException("Runtime Exception");
         }
-
-        ObservableList<ReviewDisplay> data = FXCollections.observableArrayList();
-
-        for (Review review : courseReviews) {
-            data.add(new ReviewDisplay(review.getRating(),review.getComment()));
-        }
-        reviewListView.setItems(data);
     }
     public void setStage(Stage stage){
         this.stage = stage;
     }
-    public void setDatabaseDriver(DatabaseDriver driver) {
-        this.driver = driver;
-    }
-
     public void setCurrentCourse(Course currentCourse) {
         this.currentCourse = currentCourse;
-        courseLabel.setText(currentCourse.getCourseTitle());
     }
     @FXML
     public void addReview() throws SQLException {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Add New Review");
-
-        dialog.getDialogPane().setMinSize(400,400);
-
-        VBox dialogContent = new VBox(10);
-        dialogContent.getChildren().addAll(
-                new Label("Rating: "),
-                newReviewRating,
-                new Label("Comment: "),
-                newReviewComment
-        );
-        dialog.getDialogPane().setContent(dialogContent);
-        Platform.runLater(() -> newReviewRating.requestFocus());
-        ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButton){
-                if (newReviewRating.getText().isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Invalid Rating");
-                    alert.setContentText("Rating must be an integer from 1 to 5");
-                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                    alert.showAndWait();
-                }
-                try {
-                    newRating = parseInt(newReviewRating.getText());
-                }
-                catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Invalid Rating");
-                    alert.setContentText("Rating must be an integer from 1 to 5");
-                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                    alert.showAndWait();
-                    return null;
-                }
-                newComment = newReviewComment.getText();
-                if (newRating < 1 || newRating > 5) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Invalid Rating");
-                    alert.setContentText("Rating must be an integer from 1 to 5");
-                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                    alert.showAndWait();
-                    return null;
-                }
-                else {
-                    submitReview();
-                    reviewListView.getItems().clear();
-                    initializer();
-                    dialog.close();
-                }
+        List<Review> userReviews = driver.getReviewsFromUser(currentUser.getUsername());
+        boolean reviewExists = false;
+        for (Review review : userReviews) {
+            if (courseReviews.contains(review)) {
+                reviewExists = true;
+                break;
             }
-            return null;
-        });
-        dialog.showAndWait();
+        }
+        if (reviewExists) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Cannot add new review");
+            alert.setHeaderText("Error");
+            alert.setContentText("A review for this course by this user already exists");
+            alert.showAndWait();
+        }
+        else {
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Add New Review");
+
+            dialog.getDialogPane().setMinSize(400, 400);
+
+            VBox dialogContent = new VBox(10);
+            dialogContent.getChildren().addAll(
+                    new Label("Rating: "),
+                    newReviewRating,
+                    new Label("Comment: "),
+                    newReviewComment
+            );
+            dialog.getDialogPane().setContent(dialogContent);
+            Platform.runLater(() -> newReviewRating.requestFocus());
+            ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == addButton) {
+                    if (newReviewRating.getText().isEmpty()) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Invalid Rating");
+                        alert.setContentText("Rating must be an integer from 1 to 5");
+                        alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                        alert.showAndWait();
+                    }
+                    try {
+                        newRating = parseInt(newReviewRating.getText());
+                    } catch (NumberFormatException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Invalid Rating");
+                        alert.setContentText("Rating must be an integer from 1 to 5");
+                        alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                        alert.showAndWait();
+                        return null;
+                    }
+                    newComment = newReviewComment.getText();
+                    if (newRating < 1 || newRating > 5) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Invalid Rating");
+                        alert.setContentText("Rating must be an integer from 1 to 5");
+                        alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                        alert.showAndWait();
+                        return null;
+                    } else {
+                        submitReview();
+                        reviewTableView.getItems().clear();
+                        initializer();
+                        dialog.close();
+                    }
+                }
+                return null;
+            });
+            dialog.showAndWait();
+        }
     }
 
     @FXML

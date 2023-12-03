@@ -65,7 +65,6 @@ public class AddReviewController {
 
         CourseReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        controller.setDatabaseDriver(driver);
         Course tempCourse = new Course("CS",3200,"Data Structures 3");
         controller.setCurrentCourse(tempCourse);
         controller.initializer();
