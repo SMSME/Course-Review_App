@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-//make it so that if it has the same department/subject the number isnt the same/ titles arent the same
+//make it so that if it has the same department/subject the number isnt the same/ titles arent the same -idk how to throw an error for this lol
+//add reviews for the user ?? - how do i know kek xD
 
 
 //add some formatting to make it look better too
@@ -54,6 +55,18 @@ public class CourseSearchController {
 
     public void initialize(){
         courseListView.setOnMouseClicked(this::handleCourseClick);
+    }
+
+    @FXML
+    public void logOut() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Login");
+        LoginSceneController loginSceneController = fxmlLoader.getController();
+        loginSceneController.setStage(stage);
+        loginSceneController.setDriver(driver);
     }
 
     //dealing with basic course searching
