@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 
 import javax.xml.crypto.Data;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+
 public class MyReviewsApplication extends Application{
     public static void main(String[] args) {
         launch(args);
@@ -14,19 +16,21 @@ public class MyReviewsApplication extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        User tempUser = new User("vineelk");
-        UserSingleton.login("vineelk", "password3");
-        System.out.println(UserSingleton.getCurrentUser());
-        //DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
+
         DatabaseDriver driver = DatabaseSingleton.getInstance();
         driver.connect();
+        User tempUser = new User("vineelk");
+        UserSingleton.login("vineelk", "password3");
+        Course course = new Course("DSA", 3100, "Data Structures and Algorithms 2");
+
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
 
         MyReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        //controller.setDriver(driver);
+        controller.initialize();
 
         stage.setTitle("My Reviews");
         stage.setScene(scene);

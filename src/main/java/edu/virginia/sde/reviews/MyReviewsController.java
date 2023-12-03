@@ -35,7 +35,7 @@ public class MyReviewsController {
     //can use the user singleton to get the current user
     //currentUser = UserSingleton.getCurrentUser()
     //Will add it to the Vbox and print them out like matthew has them.
-    public void initialize(){
+    public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
         driver = DatabaseSingleton.getInstance();
         try{

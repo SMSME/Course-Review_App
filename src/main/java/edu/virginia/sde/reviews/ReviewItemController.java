@@ -25,6 +25,8 @@ public class ReviewItemController {
     private Label courseRating;
     @FXML
     private Button courseReviewButton;
+    @FXML private Stage stage;
+
 
     private Course course;
     private Consumer<Course> clickHandler;
@@ -34,6 +36,9 @@ public class ReviewItemController {
         courseMnemonic.setText(review.getCourse().getCourseSubject());
         courseNumber.setText(String.valueOf(review.getCourse().getCourseNumber()));
         courseRating.setText(String.valueOf(review.getRating()));
+    }
+    public void setStage(Stage stage){
+        this.stage = stage;
     }
 
     @FXML

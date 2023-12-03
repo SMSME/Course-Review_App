@@ -22,10 +22,12 @@
                 </HBox>
             </AnchorPane>
         </top>
+        <center>
+            <VBox fx:id="myReviews">
 
-        <VBox fx:id="myReviews">
+            </VBox>
+        </center>
 
-        </VBox>
 
 
 </BorderPane>
