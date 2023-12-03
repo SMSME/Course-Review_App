@@ -23,5 +23,9 @@
             </AnchorPane>
         </top>
 
+        <VBox fx:id="myReviews">
+
+        </VBox>
+
 
 </BorderPane>

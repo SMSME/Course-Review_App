@@ -14,13 +14,15 @@ public class MyReviewsApplication extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-
+        User tempUser = new User("vineelk");
+        UserSingleton.login("vineelk", "password3");
+        System.out.println(UserSingleton.getCurrentUser());
         //DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
         DatabaseDriver driver = DatabaseSingleton.getInstance();
         driver.connect();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
 
         MyReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
