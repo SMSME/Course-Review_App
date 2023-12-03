@@ -28,7 +28,14 @@
         <Button text="Add New Course" onAction="#createNewCourse"/>
     </HBox>
 
-    <ScrollPane VBox.vgrow="ALWAYS">
+    <HBox spacing="10.0" alignment="CENTER">
+        <Label text="Subject"/>
+        <Label text="Number"/>
+        <Label text="Title"/>
+        <Label text="Rating"/>
+    </HBox>
+
+    <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
         <content>
             <ListView fx:id="courseListView"/>
         </content>

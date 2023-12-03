@@ -1,5 +1,6 @@
 package edu.virginia.sde.reviews;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,21 @@ public class Course {
     private String courseTitle;
     private int courseNumber;
     private List<Review> reviews;
+
+    public String formatTitle(String title){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(Character.toUpperCase(title.charAt(0)));
+        for (int i = 1; i < title.length(); i++){
+            if (title.charAt(i) == ' '){
+                buffer.append(title.charAt(i));
+                buffer.append(Character.toUpperCase(title.charAt(i+1)));
+                i++;
+            }
+            else{
+            buffer.append(title.charAt(i));}
+        }
+        return buffer.toString();
+    }
 
 
     public Course(String courseSubject, int courseNumber, String courseTitle){
@@ -22,7 +38,7 @@ public class Course {
     }
 
     public void setCourseSubject(String courseSubject) {
-        this.courseSubject = courseSubject;
+        this.courseSubject = courseSubject.toUpperCase();
     }
 
     public String getCourseTitle() {
@@ -63,6 +79,6 @@ public class Course {
     @Override
     public String toString() {
         return courseSubject.toUpperCase() +  ' ' +
-                courseNumber + ' ' +  courseTitle + ' ' +
+                courseNumber + ' ' +  formatTitle(courseTitle) + ' ' +
                 getAvgRating();
     }}

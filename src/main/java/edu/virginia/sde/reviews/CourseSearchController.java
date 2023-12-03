@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 //make it so that if it has the same department/subject the number isnt the same/ titles arent the same
 
-//an empty search should display all courses that are in the database
 
 //add some formatting to make it look better too
 
-//make searching connect to the db properly, open connnections and stuff
+
 
 public class CourseSearchController {
     //for searching the database
@@ -37,41 +37,56 @@ public class CourseSearchController {
     public DatabaseDriver driver = DatabaseSingleton.getInstance();
 
 
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
 
     //dealing with basic course searching
-    public void clearNewCourses(){
+    public void clearNewCourses() {
         courseSubject.clear();
         courseNumber.clear();
         courseTitle.clear();
     }
 
+
+
     //adding a new course - check if valid
     @FXML
-    public boolean validateCourse(String subject, String number, String title){
+    public boolean validateCourse(String subject, String number, String title) {
         //display an error if the course is invalid DO
         //all letters 2-4 in length
-        if (!subject.matches("[A-Za-z]{2,4}")){
+        if (!subject.matches("[A-Za-z]{2,4}")) {
             return false;
         }
         //number that is exactly 4 in length
-        if (!number.matches("\\d{4}")){
+        if (!number.matches("\\d{4}")) {
             return false;
         }
         //ensure at least one long and < 50 char
-        if (title.isEmpty() || title.length()>50){
+        if (title.isEmpty() || title.length() > 50) {
             return false;
         }
         return true;
     }
 
+    //create text for
+    @FXML
+    public TextFormatter<String> createTextFormat (String pattern){
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if(newText.matches(pattern)){
+                return change;
+            }else{
+                return null;
+            }
+        };
+        return new TextFormatter<>(filter);
+    }
+
     //ensure all fields are filled when adding new course to review
     @FXML
-    public boolean fieldsFilled(TextField newCourseSubject, TextField newCourseNumber, TextField newCourseTitle){
+    public boolean fieldsFilled(TextField newCourseSubject, TextField newCourseNumber, TextField newCourseTitle) {
         return !newCourseSubject.getText().isEmpty() && !newCourseNumber.getText().isEmpty()
                 && !newCourseTitle.getText().isEmpty();
     }
@@ -80,7 +95,6 @@ public class CourseSearchController {
     @FXML
     public void addCourse(String subject, String number, String title) throws SQLException {
         DatabaseDriver db = DatabaseSingleton.getInstance();
-
 
         try {
             db.connect();
@@ -98,16 +112,14 @@ public class CourseSearchController {
                     System.out.println("Invalid data...");
                 }
             }
-            } catch(SQLException e){
-                e.printStackTrace();
-            }finally{
-                if (db != null) {
-                    db.disconnect();
-                }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.disconnect();
             }
         }
-
-
+    }
 
 
     //create new course - opens a dialog box to fill
@@ -122,6 +134,11 @@ public class CourseSearchController {
         TextField newCourseSubjectField = new TextField();
         TextField newCourseNumberField = new TextField();
         TextField newCourseTitleField = new TextField();
+
+        newCourseSubjectField.setTextFormatter(createTextFormat("[a-zA-Z]{0,4}"));
+        newCourseNumberField.setTextFormatter(createTextFormat("\\d{0,4}"));
+        newCourseTitleField.setTextFormatter(createTextFormat(".{0,50}"));
+
 
         VBox dialogContent = new VBox(10);
         dialogContent.getChildren().addAll(
@@ -143,14 +160,14 @@ public class CourseSearchController {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButton) {
                 // Access the values from the dynamically created fields
-                String subject = newCourseSubjectField.getText().toLowerCase();
+                String subject = newCourseSubjectField.getText().toUpperCase();
                 String number = newCourseNumberField.getText();
                 String title = newCourseTitleField.getText();
 
-                if (fieldsFilled(newCourseSubjectField,newCourseNumberField,newCourseTitleField)) {
+                if (fieldsFilled(newCourseSubjectField, newCourseNumberField, newCourseTitleField)) {
                     // Add the course to the database and update the list view
                     try {
-                        addCourse(subject,number,title);
+                        addCourse(subject, number, title);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -173,14 +190,13 @@ public class CourseSearchController {
     }
 
 
-
     //updates list for courses to appear
     @FXML
-    public void updateCourseListView(){
-        try{
+    public void updateCourseListView() {
+        try {
             List<Course> allCourses = driver.getCourses();
             courseListView.getItems().setAll(allCourses);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error in getting courses idk bro");
         }
     }
@@ -192,11 +208,12 @@ public class CourseSearchController {
         String number = courseNumber.getText();
         String title = courseTitle.getText();
 
-        List<Course> foundCourses = search(subject,number,title);
+        List<Course> foundCourses = search(subject, number, title);
 
-        if (subject.isEmpty() && number.isEmpty() && title.isEmpty()){
+        if (subject.isEmpty() && number.isEmpty() && title.isEmpty()) {
             updateCourseListView();
-        }else{
+            courseListView.getItems().setAll(foundCourses);
+        } else {
             courseListView.getItems().setAll(foundCourses);
         }
     }
@@ -209,59 +226,85 @@ public class CourseSearchController {
         List<Course> coursesbyNum = new ArrayList<>();
         List<Course> coursesbyTitle = new ArrayList<>();
         List<Course> matchCourses = new ArrayList<>();
+        DatabaseDriver db = DatabaseSingleton.getInstance();
+        try {
+            db.connect();
+            if (title.isEmpty() && number.isEmpty() && subject.isEmpty()){
+                matchCourses.addAll(db.getCourses());
+            }else {
+                if (!subject.isEmpty()) {
+                    coursesbySub.addAll(db.getCoursesBySubject(subject));
+                    searchbars += 1;
+                }
 
-        if (!subject.isEmpty()) {
-            coursesbySub.addAll(driver.getCoursesBySubject(subject));
-            searchbars += 1;}
+                if (!number.isEmpty()) {
+                    coursesbyNum.addAll(db.getCoursesByNumber(Integer.parseInt(number)));
+                    searchbars += 2;
+                }
 
-        if (!number.isEmpty()) {
-            coursesbyNum.addAll(driver.getCoursesByNumber(Integer.parseInt(number)));
-            searchbars += 2;}
+                if (!title.isEmpty()) {
+                    coursesbyTitle.addAll(db.getCoursesByName(title));
+                    searchbars += 4;
+                }
+            }
 
-        if (!title.isEmpty()) {
-            coursesbyTitle.addAll(driver.getCoursesByName(title));
-            searchbars += 4;}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.disconnect();
+            }
 
-        /// case 1 = search by subject only
-        // case 2 = search by number only
-        // case 3 = search by subject and number
-        // case 4 = search by Title only
-        // case 5 = search by subject and Title
-        // case 6 = search by number and Title
-        // case 7 = search by subject, number, and Title
-        switch (searchbars){
-            case 1:
-                matchCourses.addAll(coursesbySub);
-                break;
-            case 2:
-                matchCourses.addAll(coursesbyNum);
-                break;
-            case 3:
-                for (Course course : coursesbySub){
-                    if (coursesbyNum.contains(course)){
-                        matchCourses.add(course);}}
-                break;
-            case 4:
-                matchCourses.addAll(coursesbyTitle);
-                break;
-            case 5:
-                for (Course course : coursesbySub){
-                    if (coursesbyTitle.contains(course)){
-                        matchCourses.add(course);}}
-                break;
-            case 6:
-                for (Course course : coursesbyTitle){
-                    if (coursesbyNum.contains(course)){
-                        matchCourses.add(course);}}
-                break;
-            case 7:
-                for (Course course : coursesbyTitle){
-                    if (coursesbyNum.contains(course) && coursesbySub.contains(course)){
-                        matchCourses.add(course);}}
-                break;
+
+            /// case 1 = search by subject only
+            // case 2 = search by number only
+            // case 3 = search by subject and number
+            // case 4 = search by Title only
+            // case 5 = search by subject and Title
+            // case 6 = search by number and Title
+            // case 7 = search by subject, number, and Title
+            switch (searchbars) {
+                case 1:
+                    matchCourses.addAll(coursesbySub);
+                    break;
+                case 2:
+                    matchCourses.addAll(coursesbyNum);
+                    break;
+                case 3:
+                    for (Course course : coursesbySub) {
+                        if (coursesbyNum.contains(course)) {
+                            matchCourses.add(course);
+                        }
+                    }
+                    break;
+                case 4:
+                    matchCourses.addAll(coursesbyTitle);
+                    break;
+                case 5:
+                    for (Course course : coursesbySub) {
+                        if (coursesbyTitle.contains(course)) {
+                            matchCourses.add(course);
+                        }
+                    }
+                    break;
+                case 6:
+                    for (Course course : coursesbyTitle) {
+                        if (coursesbyNum.contains(course)) {
+                            matchCourses.add(course);
+                        }
+                    }
+                    break;
+                case 7:
+                    for (Course course : coursesbyTitle) {
+                        if (coursesbyNum.contains(course) && coursesbySub.contains(course)) {
+                            matchCourses.add(course);
+                        }
+                    }
+                    break;
+            }
+            return matchCourses;
         }
-        return matchCourses;
+
+
     }
-
-
 }
