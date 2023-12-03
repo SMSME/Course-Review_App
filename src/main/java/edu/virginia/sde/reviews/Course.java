@@ -15,6 +15,9 @@ public class Course {
         StringBuffer buffer = new StringBuffer();
         buffer.append(Character.toUpperCase(title.charAt(0)));
         for (int i = 1; i < title.length(); i++){
+            if(title.charAt(title.length()-1) == ' '){
+                break;
+            }
             if (title.charAt(i) == ' '){
                 buffer.append(title.charAt(i));
                 buffer.append(Character.toUpperCase(title.charAt(i+1)));

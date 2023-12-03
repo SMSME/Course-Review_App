@@ -25,6 +25,7 @@ import java.util.function.UnaryOperator;
 //why everyony
 
 //add some formatting to make it look better too
+//thers an error if u format it to capitalize the letters because if theres a space at the end it panics
 
 
 
