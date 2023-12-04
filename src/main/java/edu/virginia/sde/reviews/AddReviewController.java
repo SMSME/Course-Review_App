@@ -28,7 +28,6 @@ public class AddReviewController {
     private Label message;
     @FXML
     private Course currentCourse;
-
     public void setStage(Stage stage){
         this.stage = stage;
     }
@@ -58,16 +57,21 @@ public class AddReviewController {
         }
     }
     @FXML
-    public void backButton() throws IOException {
+    public void backButton() throws IOException, SQLException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Course Reviews");
+        Scene scene = new Scene(fxmlLoader.load());
+        DatabaseDriver driver = DatabaseSingleton.getInstance();
+        driver.connect();
 
-        CourseReviewsController courseReviewsController = fxmlLoader.getController();
-        courseReviewsController.setStage(stage);
-        courseReviewsController.setDatabaseDriver(driver);
+        CourseReviewsController controller = fxmlLoader.getController();
+        controller.setStage(stage);
+        Course tempCourse = new Course("CS",3200,"Data Structures 3");
+        controller.setCurrentCourse(tempCourse);
+        controller.initializer();
+
+        stage.setTitle("Course Reviews");
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

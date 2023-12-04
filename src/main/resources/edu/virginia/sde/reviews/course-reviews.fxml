@@ -6,21 +6,58 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
-            prefHeight="720.0" prefWidth="1280.0">
-
-    <VBox>
-        <HBox>
-            <Label fx:id="courseLabel" text="Text" style="-fx-font-size: 32px;"/>
-            <Label text=" Course Reviews" style="-fx-font-size: 32px;"/>
+            prefHeight="720.0" prefWidth="1280.0"
+>
+    <VBox AnchorPane.leftAnchor="340">
+        <HBox alignment="CENTER" spacing="7.0">
+            <Label fx:id="courseSubjectLabel" style="-fx-font-size: 32;"/>
+            <Label fx:id="courseNumberLabel" style="-fx-font-size: 32;"/>
+            <Label fx:id="courseTitleLabel" style="-fx-font-size: 32;"/>
+            <Label text="Course Reviews" style="-fx-font-size: 32;"/>
         </HBox>
-        <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
-        <VBox fx:id="reviews">
-        </VBox>
+
+        <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
+            <content>
+                <TableView fx:id="reviewTableView" layoutX="47.0" layoutY="137.0" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Rating" fx:id="ratingColumn">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="rating" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Comment" fx:id="commentColumn">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="comment" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Timestamp" fx:id="timestampColumn">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="timestamp" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Edit">
+                            <!-- Placeholder for edit button -->
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </content>
+        </ScrollPane>
+        <HBox alignment="CENTER">
+            <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
+        </HBox>
+    </VBox>
+
+    <VBox fx:id="newReviewFields" visible="false">
+        <TextField fx:id="newReviewRating" promptText="Subject"/>
+        <TextField fx:id="newReviewComment" promptText="Number"/>
+        <Button text="Submit" onAction="#submitReview"/>
     </VBox>
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
+    <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Back to Course Search" AnchorPane.leftAnchor="0"/>
     <Hyperlink onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
 </AnchorPane>
 
