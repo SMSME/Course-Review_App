@@ -43,7 +43,7 @@ public class MyReviewsController {
     private DatabaseDriver driver;
     private String currentUser;
     @FXML
-    private VBox myReviews;
+    private VBox box;
     public void setStage(Stage stage){
         this.stage = stage;
     }
@@ -57,12 +57,21 @@ public class MyReviewsController {
 //        numberColumn.setCellValueFactory(new PropertyValueFactory<>("courseNumber"));
         try{
             reviews = driver.getReviewsFromUser(currentUser);
+            driver.disconnect();
             System.out.println("Number of reviews: " + reviews.size());
             for(Review review: reviews){
                 System.out.println(review.getCourse().toString());
                 System.out.println(review.getUser());
                 System.out.println(review.getRating());
                 System.out.println(review.getCourse().getCourseSubject());
+            }
+            if(reviews.isEmpty()){
+                box.setVisible(true);
+            }
+            else{
+                box.setVisible(false);
+                reviewListView.getItems().setAll(reviews);
+                reviewListView.setOnMouseClicked(this::handleReviewItemClick);
             }
             //ObservableList<Review> reviewList = FXCollections.observableArrayList(reviews);
             //ObservableList<Course> courseList = FXCollections.observableArrayList(courses);
@@ -76,8 +85,7 @@ public class MyReviewsController {
 //                myReviews.getChildren().add(root);
 //
 //            }
-            reviewListView.getItems().setAll(reviews);
-            reviewListView.setOnMouseClicked(this::handleReviewItemClick);
+
         }catch(SQLException e){
             e.printStackTrace();
         }

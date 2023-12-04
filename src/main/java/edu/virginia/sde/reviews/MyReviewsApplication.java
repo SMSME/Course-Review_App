@@ -32,7 +32,7 @@ public class MyReviewsApplication extends Application{
 
         MyReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        //controller.initialize();
+        controller.initialize();
 
         stage.setTitle("My Reviews");
         stage.setScene(scene);

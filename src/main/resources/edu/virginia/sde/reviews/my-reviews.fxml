@@ -24,11 +24,20 @@
             </AnchorPane>
         </top>
 
-        <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
-            <content>
-                <ListView fx:id="reviewListView"/>
-            </content>
-        </ScrollPane>
+        <center>
+            <VBox fx:id="box" alignment = "CENTER" spacing="5.0">
+                <Label fx:id="messageLabel" text="The user has no reviews" visible="false"/>
+            </VBox>
+            <VBox>
+                <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
+                    <content>
+                        <ListView fx:id="reviewListView"/>
+                    </content>
+                </ScrollPane>
+            </VBox>
+        </center>
+
+
     <!--
             <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
                 <content>
