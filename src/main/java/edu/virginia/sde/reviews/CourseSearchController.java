@@ -97,7 +97,6 @@ public class CourseSearchController {
 
     @FXML
     public void logOut() throws IOException, SQLException {
-        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -106,6 +105,7 @@ public class CourseSearchController {
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
         loginSceneController.setDriver(driver);
+        setSceneClosed();
     }
 
     public void openCourseRev(Course course) throws IOException, SQLException {
@@ -118,6 +118,7 @@ public class CourseSearchController {
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
         crc.setCurrentCourse(course);
+        setSceneClosed();
     }
 
     //dealing with basic course searching - shouldnt u make a button??

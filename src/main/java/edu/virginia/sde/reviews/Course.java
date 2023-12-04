@@ -76,7 +76,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("%-50s %-50d %-50s %-50.2f",
+        return String.format("%-41s %-32d %-50s %-20.2f",
                 courseSubject.toUpperCase(),
                 courseNumber,
                 formatTitle(courseTitle),
