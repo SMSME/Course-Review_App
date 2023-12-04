@@ -145,28 +145,28 @@ public class CourseSearchController {
 
     //adding a new course - check if valid
     @FXML
-    public boolean checkTextfields(TextField subject, TextField number, TextField title) {
+    public String checkTextfields(TextField subject, TextField number, TextField title) {
         // All fields must not be empty
         if (subject.getText().isEmpty() || number.getText().isEmpty() || title.getText().isEmpty()) {
-            return false;
+            return "Please fill all fields.";
         }
 
         // All letters in the subject, 2-4 characters in length
         if (!subject.getText().matches("[A-Za-z]{2,4}")) {
-            return false;
+            return "Subject must be 2-4 characters in length!";
         }
 
         // Number must be exactly 4 digits
         if (!number.getText().matches("\\d{4}")) {
-            return false;
+            return "Course number should be 4 digits!";
         }
 
         // Title length should be less than or equal to 50 characters
         if (title.getText().length() > 50) {
-            return false;
+            return "Course title must be less than 50 characters!";
         }
 
-        return true;
+        return null;
     }
 
 
@@ -268,8 +268,9 @@ public class CourseSearchController {
         Node addButtonNode = dialog.getDialogPane().lookupButton(addButton);
         addButtonNode.addEventFilter(ActionEvent.ACTION, event -> {
             // Check whether some conditions are fulfilled
-            if (!checkTextfields(subjectField, numberField, titleField)) {
-                errorMessage.setText("Course is not valid. Please check your fields.");
+            String error = checkTextfields(subjectField, numberField, titleField);
+            if(error != null){
+                errorMessage.setText(error);
                 // The conditions are not fulfilled, so we consume the event
                 // to prevent the dialog from closing
                 event.consume();
