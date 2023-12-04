@@ -93,7 +93,6 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        loginSceneController.setDriver(driver);
         close();
     }
 

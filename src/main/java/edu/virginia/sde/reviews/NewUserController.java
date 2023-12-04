@@ -32,8 +32,6 @@ public class NewUserController {
 //        this.driver = driver;
 //    }
     public void createUser() throws SQLException{
-        this.driver = DatabaseSingleton.getInstance();
-        driver.connect();
         String newUser = newUsername.getText();
         String newPass = newPassword.getText();
 
@@ -79,12 +77,6 @@ public class NewUserController {
     @FXML
     private void backToLogin() throws IOException{
         //try {
-            try {
-                driver.disconnect();
-            }
-            catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
