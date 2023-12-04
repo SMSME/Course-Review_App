@@ -49,6 +49,22 @@
         <Button mnemonicParsing="false" onAction="#logOut" text="Log Out"/>
     </VBox>
 
+    <GridPane alignment="CENTER" style="-fx-padding: 0 10 0 0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Subject" styleClass="header-label" GridPane.columnIndex="0"/>
+        <Label text="Number" styleClass="header-label" GridPane.columnIndex="1"/>
+        <Label text="Title" styleClass="header-label" GridPane.columnIndex="2"/>
+        <Label text="Reviews" styleClass="header-label" GridPane.columnIndex="3"/>
+
+    </GridPane>
+
+
 
     <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
         <content>

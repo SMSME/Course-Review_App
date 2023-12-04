@@ -11,27 +11,8 @@ public class Course {
     private int courseNumber;
     private List<Review> reviews;
 
-    public String formatTitle(String title){
-        title = title.toLowerCase();
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(Character.toUpperCase(title.charAt(0)));
-        for (int i = 1; i < title.length(); i++){
-            if(title.charAt(title.length()-1) == ' '){
-                break;
-            }
-            if (title.charAt(i) == ' '){
-                buffer.append(title.charAt(i));
-                buffer.append(Character.toUpperCase(title.charAt(i+1)));
-                i++;
-            }
-            else{
-            buffer.append(title.charAt(i));}
-        }
-        return buffer.toString();
-    }
 
-
-    public Course(String courseSubject, int courseNumber, String courseTitle){
+    public Course(String courseSubject, int courseNumber, String courseTitle) {
         this.courseSubject = courseSubject;
         this.courseNumber = courseNumber;
         this.courseTitle = courseTitle;
@@ -62,24 +43,25 @@ public class Course {
         this.courseNumber = courseNumber;
     }
 
-    public List<Review> getReviews(){
+    public List<Review> getReviews() {
         return reviews;
     }
 
-    public void addReview(Review review){
+    public void addReview(Review review) {
         reviews.add(review);
     }
 
-    public double getAvgRating(){
-        if (reviews.isEmpty()){
+    public double getAvgRating() {
+        if (reviews.isEmpty()) {
             return 0.0;
         }
         double sum = 0.0;
-        for (Review review: reviews){
+        for (Review review : reviews) {
             sum += review.getRating();
         }
-        return sum/reviews.size();
+        return sum / reviews.size();
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -92,10 +74,30 @@ public class Course {
     }
 
 
-
     @Override
     public String toString() {
-        return courseSubject.toUpperCase() +  ' ' +
-                courseNumber + ' ' +  formatTitle(courseTitle) + ' ' +
-                getAvgRating();
-    }}
+        return String.format("%-50s %-50d %-50s %-50.2f",
+                courseSubject.toUpperCase(),
+                courseNumber,
+                formatTitle(courseTitle),
+                getAvgRating());
+    }
+
+
+    public String formatTitle(String title) {
+        title = title.toLowerCase();
+        StringBuilder buffer = new StringBuilder();
+
+        for (int i = 0; i < title.length(); i++) {
+            char currentChar = title.charAt(i);
+
+            if (i == 0 || (i > 0 && title.charAt(i - 1) == ' ')) {
+                buffer.append(Character.toUpperCase(currentChar));
+            } else {
+                buffer.append(currentChar);
+            }
+        }
+
+        return buffer.toString();
+    }
+}

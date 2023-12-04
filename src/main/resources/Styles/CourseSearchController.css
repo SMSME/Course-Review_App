@@ -1,7 +1,16 @@
+.root {
+    -fx-font-family: "Monospaced";
+}
+
 .error-label {
     -fx-font-size: 14px;
     -fx-text-fill: rgba(167, 34, 22, 0.76);
     -fx-font-style: italic;
-
 }
+
+.header-label {
+    -fx-pref-width: 50;
+    -fx-alignment: CENTER_LEFT; /* Center-align the text within the label */
+}
+
 

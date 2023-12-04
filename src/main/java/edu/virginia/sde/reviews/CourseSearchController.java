@@ -48,7 +48,6 @@ public class CourseSearchController {
 
 
 
-
     //display courses
     @FXML
     public ListView<Course> courseListView;
@@ -61,7 +60,6 @@ public class CourseSearchController {
         this.stage = stage;
     }
 
-    public void setDriver (DatabaseDriver driver) {this.driver = driver;}
 
 
     public void initialize() throws SQLException {
@@ -145,7 +143,6 @@ public class CourseSearchController {
     }
 
 
-
     //adding a new course - check if valid
     @FXML
     public String checkTextfields(TextField subject, TextField number, TextField title) {
@@ -186,27 +183,6 @@ public class CourseSearchController {
         };
         return new TextFormatter<>(filter);
     }
-
-
-//    public boolean sameCourseNumandSub(Course newCourse) throws SQLException {
-//        DatabaseDriver db = DatabaseSingleton.getInstance();
-//        try {
-//            db.connect();
-//            List<Course> courses = db.getCourses();
-//            for (Course course : courses) {
-//                if (course.getCourseSubject().equalsIgnoreCase(newCourse.getCourseSubject()) && course.getCourseNumber() == newCourse.getCourseNumber()) {
-//                    return true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (db != null) {
-//                db.disconnect();
-//            }
-//            return false;
-//        }
-//    }
 
 
     @FXML
