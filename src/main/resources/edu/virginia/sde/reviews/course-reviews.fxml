@@ -29,7 +29,7 @@
                                 <PropertyValueFactory property="rating" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Comment" fx:id="commentColumn" prefWidth="576">
+                        <TableColumn text="Comment" fx:id="commentColumn" prefWidth="583">
                             <cellValueFactory>
                                 <PropertyValueFactory property="comment" />
                             </cellValueFactory>
@@ -55,6 +55,5 @@
     </VBox>
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
     <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Back to Course Search" AnchorPane.leftAnchor="0"/>
-    <Hyperlink onAction="#editReview" text="Edit Review" AnchorPane.bottomAnchor="0"/>
 </AnchorPane>
 

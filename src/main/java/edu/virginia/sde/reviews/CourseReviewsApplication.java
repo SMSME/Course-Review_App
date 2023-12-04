@@ -21,7 +21,6 @@ public class CourseReviewsApplication extends Application{
 
         //DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
         DatabaseDriver driver = DatabaseSingleton.getInstance();
-        driver.connect();
 
         LoginSceneController controller = fxmlLoader.getController();
         controller.setStage(stage);

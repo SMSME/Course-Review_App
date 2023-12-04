@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -91,6 +92,34 @@ public class CourseReviewsController {
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+
+        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+
+        commentColumn.setCellFactory(param -> {
+            TableCell<Review, String> cell = new TableCell<>() {
+                private Text text;
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        if (text == null) {
+                            text = new Text();
+
+                            text.setWrappingWidth(commentColumn.getWidth()-5);
+                        }
+                        text.setText(item);
+                        setGraphic(text);
+                    }
+                }
+            };
+
+            return cell;
+        });
 
         courseTitleLabel.setText(currentCourse.getCourseTitle());
         courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
@@ -296,6 +325,12 @@ public class CourseReviewsController {
     }
     @FXML
     public void logOut() throws IOException {
+        try {
+            driver.disconnect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
