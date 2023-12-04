@@ -79,19 +79,20 @@ public class MyReviewsController {
 
 
     @FXML
-    private void onLogout() throws IOException{
+    private void onLogout() throws IOException, SQLException {
+        driver.disconnect();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Login");
         LoginSceneController controller = fxmlLoader.getController();
-        controller.setDriver(driver);
         controller.setStage(stage);
     }
 
     @FXML
-    private void backToCourseSearch() throws IOException {
+    private void backToCourseSearch() throws IOException, SQLException {
+        driver.disconnect();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
