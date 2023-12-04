@@ -38,15 +38,15 @@ public class LoginSceneController {
             throw new RuntimeException(e);
         }
     }
-//    @FXML
-//    private void initialize(){
-//        try{
-//            driver = new DatabaseDriver("CruddyCoursework.sqlite");
-//            driver.connect();
-//        } catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//    }
+    @FXML
+    private void initialize(){
+        try{
+            driver = DatabaseSingleton.getInstance();
+            driver.connect();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void handleButton() throws SQLException, IOException{
