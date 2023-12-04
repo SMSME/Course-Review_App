@@ -29,9 +29,6 @@ public class LoginSceneController {
         this.stage = stage;
     }
     //@FXML
-    public void setDriver(DatabaseDriver driver){
-        this.driver = driver;
-    }
     @FXML
     private void initialize(){
         try{
