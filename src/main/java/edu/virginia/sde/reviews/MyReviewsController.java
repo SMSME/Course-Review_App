@@ -4,6 +4,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -36,31 +38,35 @@ public class MyReviewsController {
     private Stage stage;
     @FXML
     private Scene scene;
+    @FXML
+    private ListView<Review> reviewListView;
     private DatabaseDriver driver;
     private String currentUser;
     @FXML
     private VBox myReviews;
     public void setStage(Stage stage){
         this.stage = stage;
-
     }
 
-    //Need a method that will return all of the reviews that a giver user has written.
-    //can use the user singleton to get the current user
-    //currentUser = UserSingleton.getCurrentUser()
-    //Will add it to the Vbox and print them out like matthew has them.
     public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
         driver = DatabaseSingleton.getInstance();
         List<Review> reviews;
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        mnemonicColumn.setCellValueFactory(new PropertyValueFactory<>("courseSubject"));
-        numberColumn.setCellValueFactory(new PropertyValueFactory<>("courseNumber"));
+//        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+//        mnemonicColumn.setCellValueFactory(new PropertyValueFactory<>("courseSubject"));
+//        numberColumn.setCellValueFactory(new PropertyValueFactory<>("courseNumber"));
         try{
             reviews = driver.getReviewsFromUser(currentUser);
-            ObservableList<Review> reviewList = FXCollections.observableArrayList(reviews);
+            System.out.println("Number of reviews: " + reviews.size());
+            for(Review review: reviews){
+                System.out.println(review.getCourse().toString());
+                System.out.println(review.getUser());
+                System.out.println(review.getRating());
+                System.out.println(review.getCourse().getCourseSubject());
+            }
+            //ObservableList<Review> reviewList = FXCollections.observableArrayList(reviews);
             //ObservableList<Course> courseList = FXCollections.observableArrayList(courses);
-            reviewTableView.setItems(reviewList);
+            //reviewTableView.setItems(reviewList);
 //            for(Review review: reviews){
 //                FXMLLoader loader = new FXMLLoader(getClass().getResource("review-item.fxml"));
 //                Parent root = loader.load();
@@ -70,27 +76,49 @@ public class MyReviewsController {
 //                myReviews.getChildren().add(root);
 //
 //            }
+            reviewListView.getItems().setAll(reviews);
+            reviewListView.setOnMouseClicked(this::handleReviewItemClick);
         }catch(SQLException e){
             e.printStackTrace();
         }
     }
 
-    private void handleReviewItemClick(Course course) {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Course Reviews");
-            CourseReviewsController controller = loader.getController();
-            controller.setCurrentCourse(course);
-            controller.setStage(stage);
-            //Shouldn't need this if database singleton is used properly.
-        } catch(IOException e){
-            e.printStackTrace();
+    private void handleReviewItemClick(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2){
+            Review review = reviewListView.getSelectionModel().getSelectedItem();
+            if (review != null){
+                try{
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
+                    Parent root = loader.load();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.setTitle("Course Reviews");
+                    CourseReviewsController controller = loader.getController();
+                    controller.setCurrentCourse(review.getCourse());
+                    controller.setStage(stage);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         }
-
     }
+
+//    private void handleReviewItemClick(Course course) {
+//        try{
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
+//            Parent root = loader.load();
+//            Scene scene = new Scene(root);
+//            stage.setScene(scene);
+//            stage.setTitle("Course Reviews");
+//            CourseReviewsController controller = loader.getController();
+//            controller.setCurrentCourse(course);
+//            controller.setStage(stage);
+//            //Shouldn't need this if database singleton is used properly.
+//        } catch(IOException e){
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     @FXML
     private void onLogout() throws IOException{

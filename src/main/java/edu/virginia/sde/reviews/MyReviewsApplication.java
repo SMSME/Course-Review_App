@@ -19,11 +19,11 @@ public class MyReviewsApplication extends Application{
 
         DatabaseDriver driver = DatabaseSingleton.getInstance();
         driver.connect();
-        UserSingleton.login("vineelk", "password3");
+        UserSingleton.login("jamtran12", "password4");
         Course course = new Course("DSA", 3100, "Data Structures and Algorithms 2");
         driver.addCourse(course);
         Timestamp timestamp = new Timestamp(2023, 12,3, 0,0,0,0);
-        Review review = new Review(course, 4, timestamp, "good", "vineelk");
+        Review review = new Review(course, 4, timestamp, "good", "jamtran12");
 
         driver.addReview(review);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
@@ -32,7 +32,7 @@ public class MyReviewsApplication extends Application{
 
         MyReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        controller.initialize();
+        //controller.initialize();
 
         stage.setTitle("My Reviews");
         stage.setScene(scene);

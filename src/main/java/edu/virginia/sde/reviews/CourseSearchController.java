@@ -66,7 +66,7 @@ public class CourseSearchController {
 
     public void initialize() throws SQLException {
         courseListView.setOnMouseClicked(this::handleCourseClick);
-        driver.connect();
+        //driver.connect();
     }
 
     public void close() throws SQLException {

@@ -54,7 +54,20 @@ public class Review {
     public void setCourse(Course course) {this.course = course; }
 
     public Course getCourse() { return course; }
+    public void setCourseSubject(String subject){
+        courseSubject = subject;
+    }
+    public String getCourseSubject(){
+        return courseSubject;
+    }
+    public int getCourseNumber(){
+        return courseNumber;
+    }
 
+    @Override
+    public String toString(){
+        return getCourseSubject() + " "+getCourseNumber() + " "+getRating();
+    }
     public Boolean hasComment() {
         if (comment.isEmpty()) {
             return false;
