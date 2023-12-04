@@ -83,7 +83,6 @@ public class NewUserController {
             stage.setScene(scene);
             stage.setTitle("Login");
             LoginSceneController controller = fxmlLoader.getController();
-            controller.setDriver(driver);
             controller.setStage(stage);
         //} catch (IOException e) {
         //    e.printStackTrace();
