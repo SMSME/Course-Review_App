@@ -18,7 +18,7 @@ public class CourseReviewsApplication extends Application{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        DatabaseDriver driver = DatabaseSingleton.getInstance();
+
         LoginSceneController controller = fxmlLoader.getController();
         controller.setStage(stage);
         stage.setTitle("Login");

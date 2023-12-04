@@ -29,15 +29,6 @@ public class LoginSceneController {
         this.stage = stage;
     }
     //@FXML
-    public void setDriver(DatabaseDriver driver){
-        this.driver = DatabaseSingleton.getInstance();
-        try {
-            driver.connect();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     @FXML
     private void initialize(){
         try{
@@ -72,7 +63,9 @@ public class LoginSceneController {
         catch(IllegalStateException e){
             messageLabel.setText("Password is incorrect");
         }
-
+        catch(IOException e){
+            messageLabel.setText("Login not successful, an error occurred.");
+        }
 //        if(isValid(user,pass)){
 //            currentUser = user;
 //            //Will need to change when Course Search Screen is Done.
@@ -100,6 +93,12 @@ public class LoginSceneController {
     @FXML
     private void handleCreateUser() throws IOException{
         //messageLabel.setText("Create new user button pressed");
+        try {
+            driver.disconnect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
