@@ -13,6 +13,8 @@ public class Review {
     private Timestamp timestamp;
     private String comment;
     private String user;
+    private String courseSubject;
+    private int courseNumber;
 
     public Review(Course course, int rating, Timestamp timestamp, String comment, String user) {
         this.course = course;
@@ -20,6 +22,8 @@ public class Review {
         this.timestamp = timestamp;
         this.comment = comment;
         this.user = user;
+        this.courseSubject = course.getCourseSubject();
+        this.courseNumber = course.getCourseNumber();
     }
     public void setRating(int rating) {
         this.rating = rating;
@@ -50,7 +54,20 @@ public class Review {
     public void setCourse(Course course) {this.course = course; }
 
     public Course getCourse() { return course; }
+    public void setCourseSubject(String subject){
+        courseSubject = subject;
+    }
+    public String getCourseSubject(){
+        return courseSubject;
+    }
+    public int getCourseNumber(){
+        return courseNumber;
+    }
 
+    @Override
+    public String toString(){
+        return getCourseSubject() + "                                      "+getCourseNumber() + " "+getRating();
+    }
     public Boolean hasComment() {
         if (comment.isEmpty()) {
             return false;
