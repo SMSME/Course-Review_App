@@ -94,6 +94,7 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
+        loginSceneController.setDriver(driver);
     }
 
     //open course review for a specific course
@@ -107,7 +108,6 @@ public class CourseSearchController {
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
         crc.setCurrentCourse(course);
-        close();
     }
 
     //handle double clicking on a course
