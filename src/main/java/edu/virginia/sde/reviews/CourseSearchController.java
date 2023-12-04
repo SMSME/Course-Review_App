@@ -119,7 +119,6 @@ public class CourseSearchController {
 
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
-        crc.setDatabaseDriver(driver);
         crc.setCurrentCourse(course);
     }
 

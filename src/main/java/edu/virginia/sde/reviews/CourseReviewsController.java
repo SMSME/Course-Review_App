@@ -35,6 +35,8 @@ public class CourseReviewsController {
     private TableColumn<Review,Integer> ratingColumn;
     @FXML
     private TableColumn<Review,String> commentColumn;
+    @FXML
+    private TableColumn<Review, Timestamp> timestampColumn;
     private User currentUser;
     private List<Review> courseReviews;
     private DatabaseDriver driver;
@@ -76,9 +78,10 @@ public class CourseReviewsController {
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+        timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
 
         courseTitleLabel.setText(currentCourse.getCourseTitle());
-        courseSubjectLabel.setText(currentCourse.getCourseSubject());
+        courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
         courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
 
         try {
@@ -98,12 +101,10 @@ public class CourseReviewsController {
     }
     @FXML
     public void addReview() throws SQLException {
-        List<Review> userReviews = driver.getReviewsFromUser(currentUser.getUsername());
         boolean reviewExists = false;
-        for (Review review : userReviews) {
-            if (courseReviews.contains(review)) {
+        for (Review review : courseReviews) {
+            if (review.getUser().equals(currentUser.getUsername())) {
                 reviewExists = true;
-                break;
             }
         }
         if (reviewExists) {
@@ -186,6 +187,17 @@ public class CourseReviewsController {
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
         loginSceneController.setDriver(driver);
+    }
+    @FXML
+    public void backToCourseSearch() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Course Search");
+
+        CourseSearchController courseSearchController = fxmlLoader.getController();
+        courseSearchController.setStage(stage);
     }
 
     @FXML
