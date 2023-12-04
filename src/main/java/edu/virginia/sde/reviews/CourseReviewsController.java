@@ -244,7 +244,7 @@ public class CourseReviewsController {
         }
         if (reviewExists) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Cannot add new review");
+            alert.setTitle("Review already exists");
             alert.setHeaderText("Error");
             alert.setContentText("A review for this course by this user already exists");
             alert.showAndWait();
