@@ -41,6 +41,7 @@ public class CourseReviewsController {
     @FXML
     private TableColumn<Review, Timestamp> timestampColumn;
     private User currentUser;
+    private Review currentUserReview;
     private List<Review> courseReviews;
     private DatabaseDriver driver = DatabaseSingleton.getInstance();;
     private Stage stage;
@@ -48,11 +49,13 @@ public class CourseReviewsController {
     private int newRating;
     private String newComment;
     @FXML
-    private VBox newReviewFields;
-    @FXML
     private TextField newReviewRating;
     @FXML
     private TextField newReviewComment;
+    @FXML
+    private TextField editReviewRating;
+    @FXML
+    private TextField editReviewComment;
     private int actionColumns;
     public void submitReview() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -92,8 +95,6 @@ public class CourseReviewsController {
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
-
-        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
         commentColumn.setCellFactory(param -> {
             TableCell<Review, String> cell = new TableCell<>() {
@@ -149,19 +150,22 @@ public class CourseReviewsController {
                     VBox dialogContent = new VBox(10);
                     dialogContent.getChildren().addAll(
                             new Label("Rating: "),
-                            newReviewRating,
+                            editReviewRating,
                             new Label("Comment: "),
-                            newReviewComment
+                            editReviewComment
                     );
+                    editReviewRating.setText(String.valueOf(currentUserReview.getRating()));
+                    editReviewComment.setText(currentUserReview.getComment());
+
                     dialog.getDialogPane().setContent(dialogContent);
-                    Platform.runLater(() -> newReviewRating.requestFocus());
+                    Platform.runLater(() -> editReviewRating.requestFocus());
                     ButtonType addButton = new ButtonType("Save Changes", ButtonBar.ButtonData.OK_DONE);
                     ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
                     dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
 
                     dialog.setResultConverter(dialogButton -> {
                         if (dialogButton == addButton) {
-                            if (newReviewRating.getText().isEmpty()) {
+                            if (editReviewRating.getText().isEmpty()) {
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
                                 alert.setTitle("Error");
                                 alert.setHeaderText("Invalid Rating");
@@ -171,7 +175,7 @@ public class CourseReviewsController {
                             }
                             else {
                                 try {
-                                    newRating = parseInt(newReviewRating.getText());
+                                    newRating = parseInt(editReviewRating.getText());
                                 } catch (NumberFormatException e) {
                                     Alert alert = new Alert(Alert.AlertType.ERROR);
                                     alert.setTitle("Error");
@@ -181,7 +185,7 @@ public class CourseReviewsController {
                                     alert.showAndWait();
                                     return null;
                                 }
-                                newComment = newReviewComment.getText();
+                                newComment = editReviewComment.getText();
                                 if (newRating < 1 || newRating > 5) {
                                     Alert alert = new Alert(Alert.AlertType.ERROR);
                                     alert.setTitle("Error");
@@ -229,6 +233,7 @@ public class CourseReviewsController {
                 Review review = (Review) getTableRow().getItem();
                 if (review.getUser().equals(currentUser.getUsername())) {
                     setGraphic(new HBox(editButton, deleteButton));
+                    currentUserReview = review;
                 } else {
                     setGraphic(null);
                 }

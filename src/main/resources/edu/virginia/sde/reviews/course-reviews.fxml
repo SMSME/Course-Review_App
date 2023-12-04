@@ -48,9 +48,14 @@
         </HBox>
     </VBox>
 
-    <VBox fx:id="newReviewFields" visible="false">
+    <VBox visible="false">
         <TextField fx:id="newReviewRating" promptText="Subject"/>
         <TextField fx:id="newReviewComment" promptText="Number"/>
+        <Button text="Submit" onAction="#submitReview"/>
+    </VBox>
+    <VBox visible="false">
+        <TextField fx:id="editReviewRating" promptText="Subject"/>
+        <TextField fx:id="editReviewComment" promptText="Number"/>
         <Button text="Submit" onAction="#submitReview"/>
     </VBox>
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
