@@ -23,8 +23,6 @@ public class ReviewItemController {
     private Label courseNumber;
     @FXML
     private Label courseRating;
-    @FXML
-    private Button courseReviewButton;
     @FXML private Stage stage;
 
 

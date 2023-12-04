@@ -1,13 +1,15 @@
 package edu.virginia.sde.reviews;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
+import javafx.collections.FXCollections;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +18,19 @@ public class MyReviewsController {
     @FXML
     private Label messageLabel;
     @FXML
-    private ListView<ReviewDisplay> reviewListView;
+    private Label courseTitleLabel;
+    @FXML
+    private Label courseSubjectLabel;
+    @FXML
+    private Label courseNumberLabel;
+    @FXML
+    private TableView<Review> reviewTableView;
+    @FXML
+    private TableColumn<Review,Integer> ratingColumn;
+    @FXML
+    private TableColumn<Course,String> mnemonicColumn;
+    @FXML
+    private TableColumn<Course, Integer> numberColumn;
     @FXML
     private Stage stage;
     @FXML
@@ -38,24 +52,30 @@ public class MyReviewsController {
         currentUser = UserSingleton.getCurrentUser().getUsername();
         driver = DatabaseSingleton.getInstance();
         List<Review> reviews;
+        List<Course> courses;
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        mnemonicColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        numberColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         try{
             reviews = driver.getReviewsFromUser(currentUser);
-            for(Review review: reviews){
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("review-item.fxml"));
-                Parent root = loader.load();
-
-                ReviewItemController controller = loader.getController();
-                controller.setReviewData(review, this:: handleReviewItemClick);
-                myReviews.getChildren().add(root);
+            for( Review review: reviews){
 
             }
+            ObservableList<Review> reviewList = FXCollections.observableArrayList(reviews);
+            ObservableList<Course> courseList;
+            reviewTableView.setItems(reviewList);
+//            for(Review review: reviews){
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("review-item.fxml"));
+//                Parent root = loader.load();
+//
+//                ReviewItemController controller = loader.getController();
+//                controller.setReviewData(review, this:: handleReviewItemClick);
+//                myReviews.getChildren().add(root);
+//
+//            }
         }catch(SQLException e){
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-
-
     }
 
     private void handleReviewItemClick(Course course) {
@@ -69,7 +89,6 @@ public class MyReviewsController {
             controller.setCurrentCourse(course);
             controller.setStage(stage);
             //Shouldn't need this if database singleton is used properly.
-            controller.setDatabaseDriver(driver);
         } catch(IOException e){
             e.printStackTrace();
         }
