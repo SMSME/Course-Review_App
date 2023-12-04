@@ -98,15 +98,29 @@ public class CourseSearchController {
     }
 
     @FXML
-    public void logOut() throws IOException {
+    public void logOut() throws IOException, SQLException {
+        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Login");
+        Scene currentScene = courseListView.getScene();
+        currentScene.setRoot(root);
+
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
         loginSceneController.setDriver(driver);
+    }
+
+    public void openCourseRev(Course course) throws IOException, SQLException {
+        close();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene currentScene = courseListView.getScene();
+        currentScene.setRoot(root);
+
+        CourseReviewsController crc = fxmlLoader.getController();
+        crc.setStage(stage);
+        crc.setDatabaseDriver(driver);
+        crc.setCurrentCourse(course);
     }
 
     //dealing with basic course searching - shouldnt u make a button??
@@ -124,21 +138,11 @@ public class CourseSearchController {
                     openCourseRev(course);
                 }catch (IOException e){
                     e.printStackTrace();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
-    }
-
-    public void openCourseRev(Course course) throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene currentScene = courseListView.getScene();
-        currentScene.setRoot(root);
-
-        CourseReviewsController crc = fxmlLoader.getController();
-        crc.setStage(stage);
-        crc.setDatabaseDriver(driver);
-        crc.setCurrentCourse(course);
     }
 
 
