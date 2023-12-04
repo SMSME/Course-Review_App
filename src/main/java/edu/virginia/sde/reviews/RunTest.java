@@ -16,10 +16,10 @@ public class RunTest extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        DatabaseDriver driver = DatabaseSingleton.getInstance();
-        driver.connect();
+
 
         CourseSearchController controller = fxmlLoader.getController();
+
         controller.setStage(stage);
         stage.setTitle("Course Search");
         stage.setScene(scene);
