@@ -1,6 +1,7 @@
 .error-label {
-    -fx-font-size: 16px; /* Change the font size as needed */
-    -fx-font-weight: bold; /* Make the text bold */
-    -fx-text-fill: red; /* Change the text color to red */
-    /* Add any other styling properties you need */
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(167, 34, 22, 0.76);
+    -fx-font-style: italic;
+
 }
+
