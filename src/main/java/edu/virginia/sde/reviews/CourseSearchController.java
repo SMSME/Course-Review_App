@@ -56,7 +56,8 @@ public class CourseSearchController {
 
     public void initialize() throws SQLException {
         courseListView.setOnMouseClicked(this::handleCourseClick);
-        //driver.connect();
+        driver.connect();
+        updateCourseListView();
     }
 
     public void close() throws SQLException {
@@ -71,15 +72,15 @@ public class CourseSearchController {
 
     //connect after written
     @FXML
-    public void myReviews() throws IOException{
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
-//        Parent root = fxmlLoader.load();
-//        Scene scene = new Scene(root);
-//        stage.setScene(scene);
-//        stage.setTitle("My Reviews");
-//        MyReviewsController myReviewsContoller = fxmlLoader.getController();
-//        myReviewsContoller.setStage(stage);
-//        myReviewsContoller.setDriver(driver);
+    public void myReviews() throws IOException, SQLException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene currentScene = courseListView.getScene();
+        currentScene.setRoot(root);
+
+        MyReviewsController mrc = fxmlLoader.getController();
+        mrc.setStage(stage);
+        close();
     }
 
     //switch to logout screen

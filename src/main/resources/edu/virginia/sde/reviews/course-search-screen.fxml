@@ -59,7 +59,7 @@
         <Label text="Subject" styleClass="header-label" GridPane.columnIndex="0" alignment="BASELINE_LEFT" prefWidth="210"/>
         <Label text="Number" styleClass="header-label" GridPane.columnIndex="1" prefWidth="210"/>
         <Label text="Title" styleClass="header-label" GridPane.columnIndex="2" prefWidth="230"/>
-        <Label text="Reviews" styleClass="header-label" GridPane.columnIndex="3" prefWidth="190"/>
+        <Label text="Rating" styleClass="header-label" GridPane.columnIndex="3" prefWidth="190"/>
 
     </GridPane>
 
