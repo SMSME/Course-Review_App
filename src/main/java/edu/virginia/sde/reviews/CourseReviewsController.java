@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -50,7 +51,7 @@ public class CourseReviewsController {
     private TextField newReviewRating;
     @FXML
     private TextField newReviewComment;
-    @FXML
+    private int actionColumns;
     public void submitReview() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Review newReview = new Review(currentCourse, newRating, timestamp, newComment, currentUser.getUsername());
@@ -58,6 +59,18 @@ public class CourseReviewsController {
         commentColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getComment()));
         try {
             driver.addReview(newReview);
+            driver.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void editReview() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Review newReview = new Review(currentCourse, newRating, timestamp, newComment, currentUser.getUsername());
+        ratingColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getRating()).asObject());
+        commentColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getComment()));
+        try {
+            driver.editReview(newReview);
             driver.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,7 +92,23 @@ public class CourseReviewsController {
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+        commentColumn.setCellFactory(column -> {
+            TableCell<Review, String> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
 
+                    if (item == null || empty) {
+                        setGraphic(null);
+                    } else {
+                        setText(item); // Use setText method directly
+                        setWrapText(true); // Enable text wrapping
+                    }
+                }
+            };
+
+            return cell;
+        });
         courseTitleLabel.setText(currentCourse.getCourseTitle());
         courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
         courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
@@ -91,6 +120,112 @@ public class CourseReviewsController {
 
         } catch (SQLException e) {
             throw new RuntimeException("Runtime Exception");
+        }
+        TableColumn<Review, Void> actionColumn = new TableColumn<>("Actions");
+        actionColumn.setPrefWidth(100);
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                editButton.setOnAction(event -> {
+                    // Add your edit logic here, e.g., open a dialog for editing
+                    Dialog<String> dialog = new Dialog<>();
+                    dialog.setTitle("Edit Review");
+
+                    dialog.getDialogPane().setMinSize(400, 400);
+
+                    VBox dialogContent = new VBox(10);
+                    dialogContent.getChildren().addAll(
+                            new Label("Rating: "),
+                            newReviewRating,
+                            new Label("Comment: "),
+                            newReviewComment
+                    );
+                    dialog.getDialogPane().setContent(dialogContent);
+                    Platform.runLater(() -> newReviewRating.requestFocus());
+                    ButtonType addButton = new ButtonType("Save Changes", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
+
+                    dialog.setResultConverter(dialogButton -> {
+                        if (dialogButton == addButton) {
+                            if (newReviewRating.getText().isEmpty()) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setHeaderText("Invalid Rating");
+                                alert.setContentText("Rating field cannot be empty");
+                                alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                                alert.showAndWait();
+                            }
+                            else {
+                                try {
+                                    newRating = parseInt(newReviewRating.getText());
+                                } catch (NumberFormatException e) {
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Error");
+                                    alert.setHeaderText("Invalid Rating");
+                                    alert.setContentText("Rating must be an integer from 1 to 5");
+                                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                                    alert.showAndWait();
+                                    return null;
+                                }
+                                newComment = newReviewComment.getText();
+                                if (newRating < 1 || newRating > 5) {
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Error");
+                                    alert.setHeaderText("Invalid Rating");
+                                    alert.setContentText("Rating must be an integer from 1 to 5");
+                                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                                    alert.showAndWait();
+                                    return null;
+                                } else {
+                                    editReview();
+                                    reviewTableView.getItems().clear();
+                                    initializer();
+                                    dialog.close();
+                                }
+                            }
+                        }
+                        return null;
+                    });
+                    dialog.showAndWait();
+                });
+                deleteButton.setOnAction(event -> {
+                    Review review = getTableView().getItems().get(getIndex());
+                    // Add your delete logic here, e.g., show a confirmation dialog
+                    try {
+                        driver.deleteReview(review);
+                        driver.commit();
+                    }
+                    catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    reviewTableView.getItems().clear();
+                    initializer();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                Review review = (Review) getTableRow().getItem();
+                if (review.getUser().equals(currentUser.getUsername())) {
+                    setGraphic(new HBox(editButton, deleteButton));
+                } else {
+                    setGraphic(null);
+                }
+            }
+        });
+        actionColumns += 1;
+        if (actionColumns<=1) {
+            reviewTableView.getColumns().add(actionColumn);
         }
     }
     public void setStage(Stage stage){
@@ -139,35 +274,37 @@ public class CourseReviewsController {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText("Invalid Rating");
-                        alert.setContentText("Rating must be an integer from 1 to 5");
+                        alert.setContentText("Rating field cannot be empty");
                         alert.setOnHidden(alertEvent -> dialog.showAndWait());
                         alert.showAndWait();
                     }
-                    try {
-                        newRating = parseInt(newReviewRating.getText());
-                    } catch (NumberFormatException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Invalid Rating");
-                        alert.setContentText("Rating must be an integer from 1 to 5");
-                        alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                        alert.showAndWait();
-                        return null;
-                    }
-                    newComment = newReviewComment.getText();
-                    if (newRating < 1 || newRating > 5) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Invalid Rating");
-                        alert.setContentText("Rating must be an integer from 1 to 5");
-                        alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                        alert.showAndWait();
-                        return null;
-                    } else {
-                        submitReview();
-                        reviewTableView.getItems().clear();
-                        initializer();
-                        dialog.close();
+                    else {
+                        try {
+                            newRating = parseInt(newReviewRating.getText());
+                        } catch (NumberFormatException e) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Invalid Rating");
+                            alert.setContentText("Rating must be an integer from 1 to 5");
+                            alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                            alert.showAndWait();
+                            return null;
+                        }
+                        newComment = newReviewComment.getText();
+                        if (newRating < 1 || newRating > 5) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Invalid Rating");
+                            alert.setContentText("Rating must be an integer from 1 to 5");
+                            alert.setOnHidden(alertEvent -> dialog.showAndWait());
+                            alert.showAndWait();
+                            return null;
+                        } else {
+                            submitReview();
+                            reviewTableView.getItems().clear();
+                            initializer();
+                            dialog.close();
+                        }
                     }
                 }
                 return null;
@@ -175,7 +312,6 @@ public class CourseReviewsController {
             dialog.showAndWait();
         }
     }
-
     @FXML
     public void logOut() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
@@ -198,18 +334,5 @@ public class CourseReviewsController {
 
         CourseSearchController courseSearchController = fxmlLoader.getController();
         courseSearchController.setStage(stage);
-    }
-
-    @FXML
-    public void editReview() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("edit-review.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Edit Review");
-
-        EditReviewController editReviewController = fxmlLoader.getController();
-        editReviewController.setStage(stage);
-        editReviewController.setDatabaseDriver(driver);
     }
 }
