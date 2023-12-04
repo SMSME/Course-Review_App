@@ -93,6 +93,12 @@ public class LoginSceneController {
     @FXML
     private void handleCreateUser() throws IOException{
         //messageLabel.setText("Create new user button pressed");
+        try {
+            driver.disconnect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
