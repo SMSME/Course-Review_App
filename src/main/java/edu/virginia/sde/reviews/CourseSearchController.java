@@ -94,7 +94,6 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        loginSceneController.setDriver(driver);
     }
 
     //open course review for a specific course
