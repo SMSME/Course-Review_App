@@ -73,6 +73,7 @@ public class CourseSearchController {
     //connect after written
     @FXML
     public void myReviews() throws IOException, SQLException {
+        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -80,12 +81,12 @@ public class CourseSearchController {
 
         MyReviewsController mrc = fxmlLoader.getController();
         mrc.setStage(stage);
-        close();
     }
 
     //switch to logout screen
     @FXML
     public void logOut() throws IOException, SQLException {
+        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -93,7 +94,6 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        close();
     }
 
     //open course review for a specific course
