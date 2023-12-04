@@ -64,7 +64,6 @@ public class LoginSceneController {
 
                 CourseSearchController controller = fxmlLoader.getController();
                 controller.setStage(stage);
-                controller.setDriver(driver);
                 messageLabel.setText("Login successful");
             }
         } catch (IllegalArgumentException e){
