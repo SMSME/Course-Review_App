@@ -26,13 +26,14 @@ public class MyReviewsApplication extends Application{
         Review review = new Review(course, 4, timestamp, "good", "jamtran12");
 
         driver.addReview(review);
+        driver.disconnect();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
 
         MyReviewsController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        controller.initialize();
+        //controller.initialize();
 
         stage.setTitle("My Reviews");
         stage.setScene(scene);

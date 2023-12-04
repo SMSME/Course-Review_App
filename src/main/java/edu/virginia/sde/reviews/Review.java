@@ -66,7 +66,7 @@ public class Review {
 
     @Override
     public String toString(){
-        return getCourseSubject() + "                                      "+getCourseNumber() + " "+getRating();
+        return getCourseSubject() + " "+getCourseNumber() + " "+getRating();
     }
     public Boolean hasComment() {
         if (comment.isEmpty()) {

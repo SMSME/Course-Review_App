@@ -49,6 +49,7 @@ public class LoginSceneController {
         //If a correct username/password entered
         try{
             if(UserSingleton.login(user, pass)!=null){
+                driver.disconnect();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
