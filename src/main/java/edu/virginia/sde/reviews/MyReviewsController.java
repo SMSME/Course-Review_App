@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyReviewsController {
@@ -28,9 +29,9 @@ public class MyReviewsController {
     @FXML
     private TableColumn<Review,Integer> ratingColumn;
     @FXML
-    private TableColumn<Course,String> mnemonicColumn;
+    private TableColumn<Review,String> mnemonicColumn;
     @FXML
-    private TableColumn<Course, Integer> numberColumn;
+    private TableColumn<Review, Integer> numberColumn;
     @FXML
     private Stage stage;
     @FXML
@@ -52,17 +53,13 @@ public class MyReviewsController {
         currentUser = UserSingleton.getCurrentUser().getUsername();
         driver = DatabaseSingleton.getInstance();
         List<Review> reviews;
-        List<Course> courses;
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        mnemonicColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
-        numberColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
+        mnemonicColumn.setCellValueFactory(new PropertyValueFactory<>("courseSubject"));
+        numberColumn.setCellValueFactory(new PropertyValueFactory<>("courseNumber"));
         try{
             reviews = driver.getReviewsFromUser(currentUser);
-            for( Review review: reviews){
-
-            }
             ObservableList<Review> reviewList = FXCollections.observableArrayList(reviews);
-            ObservableList<Course> courseList;
+            //ObservableList<Course> courseList = FXCollections.observableArrayList(courses);
             reviewTableView.setItems(reviewList);
 //            for(Review review: reviews){
 //                FXMLLoader loader = new FXMLLoader(getClass().getResource("review-item.fxml"));

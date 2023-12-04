@@ -30,12 +30,12 @@
                     <columns>
                         <TableColumn text="Mnemonic" fx:id="mnemonicColumn">
                             <cellValueFactory>
-                                <PropertyValueFactory property="mnemonic" />
+                                <PropertyValueFactory property="courseSubject" />
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn text = "Number" fx:id="numberColumn">
                             <cellValueFactory>
-                                <PropertyValueFactory property ="number"/>
+                                <PropertyValueFactory property ="courseNumber"/>
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn text="Rating" fx:id="ratingColumn">

@@ -13,6 +13,8 @@ public class Review {
     private Timestamp timestamp;
     private String comment;
     private String user;
+    private String courseSubject;
+    private int courseNumber;
 
     public Review(Course course, int rating, Timestamp timestamp, String comment, String user) {
         this.course = course;
@@ -20,6 +22,8 @@ public class Review {
         this.timestamp = timestamp;
         this.comment = comment;
         this.user = user;
+        this.courseSubject = course.getCourseSubject();
+        this.courseNumber = course.getCourseNumber();
     }
     public void setRating(int rating) {
         this.rating = rating;
