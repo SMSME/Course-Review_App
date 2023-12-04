@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 
 import static java.lang.Integer.parseInt;
 
@@ -40,7 +41,7 @@ public class CourseReviewsController {
     private TableColumn<Review, Timestamp> timestampColumn;
     private User currentUser;
     private List<Review> courseReviews;
-    private DatabaseDriver driver;
+    private DatabaseDriver driver = DatabaseSingleton.getInstance();;
     private Stage stage;
     private Course currentCourse;
     private int newRating;
@@ -64,6 +65,14 @@ public class CourseReviewsController {
             throw new RuntimeException(e);
         }
     }
+    public void initialize() {
+        try {
+            driver.connect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void editReview() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Review newReview = new Review(currentCourse, newRating, timestamp, newComment, currentUser.getUsername());
@@ -76,39 +85,13 @@ public class CourseReviewsController {
             throw new RuntimeException(e);
         }
     }
-    public void initialize() {
-        driver = DatabaseSingleton.getInstance();
-        try {
-            driver.connect();
-        }
-        catch (SQLException e) {
-            System.out.println("bruh");
-        }
-    }
     public void initializer() throws RuntimeException {
         currentUser = UserSingleton.getCurrentUser();
-        System.out.println(currentCourse.getCourseTitle());
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
-        commentColumn.setCellFactory(column -> {
-            TableCell<Review, String> cell = new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
 
-                    if (item == null || empty) {
-                        setGraphic(null);
-                    } else {
-                        setText(item); // Use setText method directly
-                        setWrapText(true); // Enable text wrapping
-                    }
-                }
-            };
-
-            return cell;
-        });
         courseTitleLabel.setText(currentCourse.getCourseTitle());
         courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
         courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
@@ -117,7 +100,6 @@ public class CourseReviewsController {
             courseReviews = driver.getReviewsFromCourse(currentCourse);
             ObservableList<Review> reviewList = FXCollections.observableArrayList(courseReviews);
             reviewTableView.setItems(reviewList);
-
         } catch (SQLException e) {
             throw new RuntimeException("Runtime Exception");
         }
@@ -326,6 +308,12 @@ public class CourseReviewsController {
     }
     @FXML
     public void backToCourseSearch() throws IOException {
+        try {
+            driver.disconnect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);

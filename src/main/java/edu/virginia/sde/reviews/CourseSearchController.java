@@ -66,7 +66,6 @@ public class CourseSearchController {
 
     public void initialize() throws SQLException {
         courseListView.setOnMouseClicked(this::handleCourseClick);
-        driver.connect();
     }
 
     public void close() throws SQLException {
@@ -120,6 +119,7 @@ public class CourseSearchController {
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
         crc.setCurrentCourse(course);
+        crc.initializer();
     }
 
     //dealing with basic course searching - shouldnt u make a button??

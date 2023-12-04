@@ -57,6 +57,7 @@ public class LoginSceneController {
 
                 CourseSearchController controller = fxmlLoader.getController();
                 controller.setStage(stage);
+                controller.setDriver(driver);
                 messageLabel.setText("Login successful");
             }
         } catch (IllegalArgumentException e){
@@ -65,9 +66,7 @@ public class LoginSceneController {
         catch(IllegalStateException e){
             messageLabel.setText("Password is incorrect");
         }
-        catch(IOException e){
-            messageLabel.setText("Login not successful, an error occurred.");
-        }
+
 //        if(isValid(user,pass)){
 //            currentUser = user;
 //            //Will need to change when Course Search Screen is Done.
