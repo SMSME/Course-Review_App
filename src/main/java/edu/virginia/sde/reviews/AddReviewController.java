@@ -83,6 +83,6 @@ public class AddReviewController {
         stage.setTitle("Course Reviews");
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        loginSceneController.setDriver(driver);
+        //loginSceneController.setDriver(driver);
     }
 }

@@ -186,7 +186,7 @@ public class CourseReviewsController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        loginSceneController.setDriver(driver);
+        //loginSceneController.setDriver(driver);
     }
     @FXML
     public void backToCourseSearch() throws IOException {

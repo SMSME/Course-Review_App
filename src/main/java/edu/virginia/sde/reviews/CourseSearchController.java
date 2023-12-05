@@ -107,7 +107,7 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        loginSceneController.setDriver(driver);
+        //loginSceneController.setDriver(driver);
     }
 
     public void openCourseRev(Course course) throws IOException, SQLException {
