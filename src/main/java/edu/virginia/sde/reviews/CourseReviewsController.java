@@ -5,8 +5,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -34,6 +36,10 @@ public class CourseReviewsController {
     private Label courseNumberLabel;
     @FXML
     private Label averageRatingLabel;
+    @FXML
+    private Label errorUpdatingReview;
+    @FXML
+    private Label errorAddingReview;
     private double averageRating;
     @FXML
     private TableView<Review> reviewTableView;
@@ -166,33 +172,18 @@ public class CourseReviewsController {
                     dialog.setResultConverter(dialogButton -> {
                         if (dialogButton == addButton) {
                             if (editReviewRating.getText().isEmpty()) {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error");
-                                alert.setHeaderText("Invalid Rating");
-                                alert.setContentText("Rating field cannot be empty");
-                                alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                                alert.showAndWait();
+                                errorUpdatingReview.setText("Rating field cannot be empty");
                             }
                             else {
                                 try {
                                     newRating = parseInt(editReviewRating.getText());
                                 } catch (NumberFormatException e) {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                                    alert.setTitle("Error");
-                                    alert.setHeaderText("Invalid Rating");
-                                    alert.setContentText("Rating must be an integer from 1 to 5");
-                                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                                    alert.showAndWait();
+                                    errorUpdatingReview.setText("Rating must be an integer from 1-5");
                                     return null;
                                 }
                                 newComment = editReviewComment.getText();
                                 if (newRating < 1 || newRating > 5) {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                                    alert.setTitle("Error");
-                                    alert.setHeaderText("Invalid Rating");
-                                    alert.setContentText("Rating must be an integer from 1 to 5");
-                                    alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                                    alert.showAndWait();
+                                    errorUpdatingReview.setText("Rating must be an integer from 1-5");
                                     return null;
                                 } else {
                                     editReview();
@@ -270,13 +261,16 @@ public class CourseReviewsController {
             dialog.setTitle("Add New Review");
 
             dialog.getDialogPane().setMinSize(400, 400);
+            Label errorMessage = new Label();
+            errorMessage.getStyleClass().add("error-label");
 
             VBox dialogContent = new VBox(10);
             dialogContent.getChildren().addAll(
                     new Label("Rating: "),
                     newReviewRating,
                     new Label("Comment: "),
-                    newReviewComment
+                    newReviewComment,
+                    errorAddingReview
             );
             dialog.getDialogPane().setContent(dialogContent);
             Platform.runLater(() -> newReviewRating.requestFocus());
@@ -287,35 +281,19 @@ public class CourseReviewsController {
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == addButton) {
                     if (newReviewRating.getText().isEmpty()) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Invalid Rating");
-                        alert.setContentText("Rating field cannot be empty");
-                        alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                        alert.showAndWait();
+                        errorAddingReview.setText("Rating field cannot be blank");
                     }
                     else {
                         try {
                             newRating = parseInt(newReviewRating.getText());
                         } catch (NumberFormatException e) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Invalid Rating");
-                            alert.setContentText("Rating must be an integer from 1 to 5");
-                            alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                            alert.showAndWait();
-                            return null;
+                            errorAddingReview.setText("Rating must be an integer from 1-5");
                         }
                         newComment = newReviewComment.getText();
                         if (newRating < 1 || newRating > 5) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Invalid Rating");
-                            alert.setContentText("Rating must be an integer from 1 to 5");
-                            alert.setOnHidden(alertEvent -> dialog.showAndWait());
-                            alert.showAndWait();
-                            return null;
-                        } else {
+                            errorAddingReview.setText("Rating must be an integer from 1-5");
+                        }
+                        else {
                             submitReview();
                             reviewTableView.getItems().clear();
                             initializer();
@@ -325,8 +303,40 @@ public class CourseReviewsController {
                 }
                 return null;
             });
+            Node addButtonNode = dialog.getDialogPane().lookupButton(addButton);
+            addButtonNode.addEventFilter(ActionEvent.ACTION, event -> {
+                // Check whether some conditions are fulfilled
+                String error = checkTextfields(newReviewRating, newReviewComment);
+                if(error != null){
+                    errorAddingReview.setText(error);
+                    event.consume();
+                }
+            });
             dialog.showAndWait();
         }
+    }
+    @FXML
+    public String checkTextfields(TextField rating, TextField comment) {
+        // All fields must not be empty
+        if (rating.getText().isEmpty()) {
+            return "Rating field cannot be empty";
+        }
+        else {
+            try {
+                newRating = parseInt(newReviewRating.getText());
+            } catch (NumberFormatException e) {
+                errorAddingReview.setText("Rating must be an integer from 1-5");
+            }
+            newComment = newReviewComment.getText();
+            if (newRating < 1 || newRating > 5) {
+                errorAddingReview.setText("Rating must be an integer from 1-5");
+            } else {
+                submitReview();
+                reviewTableView.getItems().clear();
+                initializer();
+            }
+        }
+        return null;
     }
     @FXML
     public void logOut() throws IOException {
