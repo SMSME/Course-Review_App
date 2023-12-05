@@ -40,14 +40,9 @@ public class MyReviewsController {
         List<Review> reviews;
         try{
             reviews = driver.getReviewsFromUser(currentUser);
-            if(reviews.isEmpty()){
-                box.setVisible(true);
-            }
-            else{
-                //box.setVisible(false);
-                reviewListView.getItems().setAll(reviews);
-                reviewListView.setOnMouseClicked(this::handleReviewItemClick);
-            }
+            reviewListView.getItems().setAll(reviews);
+            reviewListView.setOnMouseClicked(this::handleReviewItemClick);
+
         }catch(SQLException e){
             e.printStackTrace();
         }

@@ -7,9 +7,13 @@
     -fx-text-fill: rgba(167, 34, 22, 0.76);
     -fx-font-style: italic;
 }
+.success-label{
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(53, 167, 22, 0.76);
+    -fx-font-style: italic;
+}
 .header-label {
 
 }
-
 
 
