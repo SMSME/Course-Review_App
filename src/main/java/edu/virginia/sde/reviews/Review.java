@@ -54,12 +54,20 @@ public class Review {
 
     @Override
     public String toString(){
-        return String.format("%" + 28 + "s" + "%-20s" + " %-19d" + " %-19d" + " %-18s" + " %-1s", "",
+        if(comment.length()<42){
+            return String.format("%" + 28 + "s %-20s %-19d %-19d %-18s %-1s", "",
+                    course.getCourseSubject().toUpperCase(),
+                    course.getCourseNumber(),
+                    rating,
+                    course.getCourseTitle(),
+                    comment);
+        }
+        return String.format("%" + 28 + "s" + "%-20s" + " %-19d" + " %-19d" + " %-20s" + " %-1s", "",
                 course.getCourseSubject().toUpperCase(),
                 course.getCourseNumber(),
                 rating,
                 course.getCourseTitle(),
-                comment.substring(0,62) + "...");
+                comment.substring(0,42) + "...");
     }
     public Boolean hasComment() {
         if (comment.isEmpty()) {
