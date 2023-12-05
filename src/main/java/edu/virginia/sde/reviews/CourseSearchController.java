@@ -67,7 +67,7 @@ public class CourseSearchController {
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
         currentScene.setRoot(root);
-
+        stage.setTitle("My Reviews");
         MyReviewsController mrc = fxmlLoader.getController();
         mrc.setStage(stage);
     }
@@ -79,6 +79,7 @@ public class CourseSearchController {
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
         currentScene.setRoot(root);
+        stage.setTitle("Login");
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
@@ -90,6 +91,7 @@ public class CourseSearchController {
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
         currentScene.setRoot(root);
+        stage.setTitle("Course Reviews");
 
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
