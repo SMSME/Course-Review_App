@@ -35,12 +35,12 @@
                                 <PropertyValueFactory property="rating" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Comment" fx:id="commentColumn" prefWidth="547">
+                        <TableColumn text="Comment" fx:id="commentColumn" prefWidth="556">
                             <cellValueFactory>
                                 <PropertyValueFactory property="comment" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Timestamp" fx:id="timestampColumn">
+                        <TableColumn text="Timestamp" fx:id="timestampColumn" prefWidth="187">
                             <cellValueFactory>
                                 <PropertyValueFactory property="timestamp" />
                             </cellValueFactory>

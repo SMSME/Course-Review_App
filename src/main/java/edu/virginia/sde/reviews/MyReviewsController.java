@@ -79,6 +79,7 @@ public class MyReviewsController {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.setTitle("Course Reviews");
+
                     CourseReviewsController controller = loader.getController();
                     controller.setCurrentCourse(review.getCourse());
                     controller.setStage(stage);
