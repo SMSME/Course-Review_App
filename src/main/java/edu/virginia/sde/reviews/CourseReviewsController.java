@@ -123,7 +123,7 @@ public class CourseReviewsController {
             return cell;
         });
 
-        courseTitleLabel.setText(currentCourse.getCourseTitle());
+        courseTitleLabel.setText(currentCourse.formatTitle(currentCourse.getCourseTitle()));
         courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
         courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
 
