@@ -27,7 +27,7 @@
                     <Label text = "Comment" prefWidth = "70" alignment="CENTER_LEFT"/>
                 </HBox>
                 <HBox  AnchorPane.rightAnchor="0">
-                    <Button mnemonicParsing="false" onAction="#onLogout" text="Logout"/>
+                    <Button mnemonicParsing="false" onAction="#onLogout" text="Log Out"/>
                 </HBox>
             </AnchorPane>
         </top>
