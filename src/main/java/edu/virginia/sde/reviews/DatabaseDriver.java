@@ -301,14 +301,14 @@ public class DatabaseDriver {
 
     public void clearTables() throws SQLException {
         //TODO: implement
-        String delRoute = "DELETE FROM Users";
-        String delBus = "DELETE FROM Courses";
-        String delStops = "DELETE FROM Reviews";
+        String delUsers = "DELETE FROM Users";
+        String delCourses = "DELETE FROM Courses";
+        String delReviews = "DELETE FROM Reviews";
 
         Statement statement = connection.createStatement();
-        statement.execute(delRoute);
-        statement.execute(delBus);
-        statement.execute(delStops);
+        statement.execute(delUsers);
+        statement.execute(delCourses);
+        statement.execute(delReviews);
 
         statement.close();
 
