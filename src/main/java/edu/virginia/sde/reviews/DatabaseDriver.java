@@ -306,14 +306,14 @@ public class DatabaseDriver {
 
     public void clearTables() throws SQLException {
         //TODO: implement
-        String delRoute = "DELETE FROM Users";
-        String delBus = "DELETE FROM Courses";
-        String delStops = "DELETE FROM Reviews";
+        String delUsers = "DELETE FROM Users";
+        String delCourses = "DELETE FROM Courses";
+        String delReviews = "DELETE FROM Reviews";
 
         Statement statement = connection.createStatement();
-        statement.execute(delRoute);
-        statement.execute(delBus);
-        statement.execute(delStops);
+        statement.execute(delUsers);
+        statement.execute(delCourses);
+        statement.execute(delReviews);
 
         statement.close();
 
@@ -327,7 +327,7 @@ public class DatabaseDriver {
 //        d.addUser("vineelk", "password3");
         d.addUser("jamtran12", "password4");
 //        System.out.println(d.getPassword("jamtran"));
-        Course temp = new Course("CS", 3200, "Data Structures 3");
+        Course temp = new Course("CS", 3300, "Data Structures 4");
         d.addCourse(temp);
         d.commit();
         d.disconnect();
