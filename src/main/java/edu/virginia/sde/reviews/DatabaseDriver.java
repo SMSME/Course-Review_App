@@ -322,7 +322,7 @@ public class DatabaseDriver {
 //        d.addUser("vineelk", "password3");
         d.addUser("jamtran12", "password4");
 //        System.out.println(d.getPassword("jamtran"));
-        Course temp = new Course("CS", 3200, "Data Structures 3");
+        Course temp = new Course("CS", 3300, "Data Structures 4");
         d.addCourse(temp);
         d.commit();
         d.disconnect();
