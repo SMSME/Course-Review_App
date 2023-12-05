@@ -160,7 +160,7 @@ public class CourseReviewsController {
                     VBox dialogContent = new VBox(10);
 
                     dialogContent.getChildren().addAll(
-                            new Label("Rating: "),
+                            new Label("Rating (1-5): "),
                             editReviewRating,
                             new Label("Comment: "),
                             editReviewComment,
@@ -268,7 +268,7 @@ public class CourseReviewsController {
             newReviewRating.setTextFormatter(createTextFormat("[1-5]{0,1}"));
             VBox dialogContent = new VBox(10);
             dialogContent.getChildren().addAll(
-                    new Label("Rating: "),
+                    new Label("Rating (1-5): "),
                     newReviewRating,
                     new Label("Comment: "),
                     newReviewComment,

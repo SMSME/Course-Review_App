@@ -55,15 +55,15 @@
     </VBox>
 
     <VBox visible="false">
-        <TextField fx:id="newReviewRating" promptText="Rating"/>
-        <TextField fx:id="newReviewComment" promptText="Comment"/>
+        <TextField fx:id="newReviewRating" promptText="Required"/>
+        <TextField fx:id="newReviewComment" promptText="Optional"/>
         <Label fx:id="errorAddingReview"/>
         <Button text="Submit" onAction="#submitReview"/>
     </VBox>
 
     <VBox visible="false">
-        <TextField fx:id="editReviewRating" promptText="Rating"/>
-        <TextField fx:id="editReviewComment" promptText="Comment"/>
+        <TextField fx:id="editReviewRating" promptText="Required"/>
+        <TextField fx:id="editReviewComment" promptText="Optional"/>
         <Label fx:id="errorUpdatingReview"/>
         <Button text="Submit" onAction="#submitReview"/>
     </VBox>
