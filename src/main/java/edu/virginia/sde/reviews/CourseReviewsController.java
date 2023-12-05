@@ -181,6 +181,8 @@ public class CourseReviewsController {
                             reviewTableView.getItems().clear();
                             initializer();
                             dialog.close();
+                            editReviewRating.clear();
+                            editReviewComment.clear();
                         }
                         return null;
                     });
@@ -212,7 +214,6 @@ public class CourseReviewsController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || getTableRow() == null || getTableRow().getItem() == null) {
                     setGraphic(null);
                     return;
@@ -282,6 +283,8 @@ public class CourseReviewsController {
                     reviewTableView.getItems().clear();
                     initializer();
                     dialog.close();
+                    newReviewRating.clear();
+                    newReviewComment.clear();
                     }
                 return null;
             });
