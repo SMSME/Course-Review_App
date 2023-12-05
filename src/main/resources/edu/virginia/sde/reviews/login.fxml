@@ -29,7 +29,7 @@
             </HBox>
 
             <!-- Login Button -->
-            <Button mnemonicParsing="false" onAction="#handleButton" text="Login" />
+            <Button mnemonicParsing="false" onAction="#handleButton" text="Login" prefWidth="134"/>
 
             <!-- Create new User Button-->
             <Button mnemonicParsing="false" onAction="#handleCreateUser" text="Create New User" />
