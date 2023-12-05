@@ -153,14 +153,17 @@ public class CourseReviewsController {
                     dialog.setTitle("Edit Review");
 
                     dialog.getDialogPane().setMinSize(400, 400);
+                    errorUpdatingReview.getStyleClass().add("error-label");
 
                     VBox dialogContent = new VBox(10);
                     dialogContent.getChildren().addAll(
                             new Label("Rating: "),
                             editReviewRating,
                             new Label("Comment: "),
-                            editReviewComment
+                            editReviewComment,
+                            errorUpdatingReview
                     );
+
                     editReviewRating.setText(String.valueOf(currentUserReview.getRating()));
                     editReviewComment.setText(currentUserReview.getComment());
 
@@ -172,29 +175,23 @@ public class CourseReviewsController {
 
                     dialog.setResultConverter(dialogButton -> {
                         if (dialogButton == addButton) {
-                            if (editReviewRating.getText().isEmpty()) {
-                                errorUpdatingReview.setText("Rating field cannot be empty");
-                            }
-                            else {
-                                try {
-                                    newRating = parseInt(editReviewRating.getText());
-                                } catch (NumberFormatException e) {
-                                    errorUpdatingReview.setText("Rating must be an integer from 1-5");
-                                    return null;
-                                }
-                                newComment = editReviewComment.getText();
-                                if (newRating < 1 || newRating > 5) {
-                                    errorUpdatingReview.setText("Rating must be an integer from 1-5");
-                                    return null;
-                                } else {
-                                    editReview();
-                                    reviewTableView.getItems().clear();
-                                    initializer();
-                                    dialog.close();
-                                }
-                            }
+                            newRating = parseInt(editReviewRating.getText());
+                            newComment = editReviewComment.getText();
+                            editReview();
+                            reviewTableView.getItems().clear();
+                            initializer();
+                            dialog.close();
                         }
                         return null;
+                    });
+                    Node addButtonNode = dialog.getDialogPane().lookupButton(addButton);
+                    addButtonNode.addEventFilter(ActionEvent.ACTION, event2 -> {
+                        // Check whether some conditions are fulfilled
+                        String error = checkRatingField(editReviewRating);
+                        if(error != null){
+                            errorUpdatingReview.setText(error);
+                            event2.consume();
+                        }
                     });
                     dialog.showAndWait();
                 });
@@ -262,10 +259,9 @@ public class CourseReviewsController {
             dialog.setTitle("Add New Review");
 
             dialog.getDialogPane().setMinSize(400, 400);
-            Label errorMessage = new Label();
-            errorMessage.getStyleClass().add("error-label");
 
-            newReviewRating.setTextFormatter(createTextFormat("\\d{1,4}"));
+            errorAddingReview.getStyleClass().add("error-label");
+            newReviewRating.setTextFormatter(createTextFormat("\\d{0,4}"));
             VBox dialogContent = new VBox(10);
             dialogContent.getChildren().addAll(
                     new Label("Rating: "),
@@ -294,7 +290,7 @@ public class CourseReviewsController {
             Node addButtonNode = dialog.getDialogPane().lookupButton(addButton);
             addButtonNode.addEventFilter(ActionEvent.ACTION, event -> {
                 // Check whether some conditions are fulfilled
-                String error = checkTextfields(newReviewRating, newReviewComment);
+                String error = checkRatingField(newReviewRating);
                 if(error != null){
                     errorAddingReview.setText(error);
                     event.consume();
@@ -316,7 +312,7 @@ public class CourseReviewsController {
         return new TextFormatter<>(filter);
     }
     @FXML
-    public String checkTextfields(TextField rating, TextField comment) {
+    public String checkRatingField(TextField rating) {
         // All fields must not be empty
         if (rating.getText().isEmpty()) {
             return "Rating field cannot be empty";

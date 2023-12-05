@@ -62,8 +62,8 @@
     </VBox>
 
     <VBox visible="false">
-        <TextField fx:id="editReviewRating" promptText="Subject"/>
-        <TextField fx:id="editReviewComment" promptText="Number"/>
+        <TextField fx:id="editReviewRating" promptText="Rating"/>
+        <TextField fx:id="editReviewComment" promptText="Comment"/>
         <Label fx:id="errorUpdatingReview"/>
         <Button text="Submit" onAction="#submitReview"/>
     </VBox>
