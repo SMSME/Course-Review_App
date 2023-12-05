@@ -19,7 +19,11 @@
             <Label fx:id="courseNumberLabel" style="-fx-font-size: 32;"/>
             <Label fx:id="courseTitleLabel" style="-fx-font-size: 32;"/>
             <Label text="Course Reviews" style="-fx-font-size: 32;"/>
-            <Label fx:id="averageRatingLabel" style="-fx-font-size: 16;"/>
+
+        </HBox>
+        <HBox alignment="CENTER" spacing="11.25">
+            <Label text="Average Rating:" style="-fx-font-size: 24;"/>
+            <Label fx:id="averageRatingLabel" style="-fx-font-size: 24;"/>
         </HBox>
 
         <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">

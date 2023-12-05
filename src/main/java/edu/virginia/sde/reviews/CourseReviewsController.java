@@ -34,7 +34,7 @@ public class CourseReviewsController {
     private Label courseNumberLabel;
     @FXML
     private Label averageRatingLabel;
-    private int averageRating;
+    private double averageRating;
     @FXML
     private TableView<Review> reviewTableView;
     @FXML
