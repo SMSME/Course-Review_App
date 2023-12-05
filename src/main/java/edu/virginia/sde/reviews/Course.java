@@ -79,9 +79,10 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("%-41s %-32d %-50s %-20.2f",
+        String formattedNum = String.format("%04d", courseNumber);
+        return String.format("%-41s %-32s %-50s %-20.2f",
                 courseSubject.toUpperCase(),
-                courseNumber,
+                formattedNum,
                 formatTitle(courseTitle),
                 getAvgRating());
     }
