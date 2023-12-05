@@ -18,12 +18,13 @@
                 <!--<HBox AnchorPane.leftAnchor="0">
                     <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Course Search"/>
                 </HBox>-->
-                <HBox spacing="20.0">
+                <HBox spacing="100.0">
                     <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Course Search"/>
-                    <Label text="Mnemonic"/>
+                    <Label text="Subject"/>
                     <Label text="Number"/>
                     <Label text="Rating"/>
                     <Label text = "Title"/>
+                    <Label text = "Comment"/>
                 </HBox>
                 <HBox  AnchorPane.rightAnchor="0">
                     <Button mnemonicParsing="false" onAction="#onLogout" text="Logout"/>
@@ -32,9 +33,6 @@
         </top>
 
         <center>
-            <VBox fx:id="box" alignment = "CENTER" spacing="5.0">
-                <Label fx:id="messageLabel" text="The user has no reviews" visible="false"/>
-            </VBox>
             <VBox>
                 <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
                     <content>

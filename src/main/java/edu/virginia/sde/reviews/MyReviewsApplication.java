@@ -18,7 +18,7 @@ public class MyReviewsApplication extends Application{
     public void start(Stage stage) throws Exception {
 
         DatabaseDriver driver = DatabaseSingleton.getInstance();
-        driver.connect();
+        //driver.connect();
         UserSingleton.login("jamtran12", "password4");
         Course course = new Course("DSA", 3100, "Data Structures and Algorithms 2");
         driver.addCourse(course);
@@ -26,7 +26,7 @@ public class MyReviewsApplication extends Application{
         Review review = new Review(course, 4, timestamp, "good", "jamtran12");
 
         driver.addReview(review);
-        driver.disconnect();
+        //driver.disconnect();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);

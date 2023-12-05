@@ -32,6 +32,7 @@ public class LoginSceneController {
     @FXML
     private void initialize(){
         driver = DatabaseSingleton.getInstance();
+        messageLabel.getStyleClass().add("error-label");
     }
 
     @FXML
@@ -60,28 +61,7 @@ public class LoginSceneController {
         catch(IOException e){
             messageLabel.setText("Login not successful, an error occurred.");
         }
-//        if(isValid(user,pass)){
-//            currentUser = user;
-//            //Will need to change when Course Search Screen is Done.
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
-//            Parent root = fxmlLoader.load();
-//            Scene scene = new Scene(root);
-//            stage.setScene(scene);
-//            stage.setTitle("Course Search");
-//
-//            CourseSearchController controller = fxmlLoader.getController();
-//            controller.setStage(stage);
-//            messageLabel.setText("Login successful");
-//        }
-        //If an incorrect username is entered
-//        else if(driver.getPassword(user)==null){
-//            messageLabel.setText("Username not found");
-//        }
-//        //password incorrect
-//        else if(!pass.equals(driver.getPassword(user))){
-//            messageLabel.setText("Password is incorrect");
-//        }
-//        else{messageLabel.setText("Login not successful");}
+
     }
 
     @FXML

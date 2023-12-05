@@ -36,6 +36,7 @@ public class MyReviewsController {
 
     public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
+        System.out.println(currentUser);
         driver = DatabaseSingleton.getInstance();
         List<Review> reviews;
         try{
@@ -44,23 +45,7 @@ public class MyReviewsController {
                 box.setVisible(true);
             }
             else{
-                box.setVisible(false);
-                reviewListView.setCellFactory(param -> new ListCell<>() {
-                    @Override
-                    protected void updateItem(Review item, boolean empty){
-                        super.updateItem(item, empty);
-
-                        if(empty || item == null){
-                            setText(null);
-                        } else{
-                            String formattedReview = String.format("                                 " +
-                                    " %s               " +
-                                    " %d             " +
-                                    " %d          %s", item.getCourseSubject(), item.getCourseNumber(), item.getRating(), item.getCourse().getCourseTitle());
-                            setText(formattedReview);
-                        }
-                    }
-                });
+                //box.setVisible(false);
                 reviewListView.getItems().setAll(reviews);
                 reviewListView.setOnMouseClicked(this::handleReviewItemClick);
             }
