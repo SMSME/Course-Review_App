@@ -3,7 +3,7 @@
 
 ## Authors
 1) Jinwoo Kim, netid, [GitHub profile name]
-2) Matthew Scarlatescu, netid, [ssmatt4]
+2) Matthew Scarlatescu, qcu6mq, [ssmatt4]
 3) Jamie Tran, netid, [GitHub profile name]
 4) Vineel Kavuru, netid, [GitHub profile name]
 
@@ -24,6 +24,8 @@ List the primary contributions of each author. It is recommended to update this 
 ### Matthew Scarlatescu
 
 * Completed CourseReviewsScene
+* Created Review Class
+* Tested Extensively
 
 ### Jamie Tran
 
