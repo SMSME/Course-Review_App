@@ -29,18 +29,11 @@ public class LoginSceneController {
         this.stage = stage;
     }
     //@FXML
-    public void setDriver(DatabaseDriver driver){
-        this.driver = driver;
+    @FXML
+    private void initialize(){
+        driver = DatabaseSingleton.getInstance();
+        messageLabel.getStyleClass().add("error-label");
     }
-//    @FXML
-//    private void initialize(){
-//        try{
-//            driver = new DatabaseDriver("CruddyCoursework.sqlite");
-//            driver.connect();
-//        } catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//    }
 
     @FXML
     private void handleButton() throws SQLException, IOException{
@@ -68,28 +61,7 @@ public class LoginSceneController {
         catch(IOException e){
             messageLabel.setText("Login not successful, an error occurred.");
         }
-//        if(isValid(user,pass)){
-//            currentUser = user;
-//            //Will need to change when Course Search Screen is Done.
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
-//            Parent root = fxmlLoader.load();
-//            Scene scene = new Scene(root);
-//            stage.setScene(scene);
-//            stage.setTitle("Course Search");
-//
-//            CourseSearchController controller = fxmlLoader.getController();
-//            controller.setStage(stage);
-//            messageLabel.setText("Login successful");
-//        }
-        //If an incorrect username is entered
-//        else if(driver.getPassword(user)==null){
-//            messageLabel.setText("Username not found");
-//        }
-//        //password incorrect
-//        else if(!pass.equals(driver.getPassword(user))){
-//            messageLabel.setText("Password is incorrect");
-//        }
-//        else{messageLabel.setText("Login not successful");}
+
     }
 
     @FXML
@@ -108,6 +80,12 @@ public class LoginSceneController {
 
     @FXML
     private void exitProgram(){
+        try {
+            driver.disconnect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Platform.exit();
     }
     private boolean isValid(String username, String password) throws SQLException {

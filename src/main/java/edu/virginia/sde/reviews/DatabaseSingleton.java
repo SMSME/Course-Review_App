@@ -1,5 +1,9 @@
 package edu.virginia.sde.reviews;
 
+import org.sqlite.SQLiteException;
+
+import java.sql.SQLException;
+
 public class DatabaseSingleton {
     private static DatabaseSingleton instance;
 
@@ -12,6 +16,14 @@ public class DatabaseSingleton {
         if (instance == null) {
             DatabaseDriver driver = new DatabaseDriver("CruddyCoursework.sqlite");
             instance = new DatabaseSingleton(driver);
+        }
+
+        try {
+            if (!instance.databaseDriver.isConnected()) {
+                instance.databaseDriver.connect();
+            }
+        } catch(SQLException e) {
+            return null;
         }
 
         return instance.databaseDriver;

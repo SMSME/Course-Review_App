@@ -12,6 +12,11 @@ public class DatabaseDriver {
         this.sqliteFilename = sqlListDatabaseFilename;
     }
 
+
+    public boolean isConnected() throws SQLException {
+        return connection != null && !connection.isClosed();
+    }
+
     /**
      * Connect to a SQLite Database. This turns out Foreign Key enforcement, and disables auto-commits
      * @throws SQLException

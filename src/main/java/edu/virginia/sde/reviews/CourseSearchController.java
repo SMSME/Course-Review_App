@@ -59,24 +59,12 @@ public class CourseSearchController {
         courseNumber.setTextFormatter(createTextFormat("\\d{0,4}"));
         courseTitle.setTextFormatter(createTextFormat(".{0,50}"));
         courseListView.setOnMouseClicked(this::handleCourseClick);
-        driver.connect();
         updateCourseListView();
-    }
-
-    public void close() throws SQLException {
-        try{
-        if (driver!=null){
-            driver.disconnect();}
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
     }
 
     //connect after written
     @FXML
     public void myReviews() throws IOException, SQLException {
-        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -89,7 +77,6 @@ public class CourseSearchController {
     //switch to logout screen
     @FXML
     public void logOut() throws IOException, SQLException {
-        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -97,12 +84,10 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        loginSceneController.setDriver(driver);
     }
 
     //open course review for a specific course
     public void openCourseRev(Course course) throws IOException, SQLException {
-        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -111,6 +96,7 @@ public class CourseSearchController {
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
         crc.setCurrentCourse(course);
+        crc.initializer();
     }
 
     //handle double clicking on a course

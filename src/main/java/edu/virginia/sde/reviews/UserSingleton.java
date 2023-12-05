@@ -46,6 +46,7 @@ public class UserSingleton {
                 else{
                     driver.addUser(username, password);
                     driver.commit();
+                    driver.disconnect();
                 }
             }
             else{
@@ -53,6 +54,7 @@ public class UserSingleton {
                     throw new IllegalStateException("Password must be at least 8 characters");
                 }
             }
+            driver.disconnect();
             return null;
         } catch (SQLException e){
             throw new IllegalArgumentException("Error occurred creating user.");
