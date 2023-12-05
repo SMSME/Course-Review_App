@@ -31,11 +31,9 @@ import static java.lang.Integer.parseInt;
 
 public class CourseReviewsController {
     @FXML
-    private Label courseTitleLabel;
+    private Label courseLabel;
     @FXML
-    private Label courseSubjectLabel;
-    @FXML
-    private Label courseNumberLabel;
+    private Label courseLabelLine2;
     @FXML
     private Label averageRatingLabel;
     @FXML
@@ -124,9 +122,7 @@ public class CourseReviewsController {
             return cell;
         });
 
-        courseTitleLabel.setText(currentCourse.formatTitle(currentCourse.getCourseTitle()));
-        courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
-        courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
+        courseLabel.setText(currentCourse.getCourseSubject().toUpperCase() + " " + String.valueOf(currentCourse.getCourseNumber()) + " " + currentCourse.formatTitle(currentCourse.getCourseTitle()) + " Course Reviews");
 
         try {
             courseReviews = driver.getReviewsFromCourse(currentCourse);
