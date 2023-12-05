@@ -17,14 +17,10 @@ import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 
-import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.UnaryOperator;
 
 //make it so that if it has the same department/subject the number isnt the same/ titles arent the same -idk how to throw an error for this lol - ask jinwoo lol
@@ -47,59 +43,40 @@ public class CourseSearchController {
     public TextField courseTitle;
 
 
-
-
     //display courses
     @FXML
     public ListView<Course> courseListView;
     public Stage stage;
     public DatabaseDriver driver = DatabaseSingleton.getInstance();
-    private boolean sceneClosed = false;
 
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    public void setDriver (DatabaseDriver driver) {this.driver = driver;}
-
-
     public void initialize() throws SQLException {
+        courseSubject.setTextFormatter(createTextFormat("[a-zA-Z]{0,4}"));
+        courseNumber.setTextFormatter(createTextFormat("\\d{0,4}"));
+        courseTitle.setTextFormatter(createTextFormat(".{0,50}"));
         courseListView.setOnMouseClicked(this::handleCourseClick);
-        driver.connect();
-    }
-
-    public void close() throws SQLException {
-        try{
-        if (driver!=null){
-            driver.disconnect();}
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void setSceneClosed() throws SQLException {
-        sceneClosed = true;
-        close();
+        updateCourseListView();
     }
 
     //connect after written
     @FXML
-    public void myReviews() throws IOException{
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
-//        Parent root = fxmlLoader.load();
-//        Scene scene = new Scene(root);
-//        stage.setScene(scene);
-//        stage.setTitle("My Reviews");
-//        MyReviewsController myReviewsContoller = fxmlLoader.getController();
-//        myReviewsContoller.setStage(stage);
-//        myReviewsContoller.setDriver(driver);
+    public void myReviews() throws IOException, SQLException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("my-reviews.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene currentScene = courseListView.getScene();
+        currentScene.setRoot(root);
+
+        MyReviewsController mrc = fxmlLoader.getController();
+        mrc.setStage(stage);
     }
 
+    //switch to logout screen
     @FXML
     public void logOut() throws IOException, SQLException {
-        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -107,11 +84,10 @@ public class CourseSearchController {
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
-        //loginSceneController.setDriver(driver);
     }
 
+    //open course review for a specific course
     public void openCourseRev(Course course) throws IOException, SQLException {
-        close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
         Parent root = fxmlLoader.load();
         Scene currentScene = courseListView.getScene();
@@ -120,15 +96,10 @@ public class CourseSearchController {
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
         crc.setCurrentCourse(course);
+        crc.initializer();
     }
 
-    //dealing with basic course searching - shouldnt u make a button??
-    public void clearNewCourses() {
-        courseSubject.clear();
-        courseNumber.clear();
-        courseTitle.clear();
-    }
-
+    //handle double clicking on a course
     public void handleCourseClick(MouseEvent event){
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2){
             Course course = courseListView.getSelectionModel().getSelectedItem();
@@ -144,9 +115,14 @@ public class CourseSearchController {
         }
     }
 
+    //dealing with basic course searching - could be a button
+    public void clearNewCourses() {
+        courseSubject.clear();
+        courseNumber.clear();
+        courseTitle.clear();
+    }
 
-
-    //adding a new course - check if valid
+    //adding a new course - check if valid and return error messages if not
     @FXML
     public String checkTextfields(TextField subject, TextField number, TextField title) {
         // All fields must not be empty
@@ -172,7 +148,6 @@ public class CourseSearchController {
         return null;
     }
 
-
     //forces you to only type lettesr / numbers for certain parts lol
     @FXML
     public TextFormatter<String> createTextFormat (String pattern){
@@ -187,38 +162,16 @@ public class CourseSearchController {
         return new TextFormatter<>(filter);
     }
 
-
-//    public boolean sameCourseNumandSub(Course newCourse) throws SQLException {
-//        DatabaseDriver db = DatabaseSingleton.getInstance();
-//        try {
-//            db.connect();
-//            List<Course> courses = db.getCourses();
-//            for (Course course : courses) {
-//                if (course.getCourseSubject().equalsIgnoreCase(newCourse.getCourseSubject()) && course.getCourseNumber() == newCourse.getCourseNumber()) {
-//                    return true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (db != null) {
-//                db.disconnect();
-//            }
-//            return false;
-//        }
-//    }
-
-
     @FXML
     public void createNewCourse() {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Add New Course");
 
         dialog.getDialogPane().setMinSize(400, 400);
+        //this is literally only for the error message, maybe more style stuff idk
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/Styles/CourseSearchController.css").toExternalForm());
-        System.out.println("CSS File Loaded: " + getClass().getResource("/Styles/CourseSearchController.css"));
 
-
+        //create new textfields to get user input
         TextField subjectField = new TextField();
         TextField numberField = new TextField();
         TextField titleField = new TextField();
@@ -226,6 +179,7 @@ public class CourseSearchController {
         Label errorMessage = new Label();
         errorMessage.getStyleClass().add("error-label");
 
+        //setting specifications so the user has to type certain characters
         subjectField.setTextFormatter(createTextFormat("[a-zA-Z]{0,4}"));
         numberField.setTextFormatter(createTextFormat("\\d{1,4}"));
         titleField.setTextFormatter(createTextFormat(".{0,50}"));
@@ -244,6 +198,7 @@ public class CourseSearchController {
         dialog.getDialogPane().setContent(dialogContent);
         Platform.runLater(() -> subjectField.requestFocus());
 
+        //creating buttons to add a new course
         ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
@@ -267,7 +222,7 @@ public class CourseSearchController {
             }
             return null;
         });
-        //check if the fields are filled or not
+        //check if the fields are filled or not and throws an error
         Node addButtonNode = dialog.getDialogPane().lookupButton(addButton);
         addButtonNode.addEventFilter(ActionEvent.ACTION, event -> {
             // Check whether some conditions are fulfilled
@@ -284,13 +239,14 @@ public class CourseSearchController {
     }
 
 
-
-
     //updates list for courses to appear
     @FXML
     public void updateCourseListView() {
         try {
             List<Course> allCourses = driver.getCourses();
+            for(Course course: allCourses){
+                course.setReviews(driver.getReviewsFromCourse(course));
+            }
             courseListView.getItems().setAll(allCourses);
         } catch (SQLException e) {
             System.out.println("Error in getting courses " + e.getMessage());
@@ -298,9 +254,9 @@ public class CourseSearchController {
         }
     }
 
-    //searching database
+    //handling search button
     @FXML
-    public void handleSearch() throws IOException, SQLException {
+    public void handleSearch() throws SQLException {
         String subject = courseSubject.getText();
         String number = courseNumber.getText();
         String title = courseTitle.getText();
@@ -324,9 +280,7 @@ public class CourseSearchController {
         List<Course> coursesbyNum = new ArrayList<>();
         List<Course> coursesbyTitle = new ArrayList<>();
 
-
         try {
-
             if (title.isEmpty() && number.isEmpty() && subject.isEmpty()){
                 matchCourses.addAll(driver.getCourses());
             }else {
@@ -347,13 +301,12 @@ public class CourseSearchController {
             }
 
         } catch (SQLException e) {
+            System.out.println("searching error");
             e.printStackTrace();
         }
-
-
             /// case 1 = search by subject only
             // case 2 = search by number only
-            // case 3 = search by subject and number
+            // case 3 = search by subject and number ---- highkey i shouldve just done if statements
             // case 4 = search by Title only
             // case 5 = search by subject and Title
             // case 6 = search by number and Title
@@ -388,6 +341,4 @@ public class CourseSearchController {
             }
             return matchCourses;
         }
-
-
     }

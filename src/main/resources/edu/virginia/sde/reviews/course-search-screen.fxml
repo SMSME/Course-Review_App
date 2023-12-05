@@ -27,11 +27,11 @@
         </VBox>
 
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="courseNumber" promptText="Course Number"/>
+            <TextField fx:id="courseNumber" promptText="Number"/>
         </VBox>
 
         <VBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
-            <TextField fx:id="courseTitle" promptText="Course Title"/>
+            <TextField fx:id="courseTitle" promptText="Title" prefWidth="200"/>
         </VBox>
 
 
@@ -44,13 +44,28 @@
     </HBox>
 
 
-
     <VBox alignment="TOP_RIGHT" spacing="10.0" style="-fx-padding: 0 10 0 0;">
         <Button mnemonicParsing="false" onAction="#logOut" text="Log Out"/>
     </VBox>
 
+    <GridPane alignment="CENTER_LEFT" style="-fx-padding: 20 0 0 10">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
 
-    <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
+        <Label text="Subject" styleClass="header-label" GridPane.columnIndex="0" alignment="BASELINE_LEFT" prefWidth="210"/>
+        <Label text="Number" styleClass="header-label" GridPane.columnIndex="1" prefWidth="210"/>
+        <Label text="Title" styleClass="header-label" GridPane.columnIndex="2" prefWidth="230"/>
+        <Label text="Rating" styleClass="header-label" GridPane.columnIndex="3" prefWidth="190"/>
+
+    </GridPane>
+
+
+
+    <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
         <content>
             <ListView fx:id="courseListView"/>
         </content>
