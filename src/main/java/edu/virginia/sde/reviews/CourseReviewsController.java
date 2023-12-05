@@ -123,7 +123,7 @@ public class CourseReviewsController {
             return cell;
         });
 
-        courseTitleLabel.setText(currentCourse.getCourseTitle());
+        courseTitleLabel.setText(currentCourse.formatTitle(currentCourse.getCourseTitle()));
         courseSubjectLabel.setText(currentCourse.getCourseSubject().toUpperCase());
         courseNumberLabel.setText(String.valueOf(currentCourse.getCourseNumber()));
 
@@ -153,7 +153,7 @@ public class CourseReviewsController {
                     dialog.setTitle("Edit Review");
                     dialog.getDialogPane().getStylesheets().add(getClass().getResource("/Styles/CourseSearchController.css").toExternalForm());
 
-
+                    editReviewRating.setTextFormatter(createTextFormat("[1-5]{0,1}"));
                     dialog.getDialogPane().setMinSize(400, 400);
                     errorUpdatingReview.getStyleClass().add("error-label");
 
@@ -265,7 +265,7 @@ public class CourseReviewsController {
             dialog.getDialogPane().getStylesheets().add(getClass().getResource("/Styles/CourseSearchController.css").toExternalForm());
 
             errorAddingReview.getStyleClass().add("error-label");
-            newReviewRating.setTextFormatter(createTextFormat("\\d{0,1}"));
+            newReviewRating.setTextFormatter(createTextFormat("[1-5]{0,1}"));
             VBox dialogContent = new VBox(10);
             dialogContent.getChildren().addAll(
                     new Label("Rating: "),
