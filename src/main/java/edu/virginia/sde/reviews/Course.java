@@ -54,7 +54,7 @@ public class Course {
         this.reviews = reviews;
     }
 
-    public double getAvgRating() {
+    public Double getAvgRating() {
         if (reviews.isEmpty()) {
             return 0.0;
         }
@@ -80,11 +80,18 @@ public class Course {
     @Override
     public String toString() {
         String formattedNum = String.format("%04d", courseNumber);
-        return String.format("%-41s %-32s %-50s %-20.2f",
+        String rating;
+        if (getAvgRating() == 0.0){
+            rating = "";
+        }else{
+            rating = String.format("%.2f", getAvgRating());;
+        }
+
+        return String.format("%-41s %-32s %-50s %-20s",
                 courseSubject.toUpperCase(),
                 formattedNum,
                 formatTitle(courseTitle),
-                getAvgRating());
+                rating);
     }
 
 
