@@ -55,17 +55,19 @@
     </VBox>
 
     <VBox visible="false">
-        <TextField fx:id="newReviewRating" promptText="Subject"/>
-        <TextField fx:id="newReviewComment" promptText="Number"/>
+        <TextField fx:id="newReviewRating" promptText="Rating"/>
+        <TextField fx:id="newReviewComment" promptText="Comment"/>
         <Label fx:id="errorAddingReview"/>
         <Button text="Submit" onAction="#submitReview"/>
     </VBox>
+
     <VBox visible="false">
         <TextField fx:id="editReviewRating" promptText="Subject"/>
         <TextField fx:id="editReviewComment" promptText="Number"/>
         <Label fx:id="errorUpdatingReview"/>
         <Button text="Submit" onAction="#submitReview"/>
     </VBox>
+
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
     <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Back to Course Search" AnchorPane.leftAnchor="0"/>
 </AnchorPane>

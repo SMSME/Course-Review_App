@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -264,6 +265,7 @@ public class CourseReviewsController {
             Label errorMessage = new Label();
             errorMessage.getStyleClass().add("error-label");
 
+            newReviewRating.setTextFormatter(createTextFormat("\\d{1,4}"));
             VBox dialogContent = new VBox(10);
             dialogContent.getChildren().addAll(
                     new Label("Rating: "),
@@ -280,27 +282,13 @@ public class CourseReviewsController {
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == addButton) {
-                    if (newReviewRating.getText().isEmpty()) {
-                        errorAddingReview.setText("Rating field cannot be blank");
+                    newRating = parseInt(newReviewRating.getText());
+                    newComment = newReviewComment.getText();
+                    submitReview();
+                    reviewTableView.getItems().clear();
+                    initializer();
+                    dialog.close();
                     }
-                    else {
-                        try {
-                            newRating = parseInt(newReviewRating.getText());
-                        } catch (NumberFormatException e) {
-                            errorAddingReview.setText("Rating must be an integer from 1-5");
-                        }
-                        newComment = newReviewComment.getText();
-                        if (newRating < 1 || newRating > 5) {
-                            errorAddingReview.setText("Rating must be an integer from 1-5");
-                        }
-                        else {
-                            submitReview();
-                            reviewTableView.getItems().clear();
-                            initializer();
-                            dialog.close();
-                        }
-                    }
-                }
                 return null;
             });
             Node addButtonNode = dialog.getDialogPane().lookupButton(addButton);
@@ -316,24 +304,26 @@ public class CourseReviewsController {
         }
     }
     @FXML
+    public TextFormatter<String> createTextFormat (String pattern){
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if(newText.matches(pattern)){
+                return change;
+            }else{
+                return null;
+            }
+        };
+        return new TextFormatter<>(filter);
+    }
+    @FXML
     public String checkTextfields(TextField rating, TextField comment) {
         // All fields must not be empty
         if (rating.getText().isEmpty()) {
             return "Rating field cannot be empty";
         }
         else {
-            try {
-                newRating = parseInt(newReviewRating.getText());
-            } catch (NumberFormatException e) {
-                errorAddingReview.setText("Rating must be an integer from 1-5");
-            }
-            newComment = newReviewComment.getText();
-            if (newRating < 1 || newRating > 5) {
-                errorAddingReview.setText("Rating must be an integer from 1-5");
-            } else {
-                submitReview();
-                reviewTableView.getItems().clear();
-                initializer();
+            if (parseInt(rating.getText()) < 1 || parseInt(rating.getText()) > 5) {
+                return "Rating must be an integer from 1-5";
             }
         }
         return null;
