@@ -13,22 +13,24 @@
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
             prefHeight="720.0" prefWidth="1280.0"
 >
-    <VBox AnchorPane.leftAnchor="181" AnchorPane.topAnchor="45">
-        <HBox alignment="CENTER" spacing="15.0">
-            <Label fx:id="courseSubjectLabel" style="-fx-font-size: 32;"/>
-            <Label fx:id="courseNumberLabel" style="-fx-font-size: 32;"/>
-            <Label fx:id="courseTitleLabel" style="-fx-font-size: 32;"/>
-            <Label text="Course Reviews" style="-fx-font-size: 32;"/>
+    <VBox AnchorPane.leftAnchor="181" AnchorPane.topAnchor="45" maxWidth="918">
+            <HBox spacing="15.0">
+                <Label fx:id="courseSubjectLabel" style="-fx-font-size: 32;"/>
+                <Label fx:id="courseNumberLabel" style="-fx-font-size: 32;"/>
+                <Label fx:id="courseTitleLabel" style="-fx-font-size: 32;"/>
+            </HBox>
+            <VBox>
+                <Label text="Course Reviews" style="-fx-font-size: 32;"/>
+            </VBox>
 
-        </HBox>
-        <HBox alignment="CENTER" spacing="11.25">
+        <HBox alignment="CENTER" spacing="11.25" style="-fx-padding:25 0 0 0">
             <Label text="Average Rating:" style="-fx-font-size: 24;"/>
             <Label fx:id="averageRatingLabel" style="-fx-font-size: 24;"/>
         </HBox>
 
         <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
             <content>
-                <TableView fx:id="reviewTableView" layoutX="47.0" layoutY="137.0" prefHeight="500.0" prefWidth="918.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="reviewTableView" layoutX="47.0" layoutY="137.0" prefHeight="500.0" maxWidth="918.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn text="Rating" fx:id="ratingColumn" prefWidth="55">
                             <cellValueFactory>

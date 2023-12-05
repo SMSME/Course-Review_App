@@ -41,8 +41,6 @@ public class CourseSearchController {
     public TextField courseNumber;
     @FXML
     public TextField courseTitle;
-
-
     //display courses
     @FXML
     public ListView<Course> courseListView;
