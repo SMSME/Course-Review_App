@@ -12,7 +12,7 @@
             fx:controller="edu.virginia.sde.reviews.NewUserController"
             prefHeight="720.0" prefWidth="1280.0">
     <top>
-        <HBox>
+        <HBox alignment="TOP_RIGHT">
             <Button mnemonicParsing = "false" onAction="#exitProgram" text ="Exit"/>
         </HBox>
     </top>
