@@ -263,12 +263,8 @@ public class CourseSearchController {
 
         List<Course> foundCourses = search(subject, number, title);
 
-        if (subject.isEmpty() && number.isEmpty() && title.isEmpty()) {
             updateCourseListView();
             courseListView.getItems().setAll(foundCourses);
-        } else {
-            courseListView.getItems().setAll(foundCourses);
-        }
     }
 
     //ngl i think that this is supposed to be a database method since this is a controller class??
@@ -339,6 +335,11 @@ public class CourseSearchController {
                     matchCourses.retainAll(coursesbyTitle);
                     break;
             }
+
+        for(Course course: matchCourses){
+            course.setReviews(driver.getReviewsFromCourse(course));
+        }
+
             return matchCourses;
         }
     }
