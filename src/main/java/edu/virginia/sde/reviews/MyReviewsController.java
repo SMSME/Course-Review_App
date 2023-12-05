@@ -36,7 +36,6 @@ public class MyReviewsController {
 
     public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
-        System.out.println(currentUser);
         driver = DatabaseSingleton.getInstance();
         List<Review> reviews;
         try{

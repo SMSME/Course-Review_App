@@ -151,11 +151,13 @@ public class CourseReviewsController {
                     // Add your edit logic here, e.g., open a dialog for editing
                     Dialog<String> dialog = new Dialog<>();
                     dialog.setTitle("Edit Review");
+                    dialog.getDialogPane().getStylesheets().add(getClass().getResource("/Styles/CourseSearchController.css").toExternalForm());
 
                     dialog.getDialogPane().setMinSize(400, 400);
                     errorUpdatingReview.getStyleClass().add("error-label");
 
                     VBox dialogContent = new VBox(10);
+
                     dialogContent.getChildren().addAll(
                             new Label("Rating: "),
                             editReviewRating,
@@ -258,6 +260,7 @@ public class CourseReviewsController {
             dialog.setTitle("Add New Review");
 
             dialog.getDialogPane().setMinSize(400, 400);
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/Styles/CourseSearchController.css").toExternalForm());
 
             errorAddingReview.getStyleClass().add("error-label");
             newReviewRating.setTextFormatter(createTextFormat("\\d{0,4}"));
