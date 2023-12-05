@@ -135,10 +135,10 @@ public class CourseReviewsController {
             throw new RuntimeException("Runtime Exception");
         }
 //
-        if (!currentCourse.getReviews().isEmpty()){
+        if (courseReviews.isEmpty()){
             averageRatingLabel.setText("N/A");
-        }
-        averageRatingLabel.setText(String.valueOf(currentCourse.getAvgRating()));
+        }else{
+            averageRatingLabel.setText(String.valueOf(currentCourse.getAvgRating()));}
         TableColumn<Review, Void> actionColumn = new TableColumn<>("Actions");
         actionColumn.setPrefWidth(118);
         actionColumn.setCellFactory(param -> new TableCell<>() {
