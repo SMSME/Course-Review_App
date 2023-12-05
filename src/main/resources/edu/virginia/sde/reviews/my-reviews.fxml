@@ -8,6 +8,7 @@
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <BorderPane xmlns="http://javafx.com/javafx"
+            stylesheets="/Styles/CourseSearchController.css"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.MyReviewsController"
             prefHeight="720.0" prefWidth="1280.0">

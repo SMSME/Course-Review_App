@@ -107,6 +107,7 @@ public class CourseSearchController {
         CourseReviewsController crc = fxmlLoader.getController();
         crc.setStage(stage);
         crc.setCurrentCourse(course);
+        crc.initializer();
     }
 
     //handle double clicking on a course

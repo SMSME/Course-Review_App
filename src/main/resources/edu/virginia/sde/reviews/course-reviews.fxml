@@ -13,24 +13,25 @@
             fx:controller="edu.virginia.sde.reviews.CourseReviewsController"
             prefHeight="720.0" prefWidth="1280.0"
 >
-    <VBox AnchorPane.leftAnchor="190" AnchorPane.topAnchor="55">
-        <HBox alignment="CENTER" spacing="7.0">
+    <VBox AnchorPane.leftAnchor="181" AnchorPane.topAnchor="45">
+        <HBox alignment="CENTER" spacing="15.0">
             <Label fx:id="courseSubjectLabel" style="-fx-font-size: 32;"/>
             <Label fx:id="courseNumberLabel" style="-fx-font-size: 32;"/>
             <Label fx:id="courseTitleLabel" style="-fx-font-size: 32;"/>
             <Label text="Course Reviews" style="-fx-font-size: 32;"/>
+            <Label fx:id="averageRatingLabel" style="-fx-font-size: 16;"/>
         </HBox>
 
         <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
             <content>
-                <TableView fx:id="reviewTableView" layoutX="47.0" layoutY="137.0" prefHeight="500.0" prefWidth="900.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="reviewTableView" layoutX="47.0" layoutY="137.0" prefHeight="500.0" prefWidth="918.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn text="Rating" fx:id="ratingColumn">
                             <cellValueFactory>
                                 <PropertyValueFactory property="rating" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Comment" fx:id="commentColumn" prefWidth="583">
+                        <TableColumn text="Comment" fx:id="commentColumn" prefWidth="547">
                             <cellValueFactory>
                                 <PropertyValueFactory property="comment" />
                             </cellValueFactory>
@@ -45,7 +46,7 @@
             </content>
         </ScrollPane>
         <HBox alignment="CENTER">
-            <Button mnemonicParsing="false" onAction="#addReview" text="Add Review"/>
+            <Button mnemonicParsing="false" onAction="#addReview" text="Add Review" prefWidth="918"/>
         </HBox>
     </VBox>
 

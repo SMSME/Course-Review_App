@@ -33,6 +33,9 @@ public class CourseReviewsController {
     @FXML
     private Label courseNumberLabel;
     @FXML
+    private Label averageRatingLabel;
+    private int averageRating;
+    @FXML
     private TableView<Review> reviewTableView;
     @FXML
     private TableColumn<Review,Integer> ratingColumn;
@@ -91,7 +94,6 @@ public class CourseReviewsController {
     }
     public void initializer() throws RuntimeException {
         currentUser = UserSingleton.getCurrentUser();
-
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
@@ -133,8 +135,13 @@ public class CourseReviewsController {
         } catch (SQLException e) {
             throw new RuntimeException("Runtime Exception");
         }
+        for (Review review : courseReviews) {
+            averageRating += review.getRating();
+        }
+        averageRating /= courseReviews.size();
+        averageRatingLabel.setText(String.valueOf(averageRating));
         TableColumn<Review, Void> actionColumn = new TableColumn<>("Actions");
-        actionColumn.setPrefWidth(100);
+        actionColumn.setPrefWidth(118);
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Edit");
             private final Button deleteButton = new Button("Delete");

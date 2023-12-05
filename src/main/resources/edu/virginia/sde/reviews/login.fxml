@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
+            stylesheets="/Styles/CourseSearchController.css"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="edu.virginia.sde.reviews.LoginSceneController"
            prefHeight="720.0" prefWidth="1280.0">
