@@ -20,11 +20,11 @@
                 </HBox>-->
                 <HBox spacing="100.0">
                     <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Course Search"/>
-                    <Label text="Subject" prefWidth = "70"/>
+                    <Label text="Subject" prefWidth = "79"/>
                     <Label text="Number" prefWidth = "50"/>
                     <Label text="Rating" prefWidth = "50"/>
-                    <Label text = "Title" prefWidth = "60"/>
-                    <Label text = "Comment" prefWidth = "70"/>
+                    <Label text = "Title" prefWidth = "160"/>
+                    <Label text = "Comment" prefWidth = "70" alignment="CENTER_LEFT"/>
                 </HBox>
                 <HBox  AnchorPane.rightAnchor="0">
                     <Button mnemonicParsing="false" onAction="#onLogout" text="Logout"/>
@@ -34,7 +34,7 @@
 
         <center>
             <VBox>
-                <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true">
+                <ScrollPane VBox.vgrow="ALWAYS" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
                     <content>
                         <ListView fx:id="reviewListView"/>
                     </content>

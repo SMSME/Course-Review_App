@@ -36,19 +36,13 @@ public class MyReviewsController {
 
     public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
-        System.out.println(currentUser);
         driver = DatabaseSingleton.getInstance();
         List<Review> reviews;
         try{
             reviews = driver.getReviewsFromUser(currentUser);
-            if(reviews.isEmpty()){
-                box.setVisible(true);
-            }
-            else{
-                //box.setVisible(false);
-                reviewListView.getItems().setAll(reviews);
-                reviewListView.setOnMouseClicked(this::handleReviewItemClick);
-            }
+            reviewListView.getItems().setAll(reviews);
+            reviewListView.setOnMouseClicked(this::handleReviewItemClick);
+
         }catch(SQLException e){
             e.printStackTrace();
         }

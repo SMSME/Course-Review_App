@@ -34,9 +34,10 @@ public class NewUserController {
     public void createUser() throws SQLException{
         String newUser = newUsername.getText();
         String newPass = newPassword.getText();
-
+        message.getStyleClass().add("error-label");
         try{
             UserSingleton.createUser(newUser,newPass);
+            message.getStyleClass().add("success-label");
             message.setText("User Created Successfully! Please return to the login page");
         }catch(IllegalArgumentException e){
             message.setText("User already exists");
