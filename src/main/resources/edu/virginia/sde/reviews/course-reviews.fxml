@@ -30,7 +30,7 @@
             <content>
                 <TableView fx:id="reviewTableView" layoutX="47.0" layoutY="137.0" prefHeight="500.0" prefWidth="918.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn text="Rating" fx:id="ratingColumn">
+                        <TableColumn text="Rating" fx:id="ratingColumn" prefWidth="55">
                             <cellValueFactory>
                                 <PropertyValueFactory property="rating" />
                             </cellValueFactory>
