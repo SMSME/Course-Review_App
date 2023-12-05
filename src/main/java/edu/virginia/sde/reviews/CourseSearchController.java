@@ -255,6 +255,9 @@ public class CourseSearchController {
     public void updateCourseListView() {
         try {
             List<Course> allCourses = driver.getCourses();
+            for(Course course: allCourses){
+                course.setReviews(driver.getReviewsFromCourse(course));
+            }
             courseListView.getItems().setAll(allCourses);
         } catch (SQLException e) {
             System.out.println("Error in getting courses " + e.getMessage());
