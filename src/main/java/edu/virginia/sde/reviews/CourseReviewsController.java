@@ -209,7 +209,6 @@ public class CourseReviewsController {
                     initializer();
                 });
             }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -218,7 +217,6 @@ public class CourseReviewsController {
                     setGraphic(null);
                     return;
                 }
-
                 Review review = (Review) getTableRow().getItem();
                 if (review.getUser().equals(currentUser.getUsername())) {
                     setGraphic(new HBox(editButton, deleteButton));
