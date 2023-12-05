@@ -82,6 +82,7 @@ public class MyReviewsController {
                     CourseReviewsController controller = loader.getController();
                     controller.setCurrentCourse(review.getCourse());
                     controller.setStage(stage);
+                    controller.initializer();
                 }
                 catch (IOException e){
                     e.printStackTrace();
