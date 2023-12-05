@@ -43,7 +43,6 @@ public class NewUserController {
             message.setText("User already exists");
         }
         catch(IllegalStateException e){
-            System.out.println("Here " + newPass.length());
             message.setText("Password needs to be at least 8 characters");
         }
 //        //If they entered a valid username and password
