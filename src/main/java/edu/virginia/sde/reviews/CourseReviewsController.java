@@ -152,7 +152,7 @@ public class CourseReviewsController {
                     Dialog<String> dialog = new Dialog<>();
                     dialog.setTitle("Edit Review");
 
-
+                    editReviewRating.setTextFormatter(createTextFormat("[1-5]{0,1}"));
                     dialog.getDialogPane().setMinSize(400, 400);
                     errorUpdatingReview.getStyleClass().add("error-label");
 
@@ -262,7 +262,7 @@ public class CourseReviewsController {
             dialog.getDialogPane().setMinSize(400, 400);
 
             errorAddingReview.getStyleClass().add("error-label");
-            newReviewRating.setTextFormatter(createTextFormat("\\d{0,1}"));
+            newReviewRating.setTextFormatter(createTextFormat("[1-5]{0,1}"));
             VBox dialogContent = new VBox(10);
             dialogContent.getChildren().addAll(
                     new Label("Rating: "),
