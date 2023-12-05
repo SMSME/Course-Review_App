@@ -72,14 +72,6 @@ public class CourseReviewsController {
             throw new RuntimeException(e);
         }
     }
-    public void initialize() {
-        try {
-            driver.connect();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public void editReview() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Review newReview = new Review(currentCourse, newRating, timestamp, newComment, currentUser.getUsername());
@@ -338,12 +330,6 @@ public class CourseReviewsController {
     }
     @FXML
     public void logOut() throws IOException {
-        try {
-            driver.disconnect();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
@@ -355,12 +341,6 @@ public class CourseReviewsController {
     }
     @FXML
     public void backToCourseSearch() throws IOException {
-        try {
-            driver.disconnect();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);

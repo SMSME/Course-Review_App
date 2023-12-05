@@ -77,12 +77,6 @@ public class NewUserController {
     @FXML
     private void backToLogin() throws IOException{
         //try {
-            try {
-                driver.disconnect();
-            }
-            catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);

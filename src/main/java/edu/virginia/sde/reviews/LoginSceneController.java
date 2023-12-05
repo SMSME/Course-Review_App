@@ -31,12 +31,7 @@ public class LoginSceneController {
     //@FXML
     @FXML
     private void initialize(){
-        try{
-            driver = DatabaseSingleton.getInstance();
-            driver.connect();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        driver = DatabaseSingleton.getInstance();
     }
 
     @FXML
@@ -46,7 +41,6 @@ public class LoginSceneController {
         //If a correct username/password entered
         try{
             if(UserSingleton.login(user, pass)!=null){
-                driver.disconnect();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("course-search-screen.fxml"));
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
@@ -93,12 +87,6 @@ public class LoginSceneController {
     @FXML
     private void handleCreateUser() throws IOException{
         //messageLabel.setText("Create new user button pressed");
-        try {
-            driver.disconnect();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("new-user.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
@@ -112,6 +100,12 @@ public class LoginSceneController {
 
     @FXML
     private void exitProgram(){
+        try {
+            driver.disconnect();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Platform.exit();
     }
     private boolean isValid(String username, String password) throws SQLException {
