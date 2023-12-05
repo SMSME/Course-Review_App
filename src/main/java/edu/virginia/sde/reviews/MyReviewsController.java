@@ -37,7 +37,6 @@ public class MyReviewsController {
     public void initialize() throws SQLException {
         currentUser = UserSingleton.getCurrentUser().getUsername();
         driver = DatabaseSingleton.getInstance();
-        driver.connect();
         List<Review> reviews;
         try{
             reviews = driver.getReviewsFromUser(currentUser);
@@ -75,7 +74,6 @@ public class MyReviewsController {
             Review review = reviewListView.getSelectionModel().getSelectedItem();
             if (review != null){
                 try{
-                    driver.disconnect();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("course-reviews.fxml"));
                     Parent root = loader.load();
                     Scene scene = new Scene(root);
@@ -84,10 +82,9 @@ public class MyReviewsController {
                     CourseReviewsController controller = loader.getController();
                     controller.setCurrentCourse(review.getCourse());
                     controller.setStage(stage);
-                }catch (IOException e){
+                }
+                catch (IOException e){
                     e.printStackTrace();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }
