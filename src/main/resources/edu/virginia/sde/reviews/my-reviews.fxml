@@ -20,11 +20,11 @@
                 </HBox>-->
                 <HBox spacing="100.0">
                     <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Course Search"/>
-                    <Label text="Subject"/>
-                    <Label text="Number"/>
-                    <Label text="Rating"/>
-                    <Label text = "Title"/>
-                    <Label text = "Comment"/>
+                    <Label text="Subject" prefWidth = "70"/>
+                    <Label text="Number" prefWidth = "50"/>
+                    <Label text="Rating" prefWidth = "50"/>
+                    <Label text = "Title" prefWidth = "60"/>
+                    <Label text = "Comment" prefWidth = "70"/>
                 </HBox>
                 <HBox  AnchorPane.rightAnchor="0">
                     <Button mnemonicParsing="false" onAction="#onLogout" text="Logout"/>
