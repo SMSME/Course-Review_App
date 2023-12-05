@@ -134,11 +134,18 @@ public class CourseReviewsController {
         } catch (SQLException e) {
             throw new RuntimeException("Runtime Exception");
         }
-//
-        if (courseReviews.isEmpty()){
+        averageRating = 0;
+        if (courseReviews.isEmpty()) {
             averageRatingLabel.setText("N/A");
-        }else{
-            averageRatingLabel.setText(String.valueOf(currentCourse.getAvgRating()));}
+        }
+        else {
+            for (Review review : courseReviews) {
+                averageRating += review.getRating();
+            }
+            averageRating = averageRating/courseReviews.size();
+            averageRatingLabel.setText(String.format("%.2f",averageRating));
+        }
+
         TableColumn<Review, Void> actionColumn = new TableColumn<>("Actions");
         actionColumn.setPrefWidth(118);
         actionColumn.setCellFactory(param -> new TableCell<>() {
