@@ -55,6 +55,9 @@ public class CourseSearchController {
     }
 
     public void initialize() throws SQLException {
+        courseSubject.setTextFormatter(createTextFormat("[a-zA-Z]{0,4}"));
+        courseNumber.setTextFormatter(createTextFormat("\\d{0,4}"));
+        courseTitle.setTextFormatter(createTextFormat(".{0,50}"));
         courseListView.setOnMouseClicked(this::handleCourseClick);
         driver.connect();
         updateCourseListView();
