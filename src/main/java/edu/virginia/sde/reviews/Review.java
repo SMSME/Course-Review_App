@@ -54,6 +54,14 @@ public class Review {
 
     @Override
     public String toString(){
+        if(comment.length()<62){
+            return String.format("%" + 28 + "s" + "%-20s" + " %-19d" + " %-19d" + " %-18s" + " %-1s", "",
+                    course.getCourseSubject().toUpperCase(),
+                    course.getCourseNumber(),
+                    rating,
+                    course.getCourseTitle(),
+                    comment);
+        }
         return String.format("%" + 28 + "s" + "%-20s" + " %-19d" + " %-19d" + " %-18s" + " %-1s", "",
                 course.getCourseSubject().toUpperCase(),
                 course.getCourseNumber(),
