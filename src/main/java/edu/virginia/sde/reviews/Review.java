@@ -62,12 +62,11 @@ public class Review {
             titleTruncate = 20;
             titleEnd = "...";
         }
-        if (comment.length() > 33){
-            truncate = 33;
+        if (comment.length() > 29){
+            truncate = 29;
             end = "...";
         }
-        return String.format(" %28s %-20s %-19s %-10s %-30s %-10s",
-                "",
+        return String.format(" %-31s %-32s %-25s %-50s %-10s",
                 course.getCourseSubject().toUpperCase(),
                 course.getCourseNumber(),
                 rating,
