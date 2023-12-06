@@ -17,9 +17,8 @@ List the primary contributions of each author. It is recommended to update this 
 
 ### Jinwoo Kim
 
-* Author 1 contributions
-* as a bulleted list
-* each line starts with an asterisk and a space
+* Completed DatabaseDriver class
+* tested Extensively
 
 ### Matthew Scarlatescu
 
@@ -29,14 +28,16 @@ List the primary contributions of each author. It is recommended to update this 
 
 ### Jamie Tran
 
-* Author 3 contributions
-* as a bulleted list
-* each line starts with an asterisk and a space
+* Completed CourseSearchScene
+* Created Course Class
+* Created Styling
+* Formatted Search boxes
 
 ### Vineel Kavuru
 
 * Completed Login/New User Scene
-* Completed My Reviews 
+* Completed My Reviews
+* Created User
 * Tested
 
 ## Issues
