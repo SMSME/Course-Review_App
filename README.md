@@ -9,7 +9,7 @@
 
 ## To Run
 
-[Run CourseReviewsApplication with the following VM Arguments: --module-path [Path to JavaFX folder] --add-modules javafx.controls,javafx.fxml]
+Run CourseReviewsApplication with the following VM Arguments: --module-path [Path to JavaFX folder] --add-modules javafx.controls,javafx.fxml
 
 ## Contributions
 
