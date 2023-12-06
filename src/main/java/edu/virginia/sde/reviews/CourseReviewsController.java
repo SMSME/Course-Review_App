@@ -339,7 +339,7 @@ public class CourseReviewsController {
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Course Reviews");
+        stage.setTitle("Login");
 
         LoginSceneController loginSceneController = fxmlLoader.getController();
         loginSceneController.setStage(stage);
