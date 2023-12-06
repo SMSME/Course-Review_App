@@ -64,6 +64,6 @@
     </VBox>
 
     <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" AnchorPane.rightAnchor="0"/>
-    <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Back" AnchorPane.leftAnchor="0"/>
+    <Button mnemonicParsing="false" onAction="#backToCourseSearch" text="Course Search" AnchorPane.leftAnchor="0"/>
 </AnchorPane>
 

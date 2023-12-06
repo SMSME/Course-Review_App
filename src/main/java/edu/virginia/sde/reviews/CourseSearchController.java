@@ -181,7 +181,7 @@ public class CourseSearchController {
 
         //setting specifications so the user has to type certain characters
         subjectField.setTextFormatter(createTextFormat("[a-zA-Z]{0,4}"));
-        numberField.setTextFormatter(createTextFormat("\\d{1,4}"));
+        numberField.setTextFormatter(createTextFormat("\\d{0,4}"));
         titleField.setTextFormatter(createTextFormat(".{0,50}"));
 
         VBox dialogContent = new VBox(10);
