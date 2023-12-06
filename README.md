@@ -2,7 +2,7 @@
 # Homework 6 - Responding to Change
 
 ## Authors
-1) Jinwoo Kim, eer6vt, [GitHub profile name]
+1) Jinwoo Kim, eer6vt, [jinwookim643]
 2) Matthew Scarlatescu, qcu6mq, [ssmatt4]
 3) Jamie Tran, pby5br, [SMSME]
 4) Vineel Kavuru, zjv5zp, [kavuru04]
