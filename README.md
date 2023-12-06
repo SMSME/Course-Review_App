@@ -35,9 +35,9 @@ List the primary contributions of each author. It is recommended to update this 
 
 ### Vineel Kavuru
 
-* Author 4 contributions
-* as a bulleted list
-* each line starts with an asterisk and a space
+* Completed Login/New User Scene
+* Completed My Reviews 
+* Tested
 
 ## Issues
 None
