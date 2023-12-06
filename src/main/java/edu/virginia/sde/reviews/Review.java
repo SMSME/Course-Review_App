@@ -62,8 +62,8 @@ public class Review {
             titleTruncate = 20;
             titleEnd = "...";
         }
-        if (comment.length() > 29){
-            truncate = 29;
+        if (comment.length() > 20){
+            truncate = 20;
             end = "...";
         }
         return String.format("%-29s %-31s %-25s %-45s %-10s",
