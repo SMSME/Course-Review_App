@@ -66,7 +66,7 @@ public class Review {
             truncate = 29;
             end = "...";
         }
-        return String.format(" %-31s %-32s %-25s %-50s %-10s",
+        return String.format("%-29s %-31s %-25s %-45s %-10s",
                 course.getCourseSubject().toUpperCase(),
                 course.getCourseNumber(),
                 rating,
