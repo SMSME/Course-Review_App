@@ -2,10 +2,10 @@
 # Homework 6 - Responding to Change
 
 ## Authors
-1) Jinwoo Kim, netid, [GitHub profile name]
+1) Jinwoo Kim, eer6vt, [GitHub profile name]
 2) Matthew Scarlatescu, qcu6mq, [ssmatt4]
-3) Jamie Tran, netid, [GitHub profile name]
-4) Vineel Kavuru, netid, [GitHub profile name]
+3) Jamie Tran, pby5br, [SMSME]
+4) Vineel Kavuru, zjv5zp, [kavuru04]
 
 ## To Run
 
