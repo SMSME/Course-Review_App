@@ -56,6 +56,12 @@ public class Review {
     public String toString(){
         int truncate = comment.length();
         String end = "";
+        int titleTruncate = course.getCourseTitle().length();
+        String titleEnd = "";
+        if(course.getCourseTitle().length()>20){
+            titleTruncate = 20;
+            titleEnd = "...";
+        }
         if (comment.length() > 33){
             truncate = 33;
             end = "...";
@@ -65,9 +71,10 @@ public class Review {
                 course.getCourseSubject().toUpperCase(),
                 course.getCourseNumber(),
                 rating,
-                course.getCourseTitle(),
+                course.getCourseTitle().substring(0, titleTruncate)+titleEnd,
                 comment.substring(0, truncate) + end);
     }
+
     public Boolean hasComment() {
         if (comment.isEmpty()) {
             return false;
