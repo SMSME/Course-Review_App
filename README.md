@@ -1,5 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/DC1SF4uZ)
-# Homework 6 - Responding to Change
 
 ## Authors
 1) Jinwoo Kim, eer6vt, [jinwookim643]
@@ -10,10 +8,6 @@
 ## To Run
 
 Run CourseReviewsApplication with the following VM Arguments: --module-path [Path to JavaFX folder] --add-modules javafx.controls,javafx.fxml
-
-## Contributions
-
-List the primary contributions of each author. It is recommended to update this with your contributions after each coding session.:
 
 ### Jinwoo Kim
 
@@ -32,6 +26,7 @@ List the primary contributions of each author. It is recommended to update this 
 * Created Course Class
 * Created Styling
 * Formatted Search boxes
+* Testing
 
 ### Vineel Kavuru
 
