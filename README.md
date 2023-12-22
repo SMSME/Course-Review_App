@@ -34,7 +34,3 @@ Run CourseReviewsApplication with the following VM Arguments: --module-path [Pat
 * Completed My Reviews
 * Created User
 * Tested
-
-## Issues
-None
-
