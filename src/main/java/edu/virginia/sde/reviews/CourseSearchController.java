@@ -23,13 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-//make it so that if it has the same department/subject the number isnt the same/ titles arent the same -idk how to throw an error for this lol - ask jinwoo lol
-//like how do i fix it brug
-//add reviews for the user ?? - how do i know kek xD
-//if u make the number 0000 it like
 
-//add some formatting to make it look better too - LITERALLY ITS SO UGLy
-//thers an error if u format it to capitalize the letters because if theres a space at the end it panics
 
 
 
